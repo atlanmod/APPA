@@ -113,6 +113,10 @@
 
         <kotlin.version>1.0.5-2</kotlin.version>
 
+        <!-- Network -->
+        <tomp2p.version>5.0-Beta8</tomp2p.version>
+        <netty.version>4.0.42.Final</netty.version>
+
         <!-- Common -->
         <guava.version>20.0</guava.version>
 
@@ -152,6 +156,30 @@
 
     <dependencyManagement>
         <dependencies>
+
+            <!-- Network -->
+
+            <dependency>
+                <groupId>net.tomp2p</groupId>
+                <artifactId>tomp2p-all</artifactId>
+                <version>${tomp2p.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>io.netty</groupId>
+                        <artifactId>netty-transport</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>io.netty</groupId>
+                        <artifactId>netty-buffer</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
 
             <!-- Commons -->
 
@@ -735,5 +763,12 @@
             </plugin>
         </plugins>
     </reporting>
+
+    <repositories>
+        <repository>
+            <id>tomp2p.net</id>
+            <url>https://tomp2p.net/dev/mvn/</url>
+        </repository>
+    </repositories>
 
 </project>
