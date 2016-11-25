@@ -1,0 +1,8 @@
+### Maven template
+**/target
+
+### JetBrains template
+# User-specific stuff:
+**/.idea
+**/*.iws
+**/*.iml
