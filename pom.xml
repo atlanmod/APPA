@@ -50,7 +50,7 @@
     </prerequisites>
 
     <modules>
-
+        <module>appa-core</module>
     </modules>
 
     <developers>
