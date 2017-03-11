@@ -11,11 +11,9 @@
 
 package fr.inria.atlanmod.appa.datatypes;
 
-import java.io.Serializable;
-
 import javax.annotation.Nonnull;
 
-public final class LongId implements Serializable, Id {
+public final class LongId implements Id {
 
     @SuppressWarnings("JavaDoc")
     private static final long serialVersionUID = -421037044740380272L;

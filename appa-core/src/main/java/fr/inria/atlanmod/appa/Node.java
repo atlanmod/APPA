@@ -11,7 +11,7 @@
 
 package fr.inria.atlanmod.appa;
 
-import fr.inria.atlanmod.appa.base.Service;
+import fr.inria.atlanmod.appa.core.Service;
 
 import java.util.ArrayList;
 import java.util.List;

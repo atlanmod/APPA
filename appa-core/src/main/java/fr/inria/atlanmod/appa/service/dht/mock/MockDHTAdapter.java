@@ -11,7 +11,7 @@
 
 package fr.inria.atlanmod.appa.service.dht.mock;
 
-import fr.inria.atlanmod.appa.base.Peer;
+import fr.inria.atlanmod.appa.core.Peer;
 import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
 import fr.inria.atlanmod.appa.datatypes.RamdomId;
 import fr.inria.atlanmod.appa.service.DHTService;

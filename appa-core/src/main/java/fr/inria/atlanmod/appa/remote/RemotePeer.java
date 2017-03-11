@@ -11,7 +11,7 @@
 
 package fr.inria.atlanmod.appa.remote;
 
-import fr.inria.atlanmod.appa.base.Peer;
+import fr.inria.atlanmod.appa.core.Peer;
 import fr.inria.atlanmod.appa.datatypes.RamdomId;
 
 import java.net.InetAddress;

@@ -13,6 +13,7 @@ package fr.inria.atlanmod.appa.messaging.nio;
 
 import java.nio.channels.Selector;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
@@ -23,6 +24,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public abstract class AbstractHandler implements Handler {
 
+    @Nonnull
     protected final MessagingServer messagingServer;
 
     public AbstractHandler(MessagingServer messagingServer) {

@@ -9,10 +9,23 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.base;
+package fr.inria.atlanmod.appa.core;
 
+import fr.inria.atlanmod.appa.datatypes.RamdomId;
+
+import java.net.InetAddress;
+
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public interface Action extends Runnable {
+public interface Peer {
+
+    @Nonnull
+    RamdomId getId();
+
+    long getBasePort();
+
+    @Nonnull
+    InetAddress getIp();
 }

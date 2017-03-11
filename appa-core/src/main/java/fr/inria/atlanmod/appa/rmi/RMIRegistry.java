@@ -11,8 +11,8 @@
 
 package fr.inria.atlanmod.appa.rmi;
 
-import fr.inria.atlanmod.appa.base.Service;
-import fr.inria.atlanmod.appa.base.ZeroconfService;
+import fr.inria.atlanmod.appa.core.Service;
+import fr.inria.atlanmod.appa.core.ZeroconfService;
 import fr.inria.atlanmod.appa.datatypes.RamdomId;
 
 import java.rmi.NotBoundException;

@@ -9,15 +9,17 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.base;
+package fr.inria.atlanmod.appa.core;
 
+import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
+import fr.inria.atlanmod.appa.messaging.ResponseHandler;
+
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public abstract class AbstractMessageContent implements MessageContent {
+public interface MessagingService extends Service {
 
-    /**
-     * Parses a message and intialize this message with it.
-     */
-    protected abstract void parse(String message);
+    @Nonnull
+    ResponseHandler send(Message message, ConnectionDescription description);
 }

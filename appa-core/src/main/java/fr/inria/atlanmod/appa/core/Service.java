@@ -9,29 +9,35 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.base;
+package fr.inria.atlanmod.appa.core;
+
+import fr.inria.atlanmod.appa.datatypes.RamdomId;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public interface ZeroconfService {
+public interface Service extends Runnable {
 
     /**
-     * The name of the service.
+     * Returns the unique identification of this {@code Service}.
      */
     @Nonnull
-    String name();
+    RamdomId id();
 
     /**
-     * Type service type, used as a DNS-SD entry.
+     * Starts this {@code Service}.
      */
-    @Nonnull
-    String type();
+    void start();
 
     /**
-     * The service port.
+     * Stops this {@code Service}.
+     */
+    void stop();
+
+    /**
+     * Returns the port that this {@code Service} is listening to.
      */
     @Nonnegative
     int port();

@@ -11,7 +11,7 @@
 
 package fr.inria.atlanmod.appa.service.registry;
 
-import fr.inria.atlanmod.appa.base.ZeroconfService;
+import fr.inria.atlanmod.appa.core.ZeroconfService;
 
 import net.posick.mDNS.Lookup;
 import net.posick.mDNS.MulticastDNSService;
@@ -105,8 +105,7 @@ public class MdnsjavaDiscoveryService {
             String[] txtValues = new String[]{""};
 
             MulticastDNSService mDNSService = new MulticastDNSService();
-            ServiceInstance service = new ServiceInstance(serviceName, priority, weight, s.port(), hostname,
-                    addresses, txtValues);
+            ServiceInstance service = new ServiceInstance(serviceName, priority, weight, s.port(), hostname, addresses, txtValues);
             registeredService = mDNSService.register(service);
         }
         catch (IOException e) {

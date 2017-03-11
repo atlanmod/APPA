@@ -11,7 +11,7 @@
 
 package fr.inria.atlanmod.appa.service;
 
-import fr.inria.atlanmod.appa.base.Service;
+import fr.inria.atlanmod.appa.core.Service;
 import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
 import fr.inria.atlanmod.appa.datatypes.RamdomId;
 

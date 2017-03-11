@@ -9,19 +9,10 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.datatypes;
+package fr.inria.atlanmod.appa.core;
 
-import java.io.Serializable;
-
-import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public interface Id extends Serializable {
-
-    long toLong();
-
-    @Nonnull
-    @Override
-    String toString();
+public interface Action extends Runnable {
 }

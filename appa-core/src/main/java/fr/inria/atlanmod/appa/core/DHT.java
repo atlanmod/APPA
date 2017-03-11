@@ -9,15 +9,23 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.base;
+package fr.inria.atlanmod.appa.core;
 
-import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.messaging.ResponseHandler;
+import java.io.Serializable;
+import java.util.concurrent.Future;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public interface MessagingService extends Service {
+public interface DHT<K, V extends Serializable> {
 
-    ResponseHandler send(Message message, ConnectionDescription description);
+    /**
+     * Stores an object in this {@code DHT}.
+     */
+    void put(K key, V value);
+
+    /**
+     * Retrieves an object from this {@code DHT}.
+     */
+    Future<V> get(K key);
 }

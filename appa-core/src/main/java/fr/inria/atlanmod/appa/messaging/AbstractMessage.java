@@ -11,7 +11,7 @@
 
 package fr.inria.atlanmod.appa.messaging;
 
-import fr.inria.atlanmod.appa.base.Message;
+import fr.inria.atlanmod.appa.core.Message;
 import fr.inria.atlanmod.appa.datatypes.RamdomId;
 
 import java.io.ByteArrayOutputStream;

@@ -11,13 +11,14 @@
 
 package fr.inria.atlanmod.appa.messaging;
 
-import fr.inria.atlanmod.appa.base.Message;
-import fr.inria.atlanmod.appa.base.MessagingService;
+import fr.inria.atlanmod.appa.core.Message;
+import fr.inria.atlanmod.appa.core.MessagingService;
 import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
 import fr.inria.atlanmod.appa.datatypes.RamdomId;
 import fr.inria.atlanmod.appa.service.AbstractService;
 
 import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
@@ -53,6 +54,7 @@ public class DefaultMessagingService extends AbstractService implements Messagin
 
     }
 
+    @Nonnull
     @Override
     public ResponseHandler send(Message message, ConnectionDescription description) {
         return server.send(message.toByteArray(), description.getHost());

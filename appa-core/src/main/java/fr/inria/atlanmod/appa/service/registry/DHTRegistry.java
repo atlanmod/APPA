@@ -11,9 +11,9 @@
 
 package fr.inria.atlanmod.appa.service.registry;
 
-import fr.inria.atlanmod.appa.base.DHT;
-import fr.inria.atlanmod.appa.base.Registry;
-import fr.inria.atlanmod.appa.base.Service;
+import fr.inria.atlanmod.appa.core.DHT;
+import fr.inria.atlanmod.appa.core.Registry;
+import fr.inria.atlanmod.appa.core.Service;
 import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
 import fr.inria.atlanmod.appa.datatypes.RamdomId;
 import fr.inria.atlanmod.appa.service.AbstractService;

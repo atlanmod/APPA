@@ -9,23 +9,21 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.base;
+package fr.inria.atlanmod.appa.core;
+
+import fr.inria.atlanmod.appa.datatypes.RamdomId;
 
 import java.io.Serializable;
-import java.util.concurrent.Future;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public interface DHT<K, V extends Serializable> {
+public interface Message extends Serializable {
 
-    /**
-     * Stores an object in this {@code DHT}.
-     */
-    void put(K key, V value);
+    @Nonnull
+    RamdomId getId();
 
-    /**
-     * Retrieves an object from this {@code DHT}.
-     */
-    Future<V> get(K key);
+    @Nonnull
+    byte[] toByteArray();
 }

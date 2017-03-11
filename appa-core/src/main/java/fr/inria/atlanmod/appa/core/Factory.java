@@ -9,21 +9,17 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.base;
-
-import fr.inria.atlanmod.appa.datatypes.RamdomId;
-
-import java.io.Serializable;
+package fr.inria.atlanmod.appa.core;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public interface Message extends Serializable {
+public interface Factory {
 
     @Nonnull
-    RamdomId getId();
+    Registry createRegistry();
 
     @Nonnull
-    byte[] toByteArray();
+    MessagingService createMessaging();
 }

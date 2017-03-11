@@ -11,7 +11,7 @@
 
 package fr.inria.atlanmod.appa.service.dht.mock;
 
-import fr.inria.atlanmod.appa.base.DHT;
+import fr.inria.atlanmod.appa.core.DHT;
 
 import java.io.Serializable;
 import java.util.HashMap;

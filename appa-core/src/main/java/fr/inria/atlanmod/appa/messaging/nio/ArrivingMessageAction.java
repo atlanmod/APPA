@@ -11,8 +11,8 @@
 
 package fr.inria.atlanmod.appa.messaging.nio;
 
-import fr.inria.atlanmod.appa.base.Action;
-import fr.inria.atlanmod.appa.base.Message;
+import fr.inria.atlanmod.appa.core.Action;
+import fr.inria.atlanmod.appa.core.Message;
 
 import java.io.ByteArrayInputStream;
 import java.io.EOFException;

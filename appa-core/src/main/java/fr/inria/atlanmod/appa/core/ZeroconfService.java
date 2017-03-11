@@ -9,23 +9,30 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.base;
+package fr.inria.atlanmod.appa.core;
 
-import fr.inria.atlanmod.appa.datatypes.RamdomId;
-
-import java.net.InetAddress;
-
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public interface Peer {
+public interface ZeroconfService {
 
+    /**
+     * The name of the service.
+     */
     @Nonnull
-    RamdomId getId();
+    String name();
 
-    long getBasePort();
-
+    /**
+     * Type service type, used as a DNS-SD entry.
+     */
     @Nonnull
-    InetAddress getIp();
+    String type();
+
+    /**
+     * The service port.
+     */
+    @Nonnegative
+    int port();
 }

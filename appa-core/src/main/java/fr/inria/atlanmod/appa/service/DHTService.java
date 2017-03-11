@@ -11,8 +11,8 @@
 
 package fr.inria.atlanmod.appa.service;
 
-import fr.inria.atlanmod.appa.base.DHT;
-import fr.inria.atlanmod.appa.base.Service;
+import fr.inria.atlanmod.appa.core.DHT;
+import fr.inria.atlanmod.appa.core.Service;
 
 import java.io.Serializable;
 

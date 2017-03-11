@@ -1,5 +1,4 @@
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fr.inria.atlanmod.appa</groupId>
@@ -89,8 +88,6 @@
         <mockito.version>2.7.14</mockito.version>
 
         <tomp2p.version>5.0-Beta8</tomp2p.version>
-        <jmdns.version>3.5.1</jmdns.version>
-        <mdnsjava.version>2.2.0</mdnsjava.version>
     </properties>
 
     <dependencies>
@@ -107,28 +104,10 @@
 
             <!-- Net -->
 
-            <dependency>
+            <dependency> <!-- TODO Must be replaced by separate dependencies instead of AiO -->
                 <groupId>net.tomp2p</groupId>
                 <artifactId>tomp2p-all</artifactId>
                 <version>${tomp2p.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.jmdns</groupId>
-                <artifactId>jmdns</artifactId>
-                <version>${jmdns.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-api</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>net.posick</groupId>
-                <artifactId>mdnsjava</artifactId>
-                <version>${mdnsjava.version}</version>
             </dependency>
 
             <!-- Common -->

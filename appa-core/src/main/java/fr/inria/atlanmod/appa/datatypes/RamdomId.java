@@ -11,13 +11,12 @@
 
 package fr.inria.atlanmod.appa.datatypes;
 
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
-public final class RamdomId implements Serializable, Id {
+public final class RamdomId implements Id {
 
     @SuppressWarnings("JavaDoc")
     private static final long serialVersionUID = -812780808539442961L;
