@@ -1,42 +1,51 @@
+/*
+ * Copyright (c) 2016-2017 Atlanmod INRIA LINA Mines Nantes.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
+ */
+
 package fr.inria.atlanmod.appa.messaging;
+
+import fr.inria.atlanmod.appa.base.Message;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-import fr.inria.atlanmod.appa.base.Message;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+import static java.util.Objects.isNull;
+
+@ParametersAreNonnullByDefault
 public class ResponseHandler {
-	private byte[] rsp = null;
 
-	public synchronized boolean handleResponse(byte[] rsp) {
-		this.rsp = rsp;
-		this.notify();
-		return true;
-	}
+    private byte[] response;
 
-	public synchronized Message waitForResponse() {
-	    Message m = null;
-		while(this.rsp == null) {
-			try {
-				this.wait();
-			} catch (InterruptedException e) {
-			}
-		}
+    public synchronized boolean handleResponse(byte[] response) {
+        this.response = response;
+        notify();
+        return true;
+    }
 
-		ObjectInputStream ois;
-        try {
-            ois = new ObjectInputStream(new ByteArrayInputStream(rsp));
-            m = (Message) ois.readObject();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+    public synchronized Message waitForResponse() {
+        if (isNull(response)) {
+            try {
+                wait();
+            }
+            catch (InterruptedException ignored) {
+            }
         }
 
-		return m;
-
-	}
+        try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(response))) {
+            return (Message) ois.readObject();
+        }
+        catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

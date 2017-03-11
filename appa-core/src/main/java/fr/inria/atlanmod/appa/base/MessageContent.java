@@ -1,41 +1,40 @@
 /*
- * Created on 17 juin 2005
+ * Copyright (c) 2016-2017 Atlanmod INRIA LINA Mines Nantes.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
+ * Contributors:
+ *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
+
 package fr.inria.atlanmod.appa.base;
 
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 /**
- * Abstract class for message contents.
+ * Represents the content of a {@link Message}.
+ * <p>
  * The goal of this class is to represent the query part of a ResolverQuery.
- * @author sunye
- *
  */
-public abstract class MessageContent {
+@ParametersAreNonnullByDefault
+public interface MessageContent {
 
-    public static final String TypeTag = "type";
-    public static final String KeyTag = "key";
-    public static final String ClassNameTag = "className";
-    public static final String ManagerPeerIDTag = "managerPeerID";
-    public static final String AttributeTag = "attribute";
-    public static final String AttributeNameTag = "name";
-    public static final String AttributeSetTag = "attributeSet";
-    
-    
-    public MessageContent() {
+    String TYPE_TAG = "type";
 
-    }
-    
-    public abstract String getType();
+    String KEY_TAG = "key";
 
+    String CLASSNAME_TAG = "className";
 
-    
-    /**
-     * Parses a message and intialize this message with it.
-     * @param msg
-     */
-    abstract protected void parseContentMessage(String msg);
+    String MANAGER_PEER_ID_TAG = "managerPeerID";
 
-    
-    
+    String ATTRIBUTE_TAG = "attribute";
+
+    String ATTRIBUTE_NAME_TAG = "name";
+
+    String ATTRIBUTE_SET_TAG = "attributeSet";
+
+    String getType();
 }

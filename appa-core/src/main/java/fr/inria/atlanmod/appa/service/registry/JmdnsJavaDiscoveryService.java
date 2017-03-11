@@ -1,35 +1,52 @@
+/*
+ * Copyright (c) 2016-2017 Atlanmod INRIA LINA Mines Nantes.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
+ */
+
 package fr.inria.atlanmod.appa.service.registry;
 
 import fr.inria.atlanmod.appa.base.Service;
 import fr.inria.atlanmod.appa.base.ZeroconfService;
 import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
 import fr.inria.atlanmod.appa.datatypes.RamdomId;
-import fr.inria.atlanmod.appa.exception.OperationFailedException;
 import fr.inria.atlanmod.appa.rmi.RMIRegistryService;
 
-import javax.jmdns.JmDNS;
-import javax.jmdns.ServiceEvent;
-import javax.jmdns.ServiceInfo;
-import javax.jmdns.ServiceListener;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+import javax.jmdns.JmDNS;
+import javax.jmdns.ServiceEvent;
+import javax.jmdns.ServiceInfo;
+import javax.jmdns.ServiceListener;
+
+@ParametersAreNonnullByDefault
 public class JmdnsJavaDiscoveryService implements Service {
 
+    private final Map<String, ConnectionDescription> services = new ConcurrentHashMap<>();
+
     private JmDNS zeroconf;
-    private Map<String, ConnectionDescription> services = Collections.synchronizedMap(new HashMap<String,ConnectionDescription>());
 
-    public JmdnsJavaDiscoveryService() {
-
+    public static void main(String[] args) throws InterruptedException {
+        new JmdnsJavaDiscoveryService().publish(new RMIRegistryService());
+        Thread.sleep(30000);
     }
 
+    @Nonnull
     @Override
     public RamdomId id() {
         return null;
@@ -38,32 +55,30 @@ public class JmdnsJavaDiscoveryService implements Service {
     @Override
     public void start() {
         try {
-            this.zeroconf = JmDNS.create(InetAddress.getLocalHost());
+            zeroconf = JmDNS.create(InetAddress.getLocalHost());
             zeroconf.addServiceListener("_jrmp._tcp.local.", new SampleListener());
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @Override
     public void stop() {
-
     }
 
+    @Nonnegative
     @Override
     public int port() {
         return 0;
     }
 
-
-
-
-
-    public void publish(ZeroconfService s) throws OperationFailedException {
+    public void publish(ZeroconfService s) {
         ServiceInfo serviceInfo = ServiceInfo.create(s.type(), s.name(), s.port(), "");
         try {
             zeroconf.registerService(serviceInfo);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -74,13 +89,12 @@ public class JmdnsJavaDiscoveryService implements Service {
 
     @Override
     public void run() {
-
     }
 
-
+    @ParametersAreNonnullByDefault
     private class Locate implements Future<ConnectionDescription> {
-        private String name;
 
+        private final String name;
 
         public Locate(String name) {
             this.name = name;
@@ -103,12 +117,12 @@ public class JmdnsJavaDiscoveryService implements Service {
 
         @Override
         public ConnectionDescription get() throws InterruptedException, ExecutionException {
-            ConnectionDescription description =  services.get(name);
+            ConnectionDescription description = services.get(name);
             while (description == null) {
                 synchronized (services) {
                     services.wait();
                 }
-                description =  services.get(name);
+                description = services.get(name);
             }
             return description;
         }
@@ -119,7 +133,9 @@ public class JmdnsJavaDiscoveryService implements Service {
         }
     }
 
+    @ParametersAreNonnullByDefault
     private class SampleListener implements ServiceListener {
+
         @Override
         public void serviceAdded(ServiceEvent event) {
             System.out.println("Service added: " + event.getInfo());
@@ -141,20 +157,11 @@ public class JmdnsJavaDiscoveryService implements Service {
             InetAddress address = info.getInetAddresses()[0];
             int port = info.getPort();
 
-            ConnectionDescription description = new ConnectionDescription(address,port);
-            services.put(info.getName(),description);
+            ConnectionDescription description = new ConnectionDescription(address, port);
+            services.put(info.getName(), description);
             synchronized (services) {
                 services.notifyAll();
             }
-
-
-
         }
-    }
-
-    public static void main(String[] args) throws InterruptedException, OperationFailedException {
-
-        new JmdnsJavaDiscoveryService().publish(new RMIRegistryService());
-            Thread.sleep(30000);
     }
 }

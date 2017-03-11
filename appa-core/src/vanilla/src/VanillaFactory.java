@@ -1,10 +1,3 @@
-/*
- * Created on 2 ao�t 07
- *
- */
-
-import java.net.InetSocketAddress;
-
 import fr.inria.appa.base.DHT;
 import fr.inria.appa.base.Factory;
 import fr.inria.appa.base.MessagingService;
@@ -31,8 +24,8 @@ public class VanillaFactory implements Factory {
     }
 
     public MessagingService createMessaging() {
-    
-        ConnectionDescription cd = new ConnectionDescription(port+58);
+
+        ConnectionDescription cd = new ConnectionDescription(port + 58);
         Server s = new MessagingServer(cd.getSocketAddress(), schedule);
         Id id = new Id();
         MessagingService ms = new MessagingServiceImpl(id, cd, s);
@@ -41,7 +34,7 @@ public class VanillaFactory implements Factory {
     }
 
     public Registry createRegistry() {
-        ConnectionDescription cd = new ConnectionDescription(port+62);
+        ConnectionDescription cd = new ConnectionDescription(port + 62);
         Id id = new Id();
         return new DHTRegistry(id, cd, dht);
     }

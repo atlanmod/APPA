@@ -1,4 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -9,14 +9,37 @@
     </parent>
 
     <artifactId>appa-core</artifactId>
+
     <packaging>jar</packaging>
 
-    <name>Appa :: Core</name>
+    <name>Appa Core</name>
+    <description />
 
     <properties>
-
     </properties>
 
+    <dependencies>
+
+        <!-- Net -->
+
+        <dependency>
+            <groupId>org.jmdns</groupId>
+            <artifactId>jmdns</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>net.posick</groupId>
+            <artifactId>mdnsjava</artifactId>
+        </dependency>
+
+        <!-- Common -->
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
+    </dependencies>
 
     <build>
         <plugins>

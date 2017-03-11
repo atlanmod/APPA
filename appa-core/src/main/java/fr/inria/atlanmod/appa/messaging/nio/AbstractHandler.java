@@ -11,13 +11,29 @@
 
 package fr.inria.atlanmod.appa.messaging.nio;
 
-import java.io.IOException;
-import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+/**
+ * Sender <-> Reader
+ * <p>
+ * Receiver <-> Answerer
+ */
 @ParametersAreNonnullByDefault
-public interface Handler {
+public abstract class AbstractHandler implements Handler {
 
-    void handle(SelectionKey key) throws IOException;
+    protected final MessagingServer messagingServer;
+
+    public AbstractHandler(MessagingServer messagingServer) {
+        this.messagingServer = messagingServer;
+    }
+
+    protected Selector getSelector() {
+        return messagingServer.getSelector();
+    }
+
+    protected void schedule(Runnable r) {
+        messagingServer.schedule(r);
+    }
 }

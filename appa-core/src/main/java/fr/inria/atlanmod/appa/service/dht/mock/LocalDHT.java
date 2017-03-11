@@ -1,79 +1,83 @@
 /*
- * Created on 4 juil. 07
+ * Copyright (c) 2016-2017 Atlanmod INRIA LINA Mines Nantes.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
+ * Contributors:
+ *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
+
 package fr.inria.atlanmod.appa.service.dht.mock;
 
 import fr.inria.atlanmod.appa.base.DHT;
-import fr.inria.atlanmod.appa.exception.ObjectNotFoundException;
-import fr.inria.atlanmod.appa.exception.OperationFailedException;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
+import java.util.NoSuchElementException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
 
-public class LocalDHT implements DHT<String,Serializable> {
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
+public class LocalDHT implements DHT<String, Serializable> {
+
+    @SuppressWarnings("JavaDoc")
     private static Logger logger = Logger.getLogger("appa.dht.mock");
 
-    private long delay;
-    private Map<String, Serializable> map = new HashMap<String, Serializable>();
+    private final long delay;
 
-    public LocalDHT(long l) {
-        delay = l;
+    private final Map<String, Serializable> map = new HashMap<>();
+
+    public LocalDHT(long delay) {
+        this.delay = delay;
     }
 
-    public Future<Serializable> get(String key) throws OperationFailedException,
-            ObjectNotFoundException {
-        delay();
-
-        if (map.containsKey(key)) {
-            return new ReturnValue<Serializable>(map.get(key)) ;
-        } else {
-            throw new ObjectNotFoundException();
-        }
-    }
-
-    public void put(String key, Serializable value) throws OperationFailedException {
+    @Override
+    public void put(String key, Serializable value) {
         logger.info(String.format("Putting [%s] = %s", key, value));
 
         delay();
         map.put(key, value);
-   }
+    }
 
-    private synchronized void delay() throws OperationFailedException {
-        try {
-            this.wait(delay);
-        } catch (InterruptedException e) {
-            throw new OperationFailedException();
+    @Override
+    public Future<Serializable> get(String key) {
+        delay();
+
+        if (map.containsKey(key)) {
+            return new ReturnValue<>(map.get(key));
+        }
+        else {
+            throw new NoSuchElementException();
         }
     }
 
-    class ReturnValue<V> implements Future {
+    private synchronized void delay() {
+        try {
+            this.wait(delay);
+        }
+        catch (InterruptedException e) {
+            throw new NoSuchElementException();
+        }
+    }
+
+    @ParametersAreNonnullByDefault
+    private static class ReturnValue<V> implements Future<V> {
+
         private V value;
 
         public ReturnValue(V v) {
-            value =v;
+            value = v;
         }
 
         @Override
-        public boolean isDone() {
-            return true;
-        }
-
-        @Override
-        public Object get() throws InterruptedException, ExecutionException {
-            return value;
-        }
-
-        @Override
-        public Object get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
-            return value;
+        public boolean cancel(boolean mayInterruptIfRunning) {
+            return false;
         }
 
         @Override
@@ -82,12 +86,18 @@ public class LocalDHT implements DHT<String,Serializable> {
         }
 
         @Override
-        public boolean cancel(boolean mayInterruptIfRunning) {
-            return false;
+        public boolean isDone() {
+            return true;
         }
 
+        @Override
+        public V get() {
+            return value;
+        }
 
+        @Override
+        public V get(long timeout, TimeUnit unit) {
+            return value;
+        }
     }
-
-
 }

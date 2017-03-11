@@ -1,20 +1,21 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fr.inria.atlanmod.appa</groupId>
     <artifactId>appa</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+
     <packaging>pom</packaging>
 
-    <name>Appa :: Appa</name>
-
+    <name>Appa</name>
     <description>APPA is testing platform for large-scale distributed applications</description>
 
+    <url />
     <inceptionYear>2016</inceptionYear>
 
     <organization>
-        <name>Inria-AtlanMod Team</name>
+        <name>Atlanmod INRIA LINA Mines Nantes</name>
         <url>http://www.emn.fr/z-info/atlanmod/index.php/Main_Page</url>
     </organization>
 
@@ -52,35 +53,12 @@
     <prerequisites>
         <maven>3.3.9</maven>
     </prerequisites>
-	
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <manifest-location>META-INF</manifest-location>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
-        <argLine /> <!-- Keep it empty -->
-        <argLine.global>-Xms256m -Xmx2g -XX:+UseConcMarkSweepGC</argLine.global>
-
-        <emf.version>2.12.0</emf.version>
-        <ecore.version>2.12.0</ecore.version>
-        <xcore.version>1.1.100</xcore.version>
-
-        <javax-annotations.version>3.0.1</javax-annotations.version>
-
-        <assertj.version>3.6.2</assertj.version>
-        <junit.version>4.12</junit.version>
-        <mockito.version>2.7.14</mockito.version>
-        <guava.version>21.0</guava.version>
-        <javax-annotations.version>3.0.1</javax-annotations.version>
-        <junit.version>4.12</junit.version>
-        <tomp2p.version>5.0-Beta8</tomp2p.version>
-    </properties>
 
     <modules>
         <module>appa-core</module>
         <module>appa-stub</module>
     </modules>
+
     <developers>
         <developer>
             <name>Yoann Vernageau</name>
@@ -94,386 +72,382 @@
         </developer>
     </developers>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+        <argLine /> <!-- Keep it empty -->
+        <argLine.global>-Xms256m -Xmx2g -XX:+UseConcMarkSweepGC</argLine.global>
+
+        <guava.version>21.0</guava.version>
+
+        <javax-annotations.version>3.0.1</javax-annotations.version>
+
+        <assertj.version>3.6.2</assertj.version>
+        <junit.version>4.12</junit.version>
+        <mockito.version>2.7.14</mockito.version>
+
+        <tomp2p.version>5.0-Beta8</tomp2p.version>
+        <jmdns.version>3.5.1</jmdns.version>
+        <mdnsjava.version>2.2.0</mdnsjava.version>
+    </properties>
+
     <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-        </dependency>
-
-		
-        <dependency>
-            <groupId>net.tomp2p</groupId>
-            <artifactId>tomp2p-all</artifactId>
-            <version>${tomp2p.version}</version>
-        </dependency>
-
-
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
-
-
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
             <version>${javax-annotations.version}</version>
-            <optional>true</optional>
-        </dependency>
-
-        <!--
-        <dependency>
-            <groupId>org.jmdns</groupId>
-            <artifactId>jmdns</artifactId>
-            <version>3.4.1</version>
-        </dependency>
-        -->
-
-        <dependency>
-            <groupId>net.posick</groupId>
-            <artifactId>mdnsjava</artifactId>
-            <version>2.2.0</version>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.jmdns</groupId>
-            <artifactId>jmdns</artifactId>
-            <version>3.5.2-SNAPSHOT</version>
-        </dependency>
-		
-        <!-- Test -->
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>${mockito.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <version>${assertj.version}</version>
-            <scope>test</scope>
+            <optional>true</optional><!-- needed only for annotations -->
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <!-- Net -->
+
+            <dependency>
+                <groupId>net.tomp2p</groupId>
+                <artifactId>tomp2p-all</artifactId>
+                <version>${tomp2p.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jmdns</groupId>
+                <artifactId>jmdns</artifactId>
+                <version>${jmdns.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>net.posick</groupId>
+                <artifactId>mdnsjava</artifactId>
+                <version>${mdnsjava.version}</version>
+            </dependency>
+
+            <!-- Common -->
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+
+            <!-- Test -->
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${assertj.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <repositories>
         <repository>
             <id>tomp2p.net</id>
             <url>http://tomp2p.net/dev/mvn/</url>
         </repository>
-
     </repositories>
 
     <build>
-    <resources>
-        <resource>
-            <directory>${project.basedir}/src/main/resources</directory>
-            <excludes>
-                <exclude>**/.empty</exclude>
-            </excludes>
-        </resource>
-    </resources>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <excludes>
+                    <exclude>**/.empty</exclude>
+                </excludes>
+            </resource>
+        </resources>
 
-    <testResources>
-        <testResource>
-            <directory>${project.basedir}/src/test/resources</directory>
-            <excludes>
-                <exclude>**/.empty</exclude>
-            </excludes>
-        </testResource>
-    </testResources>
+        <testResources>
+            <testResource>
+                <directory>${project.basedir}/src/test/resources</directory>
+                <excludes>
+                    <exclude>**/.empty</exclude>
+                </excludes>
+            </testResource>
+        </testResources>
 
-    <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <executions>
-                <execution>
-                    <goals>
-                        <goal>test-jar</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
-
-        <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>build-helper-maven-plugin</artifactId>
-            <executions>
-                <execution>
-                    <goals>
-                        <goal>parse-version</goal>
-                    </goals>
-                    <configuration>
-                        <propertyPrefix>osgi</propertyPrefix>
-                    </configuration>
-                </execution>
-            </executions>
-        </plugin>
-    </plugins>
-
-    <pluginManagement>
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.12</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <version>3.2.0</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <instructions>
-                        <Bundle-Version>
-                            <!-- Properties ${osgi.XXX} : Created by build-helper-maven-plugin:parse-version -->
-                            ${osgi.majorVersion}.${osgi.minorVersion}.${osgi.incrementalVersion}.${maven.build.timestamp}
-                        </Bundle-Version>
-                        <Bundle-ClassPath>.,{maven-dependencies}</Bundle-ClassPath>
-                        <Import-Package />
-                        <Embed-Dependency>
-                            <!-- org.eclipse.osgi dependencies should not be part of the Embed-Dependency tag,
-                                 otherwise it creates conflicts with running osgi version (these dependencies are
-                                 only needed when running the plugins in an eclipse-based environment) -->
-                            *;
-                            scope=compile|runtime;
-                            type=!pom;
-                            artifactId=!jsr305;
-                            groupId=!${project.groupId}|org.eclipse.emf|org.osgi
-                        </Embed-Dependency>
-                        <Embed-Transitive>true</Embed-Transitive>
-                    </instructions>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-changes-plugin</artifactId>
-                <version>2.12.1</version>
-                <configuration>
-                    <failOnError>false</failOnError>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>3.0.0</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.0</version>
-                <configuration>
-                    <compilerArgs>
-                        <!--<arg>-Xlint:all</arg>-->
-                    </compilerArgs>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.2</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.10</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-install-plugin</artifactId>
-                <version>2.5.2</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.7.201606060606</version>
-                <configuration>
-                    <excludes>
-                        <exclude>**/tests/*</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-
-            <plugin>
+            <plugin> <!-- Generate 'test-jar's beside source 'jar's -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.2</version>
-                <configuration>
-                    <skipIfEmpty>true</skipIfEmpty>
-                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
-            <plugin>
-                <!-- "deploy-javadoc" profile comes in addition to this configuration -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.4</version>
-                <configuration>
-                    <additionalparam>-Xdoclint:none</additionalparam>
-                    <failOnError>false</failOnError>
-                    <quiet>true</quiet>
-                    <notimestamp>true</notimestamp>
-                    <nosince>true</nosince>
-                    <author>false</author>
-                    <groups>
-                        <group>
-                            <title>Core</title>
-                            <packages>fr.inria.atlanmod.appa*</packages>
-                        </group>
-                    </groups>
-                    <tags>
-                        <tag>
-                            <name>note</name>
-                            <placement>a</placement>
-                            <head>Note:</head>
-                        </tag>
-                        <tag>
-                            <name>future</name>
-                            <placement>a</placement>
-                            <head>In Future:</head>
-                        </tag>
-                    </tags>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.0.1</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
-                <configuration>
-                    <!-- Property @{argLine} : created by jacoco:prepare-agent -->
-                    <argLine>@{argLine} ${argLine.global}</argLine>
-                    <!-- '/tmp' directory doesn't exist in Windows : think to comment this line before commit -->
-                    <!--<argLine>-Djava.io.tmpdir=/tmp/</argLine>-->
-                    <failIfNoTests>false</failIfNoTests>
-                </configuration>
-            </plugin>
-
-            <plugin> <!-- Disable by default -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>3.6</version>
-                <configuration>
-                    <skip>true</skip>
-                    <skipDeploy>true</skipDeploy>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.eclipse.xtext</groupId>
-                <artifactId>xtext-maven-plugin</artifactId>
-                <version>2.9.2</version>
+            <plugin> <!-- Add ${osgi.***Version} properties for `maven-bundle-plugin` -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>parse-version</goal>
+                        </goals>
+                        <configuration>
+                            <propertyPrefix>osgi</propertyPrefix>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
-    </pluginManagement>
-    </build>
 
-
-<profiles>
-    <!-- A profile to manage Javadoc dependencies (EMF, OSGi,...) -->
-    <profile>
-        <id>deploy-javadoc</id>
-        <build>
-            <pluginManagement>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.10.4</version>
-                        <configuration>
-                            <includeDependencySources>true</includeDependencySources>
-                            <detectLinks>true</detectLinks>
-                            <links>
-                                <!-- Common -->
-                                <link>https://google.github.io/guava/releases/20.0/api/docs/</link>
-                            </links>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </pluginManagement>
-        </build>
-    </profile>
-    <!-- A profile to deploy artifacts on OSS Sonartype -->
-    <profile>
-        <id>deploy-artifacts</id>
-        <build>
+        <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-bundle-plugin</artifactId>
+                    <version>3.2.0</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <instructions>
+                            <Bundle-Version>
+                                <!-- Properties ${osgi.XXX} : Created by build-helper-maven-plugin:parse-version -->
+                                ${osgi.majorVersion}.${osgi.minorVersion}.${osgi.incrementalVersion}.${maven.build.timestamp}
+                            </Bundle-Version>
+                            <Bundle-ClassPath>.,{maven-dependencies}</Bundle-ClassPath>
+                            <Import-Package />
+                            <Embed-Dependency>
+                                <!-- org.eclipse.osgi dependencies should not be part of the Embed-Dependency tag,
+                                     otherwise it creates conflicts with running osgi version (these dependencies are
+                                     only needed when running the plugins in an eclipse-based environment) -->
+                                *;
+                                scope=compile|runtime;
+                                type=!pom;
+                                artifactId=!jsr305;
+                                groupId=!${project.groupId}|org.eclipse.emf|org.osgi
+                            </Embed-Dependency>
+                            <Embed-Transitive>true</Embed-Transitive>
+                        </instructions>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.6.1</version>
+                    <configuration>
+                        <compilerArgs>
+                            <!--<arg>-Xlint:all</arg>-->
+                        </compilerArgs>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.2</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>2.5.2</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.7.9</version>
+                    <configuration>
+                        <excludes>
+                            <exclude>**/tests/*</exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.0.2</version>
+                    <configuration>
+                        <skipIfEmpty>true</skipIfEmpty>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <!-- `deploy-javadoc` profile comes in addition to this configuration -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.10.4</version>
+                    <configuration>
+                        <additionalparam>-Xdoclint:none</additionalparam>
+                        <failOnError>false</failOnError>
+                        <quiet>true</quiet>
+                        <notimestamp>true</notimestamp>
+                        <nosince>true</nosince>
+                        <author>false</author>
+                        <groups>
+                            <group>
+                                <title>Core</title>
+                                <packages>fr.inria.atlanmod.appa*</packages>
+                            </group>
+                        </groups>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.0.2</version>
+                </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
                     <version>3.0.1</version>
-                    <executions>
-                        <execution>
-                            <id>attach-sources</id>
-                            <goals>
-                                <goal>jar-no-fork</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.10.4</version>
-                    <executions>
-                        <execution>
-                            <id>attach-javadocs</id>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                        </execution>
-                    </executions>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.19.1</version>
+                    <configuration>
+                        <!-- Property @{argLine} : created by jacoco:prepare-agent -->
+                        <argLine>@{argLine} ${argLine.global}</argLine>
+                        <!-- '/tmp' directory doesn't exist in Windows : think to comment this line before commit -->
+                        <!--<argLine>-Djava.io.tmpdir=/tmp/</argLine>-->
+                        <failIfNoTests>false</failIfNoTests>
+                    </configuration>
                 </plugin>
-                <plugin>
+
+                <plugin> <!-- Disable by default -->
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-gpg-plugin</artifactId>
-                    <version>1.6</version>
-                    <executions>
-                        <execution>
-                            <id>sign-artifacts</id>
-                            <phase>verify</phase>
-                            <goals>
-                                <goal>sign</goal>
-                            </goals>
-                        </execution>
-                    </executions>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.6</version>
+                    <configuration>
+                        <skip>true</skip>
+                        <skipDeploy>true</skipDeploy>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.eclipse.xtext</groupId>
+                    <artifactId>xtext-maven-plugin</artifactId>
+                    <version>2.9.2</version>
                 </plugin>
             </plugins>
-        </build>
-    </profile>
-</profiles>
+        </pluginManagement>
+    </build>
+
+
+    <profiles>
+        <!-- A profile to manage Javadoc dependencies (EMF, OSGi,...) -->
+        <profile>
+            <id>deploy-javadoc</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-javadoc-plugin</artifactId>
+                            <version>2.10.4</version>
+                            <configuration>
+                                <includeDependencySources>true</includeDependencySources>
+                                <detectLinks>true</detectLinks>
+                                <links>
+                                    <!-- Common -->
+                                    <link>https://google.github.io/guava/releases/20.0/api/docs/</link>
+                                </links>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+        <!-- A profile to deploy artifacts on OSS Sonartype -->
+        <profile>
+            <id>deploy-artifacts</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.0.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.10.4</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

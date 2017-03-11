@@ -1,4 +1,19 @@
+/*
+ * Copyright (c) 2016-2017 Atlanmod INRIA LINA Mines Nantes.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
+ */
+
 package fr.inria.atlanmod.appa.messaging.nio;
+
+import fr.inria.atlanmod.appa.kernel.Schedule;
+import fr.inria.atlanmod.appa.messaging.ResponseHandler;
+import fr.inria.atlanmod.appa.messaging.Server;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -12,106 +27,80 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.UnresolvedAddressException;
 import java.nio.channels.UnsupportedAddressTypeException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Logger;
 
-import fr.inria.atlanmod.appa.kernel.Schedule;
-import fr.inria.atlanmod.appa.messaging.ResponseHandler;
-import fr.inria.atlanmod.appa.messaging.Server;
-/**
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
- * @author sunye
- *
- */
+@ParametersAreNonnullByDefault
 public class MessagingServer implements Runnable, Server {
 
-    private static final Logger logger = Logger.global;
-
+    @SuppressWarnings("JavaDoc")
+    private static final Logger logger = Logger.getLogger("appa.messaging");
 
     /**
      * Queue a channel registration since the caller is not the selecting thread.
      * Otherwise, the register() method will block.
      */
-    private List<Register> pending = Collections.synchronizedList(new LinkedList<Register>());
+    private final Queue<Register> pending = new LinkedBlockingQueue<>();
 
-    private Map<InetSocketAddress, SocketChannel> openConnections = new HashMap<InetSocketAddress, SocketChannel>();
-	/**
-	 * The channel on which we'll accept connections
-	 */
-	private ServerSocketChannel serverSocket;
+    /**
+     * The channel on which we'll handle connections.
+     */
+    private ServerSocketChannel serverSocket;
 
-	/**
-	 * The selector we'll be monitoring
-	 */
-	private Selector selector;
+    /**
+     * The selector we'll be monitoring.
+     */
+    private Selector selector;
 
+    private Schedule schedule;
 
-	private Schedule schedule;
-
-	/**
-	 * Create a new selector
-	 * Bind the server socket to the specified address and port
-	 * Register the server socket channel, indicating an interest in accepting new connections
-	 * @param isa
-	 * @param schedule
-	 * @throws IOException
-	 */
-	public MessagingServer(InetSocketAddress isa, Schedule scd) {
-
-	    try {
+    /**
+     * Create a new selector.
+     * Bind the server socket to the specified address and port
+     * Register the server socket channel, indicating an interest in accepting new connections
+     */
+    public MessagingServer(InetSocketAddress socketAddress, Schedule schedule) {
+        try {
             selector = createSelector();
             serverSocket = ServerSocketChannel.open();
             serverSocket.configureBlocking(false);
-            serverSocket.socket().bind(isa);
-            SelectionKey sk = serverSocket.register(selector, SelectionKey.OP_ACCEPT);
-            sk.attach(new Acceptor(this));
-            schedule = scd;
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
+            serverSocket.socket().bind(socketAddress);
+
+            SelectionKey selectionKey = serverSocket.register(selector, SelectionKey.OP_ACCEPT);
+            selectionKey.attach(new Acceptor(this));
+
+            this.schedule = schedule;
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
-	}
+    public static void main(String[] args) {
+        Schedule s = new Schedule(3);
+        new Thread(s).start();
+        InetSocketAddress isa = new InetSocketAddress(1958);
+        MessagingServer ms = new MessagingServer(isa, s);
+        new Thread(ms).start();
 
+    }
 
     protected Selector createSelector() throws IOException {
         return Selector.open();
     }
 
-
-	/*
-     * (non-Javadoc)
-     *
-     * @see Server#send(byte[],
-     *      java.net.InetSocketAddress)
-     *
-     * Queue a channel registration since the caller is not the selecting
-     * thread. As part of the registration we'll register an interest in
-     * connection events. These are raised when a channel is ready to complete
-     * connection establishment.
-     */
-	public ResponseHandler send(byte[] data, InetSocketAddress isa) {
-
-        assert data != null;
-        assert isa != null;
-
+    @Nonnull
+    @Override
+    public ResponseHandler send(byte[] data, InetSocketAddress isa) {
         ResponseHandler handler = new ResponseHandler();
         SocketChannel socket;
         try {
-//             if (openConnections.containsKey(isa)) {
-//             socket = openConnections.get(isa);
-//             SelectionKey key = socket.keyFor(selector);
-//             key.attach(new Sender(this, key, ByteBuffer.wrap(data),
-//             handler));
-//
-//             } else {
             socket = SocketChannel.open();
-//             openConnections.put(isa, socket);
             socket.configureBlocking(false);
             socket.connect(isa);
 
@@ -120,47 +109,44 @@ public class MessagingServer implements Runnable, Server {
             }
 
             selector.wakeup();
-//                       }
-
-        } catch (ClosedByInterruptException e) {
+        }
+        catch (ClosedByInterruptException e) {
             // If another thread interrupts the current thread while the
             // connect operation is in progress, thereby closing the channel
             // and setting the current thread's interrupt status
-        } catch (AsynchronousCloseException e) {
-            // If another thread closes this channel while the connect operation
-            // is in progress
-        } catch (UnresolvedAddressException e) {
+        }
+        catch (AsynchronousCloseException e) {
+            // If another thread closes this channel while the connect operation is in progress
+        }
+        catch (UnresolvedAddressException e) {
             // If the given remote address is not fully resolved
-        } catch (UnsupportedAddressTypeException e) {
+        }
+        catch (UnsupportedAddressTypeException e) {
             // If the type of the given remote address is not supported
-        } catch (SecurityException e) {
-            // If a security manager has been installed and it does not permit
-            // access to the given remote endpoint
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
+        }
+        catch (SecurityException e) {
+            // If a security manager has been installed and it does not permit access to the given remote endpoint
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
 
         return handler;
     }
 
-	public void answer(SocketChannel socket, ByteBuffer data) throws IOException {
-	    //logger.info("Answering: " + data);
-
-	    assert socket != null;
-	    assert data != null;
-
+    public void answer(SocketChannel socket, ByteBuffer data) throws IOException {
+        //logger.info("Answering: " + data);
         new Answerer(this, socket, data);
-	}
+    }
 
-
-	public void run() {
+    @Override
+    public void run() {
         logger.info(String.format("NIO MessagingServer running on %s",
                 serverSocket.socket().getLocalSocketAddress()));
         try {
             while (!Thread.interrupted()) {
 
-                synchronized(pending) {
+                synchronized (pending) {
                     for (Register each : pending) {
                         each.register();
                     }
@@ -174,49 +160,38 @@ public class MessagingServer implements Runnable, Server {
                 }
                 selected.clear();
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-	Selector getSelector() {
-	    assert selector != null : "Null selector";
-	    return this.selector;
-	}
+    Selector getSelector() {
+        assert selector != null : "Null selector";
+        return this.selector;
+    }
 
-	ServerSocketChannel getServerSocket() {
-	    return serverSocket;
-	}
+    ServerSocketChannel getServerSocket() {
+        return serverSocket;
+    }
 
-	void schedule(Runnable r) {
-	    schedule.schedule(r);
-	}
+    void schedule(Runnable r) {
+        schedule.schedule(r);
+    }
 
-	private void dispatch(SelectionKey key) {
-
+    private void dispatch(SelectionKey key) {
         try {
-            Handler h = (Handler) (key.attachment());
-            if (h != null)
-                h.run(key);
-            else
+            Handler h = (Handler) key.attachment();
+            if (h != null) {
+                h.handle(key);
+            }
+            else {
                 logger.warning("Selection key without attachment");
-        } catch (NotYetConnectedException e) {
+            }
+        }
+        catch (NotYetConnectedException | IOException e) {
             // The channel is not yet connected.
             e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
-
     }
-
-
-	public static void main(String[] args) {
-		    Schedule s = new Schedule(3);
-			new Thread(s).start();
-			InetSocketAddress isa = new InetSocketAddress(1958);
-			MessagingServer ms = new MessagingServer(isa, s);
-			new Thread(ms).start();
-
-	}
 }

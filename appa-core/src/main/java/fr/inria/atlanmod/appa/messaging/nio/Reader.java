@@ -1,8 +1,17 @@
 /*
- * Created on 1 ao�t 07
+ * Copyright (c) 2016-2017 Atlanmod INRIA LINA Mines Nantes.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
+ * Contributors:
+ *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
+
 package fr.inria.atlanmod.appa.messaging.nio;
+
+import fr.inria.atlanmod.appa.messaging.ResponseHandler;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -10,31 +19,35 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import java.util.logging.Logger;
 
-import fr.inria.atlanmod.appa.messaging.ResponseHandler;
+import javax.annotation.ParametersAreNonnullByDefault;
 
-class Reader extends Handler  {
-    private static final Logger logger = Logger.global;
-    private static int MAXIN = 8192;
+@ParametersAreNonnullByDefault
+class Reader extends AbstractHandler {
 
-    private final SelectionKey sk;
-    private ByteBuffer input = ByteBuffer.allocate(MAXIN);
-    private Object sender;
-    private ResponseHandler handler;
+    @SuppressWarnings("JavaDoc")
+    private static final Logger logger = Logger.getLogger("appa.messaging");
 
-    public Reader(MessagingServer ms, SelectionKey key, ResponseHandler rh) throws IOException {
-        super(ms);
-        assert key != null;
+    private static final int MAXIN = 8192;
 
-        sk = key;
-        handler = rh;
-        sender = sk.attachment();
-        sk.interestOps(SelectionKey.OP_READ);
-        sk.attach(this);
-        sk.selector().wakeup();
+    private final SelectionKey selectionKey;
+    private final ByteBuffer input = ByteBuffer.allocate(MAXIN);
+
+    private final Object sender;
+    private final ResponseHandler handler;
+
+    public Reader(MessagingServer messagingServer, SelectionKey selectionKey, ResponseHandler handler) throws IOException {
+        super(messagingServer);
+
+        this.selectionKey = selectionKey;
+        this.handler = handler;
+        this.sender = this.selectionKey.attachment();
+        this.selectionKey.interestOps(SelectionKey.OP_READ);
+        this.selectionKey.attach(this);
+        this.selectionKey.selector().wakeup();
     }
 
     @Override
-    public void run(SelectionKey key) throws IOException {
+    public void handle(SelectionKey key) throws IOException {
         int numRead;
 
         SocketChannel socket = (SocketChannel) key.channel();
@@ -46,24 +59,23 @@ class Reader extends Handler  {
         if (numRead == -1) {
             // Remote entity shut the socket down cleanly. Do the
             // same from our end and cancel the channel.
-            sk.channel().close();
-            sk.cancel();
-        } else if (numRead >0 ) {
+            selectionKey.channel().close();
+            selectionKey.cancel();
+        }
+        else if (numRead > 0) {
             byte[] rspData = new byte[numRead];
             System.arraycopy(input.array(), 0, rspData, 0, numRead);
             process(rspData);
         }
 
-        sk.channel().close();
+        selectionKey.channel().close();
     }
 
-
     private void process(byte[] data) {
-        if (data.length < 5)
+        if (data.length < 5) {
             logger.info("Message size smaller than 5 !");
+        }
         handler.handleResponse(data);
         //schedule(new ArrivingMessageAction(messaging, socket, data));
     }
-
-
 }

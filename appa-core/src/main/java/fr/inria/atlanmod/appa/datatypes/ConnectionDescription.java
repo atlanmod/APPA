@@ -1,7 +1,14 @@
 /*
- * Created on 27 juil. 07
+ * Copyright (c) 2016-2017 Atlanmod INRIA LINA Mines Nantes.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
+ * Contributors:
+ *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
+
 package fr.inria.atlanmod.appa.datatypes;
 
 import java.io.ByteArrayInputStream;
@@ -13,41 +20,32 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
-public class ConnectionDescription implements Serializable {
+public final class ConnectionDescription implements Serializable {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+    @SuppressWarnings("JavaDoc")
+    private static final long serialVersionUID = -5648760003002377742L;
 
-    private InetSocketAddress socketAddress;
+    private static final String LOCALHOST = "127.0.0.1";
 
-    public ConnectionDescription(InetSocketAddress addr) {
-        socketAddress = addr;
+    private final InetSocketAddress host;
+
+    public ConnectionDescription(InetSocketAddress socketAddress) {
+        this.host = socketAddress;
     }
 
     public ConnectionDescription(int port) {
-        this(new InetSocketAddress("localhost", port));
+        this(new InetSocketAddress(LOCALHOST, port));
     }
 
-    public ConnectionDescription(InetAddress addr, int port) {
-        this(new InetSocketAddress(addr, port));
-    }
-
-    public InetSocketAddress getSocketAddress() {
-        return socketAddress;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("%s:%d", socketAddress.getHostName(), socketAddress.getPort());
+    public ConnectionDescription(InetAddress address, int port) {
+        this(new InetSocketAddress(address, port));
     }
 
     public static void main(String[] argv) {
-
         try {
-            InetSocketAddress addr = new InetSocketAddress("localhost", 22);
+            InetSocketAddress addr = new InetSocketAddress(LOCALHOST, 22);
             ConnectionDescription cd = new ConnectionDescription(addr);
+
             ByteArrayOutputStream oStream = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(oStream);
             oos.writeObject(cd);
@@ -58,16 +56,19 @@ public class ConnectionDescription implements Serializable {
             ConnectionDescription xcd = (ConnectionDescription) ois.readObject();
             ois.close();
 
-            System.out.println(xcd.getSocketAddress());
-
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
+            System.out.println(xcd.getHost());
+        }
+        catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
 
+    public InetSocketAddress getHost() {
+        return host;
+    }
 
+    @Override
+    public String toString() {
+        return String.format("%s:%d", host.getHostName(), host.getPort());
     }
 }

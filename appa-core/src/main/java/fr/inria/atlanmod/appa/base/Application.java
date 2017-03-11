@@ -1,7 +1,14 @@
 /*
- * Created on 26 juil. 07
+ * Copyright (c) 2016-2017 Atlanmod INRIA LINA Mines Nantes.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
+ * Contributors:
+ *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
+
 package fr.inria.atlanmod.appa.base;
 
 import java.util.ArrayList;
@@ -9,27 +16,26 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.logging.Logger;
 
-import fr.inria.atlanmod.appa.exception.OperationFailedException;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public abstract class Application {
 
-    private Logger logger = Logger.global;
+    @SuppressWarnings("JavaDoc")
+    private static final Logger logger = Logger.getGlobal();
 
-    private List<Service> services = new ArrayList<Service>();
+    private final Registry registry;
 
-    private Registry registry;
+    private final MessagingService messaging;
 
-    private MessagingService messaging;
+    private final List<Service> services = new ArrayList<>();
 
     public Application(Factory factory) {
         registry = factory.createRegistry();
         messaging = factory.createMessaging();
 
-        assert registry != null : "Registry service was not created correctly";
-        assert messaging != null : "Messaging service was not created correctly";
-
-        this.addService(registry);
-        this.addService(messaging);
+        addService(registry);
+        addService(messaging);
     }
 
     public MessagingService getMessagingService() {
@@ -40,10 +46,8 @@ public abstract class Application {
         return registry;
     }
 
-    protected void addService (Service s) {
-        assert s != null : "Cannot add a null service";
-
-        services.add(s);
+    protected void addService(Service service) {
+        services.add(service);
     }
 
     public void start() {
@@ -54,15 +58,14 @@ public abstract class Application {
             each.start();
             try {
                 registry.publish(each);
-            } catch (OperationFailedException e) {
-                // TODO Auto-generated catch block
+            }
+            catch (RuntimeException e) {
                 e.printStackTrace();
             }
         }
     }
 
     public void stop() {
-
         ListIterator<Service> it = services.listIterator(services.size());
         Service each;
 
@@ -71,12 +74,10 @@ public abstract class Application {
             each.stop();
             try {
                 registry.unpublish(each);
-            } catch (OperationFailedException e) {
-                // TODO Auto-generated catch block
+            }
+            catch (RuntimeException e) {
                 e.printStackTrace();
             }
         }
     }
-
-
 }

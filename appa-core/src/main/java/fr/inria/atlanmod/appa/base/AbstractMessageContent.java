@@ -11,13 +11,13 @@
 
 package fr.inria.atlanmod.appa.base;
 
-import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.messaging.ResponseHandler;
-
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public interface MessagingService extends Service {
+public abstract class AbstractMessageContent implements MessageContent {
 
-    ResponseHandler send(Message message, ConnectionDescription description);
+    /**
+     * Parses a message and intialize this message with it.
+     */
+    protected abstract void parse(String message);
 }

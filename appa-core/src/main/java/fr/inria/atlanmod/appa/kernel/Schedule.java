@@ -1,66 +1,62 @@
 /*
- * Created on 2 juil. 07
+ * Copyright (c) 2016-2017 Atlanmod INRIA LINA Mines Nantes.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
+ * Contributors:
+ *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
+
 package fr.inria.atlanmod.appa.kernel;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.logging.Logger;
 
-public class Schedule   implements Runnable {
+public class Schedule implements Runnable {
 
-    private final static Logger logger = Logger.global;
+    private final BlockingQueue<Runnable> actions;
 
-    private BlockingQueue<Runnable> actions;
-    private Thread[] threads;
+    private final Thread[] threads;
 
     public Schedule(int threadsNumber) {
-        actions = new LinkedBlockingQueue<Runnable>();
+        actions = new LinkedBlockingQueue<>();
         threads = new Thread[threadsNumber];
+
         for (int i = 0; i < threads.length; i++) {
             threads[i] = new Thread(new Consumer());
         }
     }
 
     public void schedule(Runnable a) {
-        //logger.info("Scheduling " + a);
         try {
             actions.put(a);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
+        }
+        catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    public void execute(Runnable r) {
-        new Thread(r).start();
-    }
-
-
+    @Override
     public void run() {
-        for (int i = 0; i < threads.length; i++) {
-            threads[i].start();
+        for (Thread thread : threads) {
+            thread.start();
         }
     }
 
     private class Consumer implements Runnable {
-        public void run() {
-            //ogger.info("Logger running");
-            Runnable a;
 
+        @Override
+        public void run() {
             while (!Thread.interrupted()) {
                 try {
-                    a = actions.take();
-                    a.run();
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
+                    actions.take().run();
+                }
+                catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
             }
         }
-
     }
-
 }

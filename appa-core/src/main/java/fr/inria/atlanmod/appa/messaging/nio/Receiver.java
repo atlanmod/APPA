@@ -1,7 +1,14 @@
 /*
- * Created on 1 ao�t 07
+ * Copyright (c) 2016-2017 Atlanmod INRIA LINA Mines Nantes.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
+ * Contributors:
+ *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
+
 package fr.inria.atlanmod.appa.messaging.nio;
 
 import java.io.IOException;
@@ -10,8 +17,13 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import java.util.logging.Logger;
 
-class Receiver extends Handler {
-    private static final Logger logger = Logger.global;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+class Receiver extends AbstractHandler {
+
+    @SuppressWarnings("JavaDoc")
+    private static final Logger logger = Logger.getLogger("appa.messaging");
 
     private static int MAXIN = 8192;
 
@@ -21,47 +33,41 @@ class Receiver extends Handler {
     /**
      * Register the new SocketChannel with our Selector,
      * indicating we'd like to be notified when there's data waiting to be read
-     * @param sel
-     * @param c
-     * @throws IOException
      */
-    public Receiver(MessagingServer ms, SocketChannel sc) throws IOException {
-        super(ms);
+    public Receiver(MessagingServer messagingServer, SocketChannel channel) throws IOException {
+        super(messagingServer);
+
         //logger.info("Receiver created");
-        sc.configureBlocking(false);
-        sk = sc.register(getSelector(), SelectionKey.OP_READ, this);
+
+        channel.configureBlocking(false);
+        sk = channel.register(getSelector(), SelectionKey.OP_READ, this);
         getSelector().wakeup();
 
         assert sk != null;
     }
 
     @Override
-    public void run(SelectionKey key) throws IOException {
+    public void handle(SelectionKey key) throws IOException {
 
         SocketChannel socket = (SocketChannel) key.channel();
         this.input.clear();
         int numRead = socket.read(this.input);
 
-        logger.info("Received: "+ numRead);
+        logger.info("Received: " + numRead);
 
         if (numRead == -1) {
             logger.warning("Remote entity shut the socket down cleanly. Do the same from our end and cancel the channel.");
             sk.channel().close();
             sk.cancel();
-        } else if (numRead > 0 ) {
+        }
+        else if (numRead > 0) {
             byte[] rspData = new byte[numRead];
             System.arraycopy(input.array(), 0, rspData, 0, numRead);
             process(rspData, socket);
         }
-
-
-
     }
-
 
     private void process(byte[] data, SocketChannel socket) {
-        schedule(new ArrivingMessageAction(messaging, socket, data));
+        schedule(new ArrivingMessageAction(messagingServer, socket, data));
     }
-
-
 }
