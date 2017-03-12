@@ -132,7 +132,7 @@ public class MockDHTAdapter<K, V extends Serializable> implements DHTService<K, 
         return 0;
     }
 
-    public ConnectionDescription getConnectionDescription() {
+    public ConnectionDescription getConnection() {
         return null;
     }
 

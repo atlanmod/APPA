@@ -30,9 +30,9 @@ public class RemoteNamingServer implements RemoteNaming {
     private final AtomicLong lastValue = new AtomicLong(0);
 
     @Override
-    public Id register(ConnectionDescription description) throws RemoteException {
+    public Id register(ConnectionDescription connection) throws RemoteException {
         LongId newId = new LongId(lastValue.incrementAndGet());
-        map.put(newId, description);
+        map.put(newId, connection);
         return newId;
     }
 

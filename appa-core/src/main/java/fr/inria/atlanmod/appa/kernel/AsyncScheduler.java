@@ -14,13 +14,13 @@ package fr.inria.atlanmod.appa.kernel;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class Schedule implements Runnable {
+public class AsyncScheduler implements Scheduler {
 
     private final BlockingQueue<Runnable> actions;
 
     private final Thread[] threads;
 
-    public Schedule(int threadsNumber) {
+    public AsyncScheduler(int threadsNumber) {
         actions = new LinkedBlockingQueue<>();
         threads = new Thread[threadsNumber];
 
@@ -29,9 +29,10 @@ public class Schedule implements Runnable {
         }
     }
 
-    public void schedule(Runnable a) {
+    @Override
+    public void schedule(Runnable runnable) {
         try {
-            actions.put(a);
+            actions.put(runnable);
         }
         catch (InterruptedException e) {
             e.printStackTrace();

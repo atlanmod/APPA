@@ -28,8 +28,8 @@ public class DefaultMessagingService extends AbstractService implements Messagin
 
     private Thread thread;
 
-    public DefaultMessagingService(RamdomId id, ConnectionDescription description, Server server) {
-        super(id, description);
+    public DefaultMessagingService(RamdomId id, ConnectionDescription connection, Server server) {
+        super(id, connection);
         this.server = server;
     }
 
@@ -51,12 +51,11 @@ public class DefaultMessagingService extends AbstractService implements Messagin
 
     @Override
     public void run() {
-
     }
 
     @Nonnull
     @Override
-    public ResponseHandler send(Message message, ConnectionDescription description) {
-        return server.send(message.toByteArray(), description.getHost());
+    public ResponseHandler send(Message message, ConnectionDescription connection) {
+        return server.send(message.toByteArray(), connection.getIp());
     }
 }

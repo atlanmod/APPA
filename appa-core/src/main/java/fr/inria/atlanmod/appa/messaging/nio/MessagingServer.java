@@ -11,15 +11,14 @@
 
 package fr.inria.atlanmod.appa.messaging.nio;
 
-import fr.inria.atlanmod.appa.kernel.Schedule;
+import fr.inria.atlanmod.appa.kernel.AsyncScheduler;
+import fr.inria.atlanmod.appa.kernel.Scheduler;
 import fr.inria.atlanmod.appa.messaging.ResponseHandler;
 import fr.inria.atlanmod.appa.messaging.Server;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.AsynchronousCloseException;
-import java.nio.channels.ClosedByInterruptException;
 import java.nio.channels.NotYetConnectedException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -27,8 +26,8 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.UnresolvedAddressException;
 import java.nio.channels.UnsupportedAddressTypeException;
-import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Logger;
 
@@ -45,49 +44,47 @@ public class MessagingServer implements Runnable, Server {
      * Queue a channel registration since the caller is not the selecting thread.
      * Otherwise, the register() method will block.
      */
-    private final Queue<Register> pending = new LinkedBlockingQueue<>();
+    private final BlockingQueue<Register> pending = new LinkedBlockingQueue<>();
 
     /**
      * The channel on which we'll handle connections.
      */
-    private ServerSocketChannel serverSocket;
+    private final ServerSocketChannel serverSocket;
 
     /**
      * The selector we'll be monitoring.
      */
-    private Selector selector;
+    private final Selector selector;
 
-    private Schedule schedule;
+    private final Scheduler scheduler;
 
     /**
      * Create a new selector.
      * Bind the server socket to the specified address and port
      * Register the server socket channel, indicating an interest in accepting new connections
      */
-    public MessagingServer(InetSocketAddress socketAddress, Schedule schedule) {
+    public MessagingServer(InetSocketAddress socketAddress, Scheduler scheduler) {
         try {
-            selector = createSelector();
-            serverSocket = ServerSocketChannel.open();
-            serverSocket.configureBlocking(false);
-            serverSocket.socket().bind(socketAddress);
+            this.selector = createSelector();
+            this.serverSocket = ServerSocketChannel.open();
+            this.serverSocket.configureBlocking(false);
+            this.serverSocket.socket().bind(socketAddress);
+            this.scheduler = scheduler;
 
             SelectionKey selectionKey = serverSocket.register(selector, SelectionKey.OP_ACCEPT);
             selectionKey.attach(new Acceptor(this));
-
-            this.schedule = schedule;
         }
         catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
     public static void main(String[] args) {
-        Schedule s = new Schedule(3);
+        Scheduler s = new AsyncScheduler(3);
         new Thread(s).start();
         InetSocketAddress isa = new InetSocketAddress(1958);
         MessagingServer ms = new MessagingServer(isa, s);
         new Thread(ms).start();
-
     }
 
     protected Selector createSelector() throws IOException {
@@ -98,36 +95,17 @@ public class MessagingServer implements Runnable, Server {
     @Override
     public ResponseHandler send(byte[] data, InetSocketAddress isa) {
         ResponseHandler handler = new ResponseHandler();
-        SocketChannel socket;
+
         try {
-            socket = SocketChannel.open();
+            SocketChannel socket = SocketChannel.open();
             socket.configureBlocking(false);
             socket.connect(isa);
 
-            synchronized (pending) {
-                pending.add(new Register(this, socket, data, handler));
-            }
+            pending.put(new Register(this, socket, data, handler));
 
             selector.wakeup();
         }
-        catch (ClosedByInterruptException e) {
-            // If another thread interrupts the current thread while the
-            // connect operation is in progress, thereby closing the channel
-            // and setting the current thread's interrupt status
-        }
-        catch (AsynchronousCloseException e) {
-            // If another thread closes this channel while the connect operation is in progress
-        }
-        catch (UnresolvedAddressException e) {
-            // If the given remote address is not fully resolved
-        }
-        catch (UnsupportedAddressTypeException e) {
-            // If the type of the given remote address is not supported
-        }
-        catch (SecurityException e) {
-            // If a security manager has been installed and it does not permit access to the given remote endpoint
-        }
-        catch (IOException e) {
+        catch (UnresolvedAddressException | UnsupportedAddressTypeException | SecurityException | IOException | InterruptedException e) {
             e.printStackTrace();
         }
 
@@ -141,19 +119,14 @@ public class MessagingServer implements Runnable, Server {
 
     @Override
     public void run() {
-        logger.info(String.format("NIO MessagingServer running on %s",
-                serverSocket.socket().getLocalSocketAddress()));
+        logger.info(String.format("NIO MessagingServer running on %s", serverSocket.socket().getLocalSocketAddress()));
+
         try {
             while (!Thread.interrupted()) {
-
-                synchronized (pending) {
-                    for (Register each : pending) {
-                        each.register();
-                    }
-                    pending.clear();
-                }
+                pending.take().register();
 
                 selector.select();
+
                 Set<SelectionKey> selected = selector.selectedKeys();
                 for (SelectionKey each : selected) {
                     dispatch(each);
@@ -161,7 +134,7 @@ public class MessagingServer implements Runnable, Server {
                 selected.clear();
             }
         }
-        catch (IOException e) {
+        catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -175,8 +148,8 @@ public class MessagingServer implements Runnable, Server {
         return serverSocket;
     }
 
-    void schedule(Runnable r) {
-        schedule.schedule(r);
+    void schedule(Runnable runnable) {
+        scheduler.schedule(runnable);
     }
 
     private void dispatch(SelectionKey key) {

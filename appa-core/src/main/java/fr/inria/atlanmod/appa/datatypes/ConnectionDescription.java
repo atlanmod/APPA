@@ -20,55 +20,74 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
+import javax.annotation.Nonnegative;
+
 public final class ConnectionDescription implements Serializable {
 
     @SuppressWarnings("JavaDoc")
     private static final long serialVersionUID = -5648760003002377742L;
 
-    private static final String LOCALHOST = "127.0.0.1";
+    /**
+     * The IP address used for this connection.
+     */
+    private final InetSocketAddress ip;
 
-    private final InetSocketAddress host;
-
-    public ConnectionDescription(InetSocketAddress socketAddress) {
-        this.host = socketAddress;
+    /**
+     * Constructs a new {@code ConnectionDescription} with the given {@code ip}.
+     *
+     * @param ip the described IP address
+     */
+    public ConnectionDescription(InetSocketAddress ip) {
+        this.ip = ip;
     }
 
-    public ConnectionDescription(int port) {
-        this(new InetSocketAddress(LOCALHOST, port));
-    }
-
-    public ConnectionDescription(InetAddress address, int port) {
-        this(new InetSocketAddress(address, port));
+    /**
+     * Constructs a new {@code ConnectionDescription} with the given {@code ipAddress}, on the given {@code port}.
+     *
+     * @param ipAddress the IP address
+     * @param port      the port
+     *
+     * @throws IllegalArgumentException if the port parameter is outside the specified range of valid port values, i.e.,
+     * if {@code port < 0 || port > 65536}
+     */
+    public ConnectionDescription(InetAddress ipAddress, @Nonnegative int port) {
+        this(new InetSocketAddress(ipAddress, port));
     }
 
     public static void main(String[] argv) {
         try {
-            InetSocketAddress addr = new InetSocketAddress(LOCALHOST, 22);
-            ConnectionDescription cd = new ConnectionDescription(addr);
+            InetSocketAddress ip = new InetSocketAddress(InetAddress.getLocalHost(), 22);
+            ConnectionDescription cd = new ConnectionDescription(ip);
+            ConnectionDescription xcd;
 
-            ByteArrayOutputStream oStream = new ByteArrayOutputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(oStream);
-            oos.writeObject(cd);
-            oos.close();
+            try (ByteArrayOutputStream oStream = new ByteArrayOutputStream()) {
+                try (ObjectOutputStream oos = new ObjectOutputStream(oStream)) {
+                    oos.writeObject(cd);
+                }
 
-            ByteArrayInputStream iStream = new ByteArrayInputStream(oStream.toByteArray());
-            ObjectInputStream ois = new ObjectInputStream(iStream);
-            ConnectionDescription xcd = (ConnectionDescription) ois.readObject();
-            ois.close();
+                try (ByteArrayInputStream iStream = new ByteArrayInputStream(oStream.toByteArray()); ObjectInputStream ois = new ObjectInputStream(iStream)) {
+                    xcd = (ConnectionDescription) ois.readObject();
+                }
+            }
 
-            System.out.println(xcd.getHost());
+            System.out.println(xcd.getIp());
         }
         catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public InetSocketAddress getHost() {
-        return host;
+    /**
+     * Returns the IP address used for this connection.
+     *
+     * @return the IP address
+     */
+    public InetSocketAddress getIp() {
+        return ip;
     }
 
     @Override
     public String toString() {
-        return String.format("%s:%d", host.getHostName(), host.getPort());
+        return String.format("%s:%d", ip.getHostName(), ip.getPort());
     }
 }

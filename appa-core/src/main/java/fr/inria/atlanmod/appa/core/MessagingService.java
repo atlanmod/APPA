@@ -21,5 +21,5 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public interface MessagingService extends Service {
 
     @Nonnull
-    ResponseHandler send(Message message, ConnectionDescription description);
+    ResponseHandler send(Message message, ConnectionDescription connection);
 }

@@ -32,9 +32,9 @@ public class NamingServiceFake implements NamingService {
     }
 
     @Override
-    public Id register(ConnectionDescription description) {
+    public Id register(ConnectionDescription connection) {
         try {
-            return naming.register(description);
+            return naming.register(connection);
         }
         catch (RemoteException e) {
             throw new RuntimeException(e);

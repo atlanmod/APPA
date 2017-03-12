@@ -49,7 +49,7 @@ public class DHTRegistry extends AbstractService implements Registry {
     @Override
     public void publish(Service service) {
         logger.info("publishing");
-        //dht.put(s.id().toString(), s.getConnectionDescription());
+        //dht.put(s.id().toString(), s.getConnection());
     }
 
     @Override
@@ -70,7 +70,7 @@ public class DHTRegistry extends AbstractService implements Registry {
         return 0;
     }
 
-    public ConnectionDescription getConnexionDescription() {
+    public ConnectionDescription getConnexion() {
         return null;
     }
 }

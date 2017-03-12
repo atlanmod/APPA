@@ -24,12 +24,12 @@ public class RemotePeer implements Peer {
 
     private RamdomId id;
 
-    private InetAddress addr;
+    private InetAddress ip;
 
     private long port;
 
-    public RemotePeer(InetAddress addr, long port) {
-        this.addr = addr;
+    public RemotePeer(InetAddress ip, long port) {
+        this.ip = ip;
         this.port = port;
     }
 
@@ -51,6 +51,6 @@ public class RemotePeer implements Peer {
     @Nonnull
     @Override
     public InetAddress getIp() {
-        return addr;
+        return ip;
     }
 }

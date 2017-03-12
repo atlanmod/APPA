@@ -22,7 +22,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public interface RemoteNaming extends Remote {
 
-    Id register(ConnectionDescription description) throws RemoteException;
+    Id register(ConnectionDescription connection) throws RemoteException;
 
     ConnectionDescription lookup(Id id) throws RemoteException;
 }

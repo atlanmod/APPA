@@ -37,7 +37,7 @@ import javax.jmdns.ServiceListener;
 @ParametersAreNonnullByDefault
 public class JmdnsJavaDiscoveryService implements Service {
 
-    private final Map<String, ConnectionDescription> services = new ConcurrentHashMap<>();
+    private final Map<String, ConnectionDescription> connections = new ConcurrentHashMap<>();
 
     private JmDNS zeroconf;
 
@@ -117,14 +117,14 @@ public class JmdnsJavaDiscoveryService implements Service {
 
         @Override
         public ConnectionDescription get() throws InterruptedException, ExecutionException {
-            ConnectionDescription description = services.get(name);
-            while (description == null) {
-                synchronized (services) {
-                    services.wait();
+            ConnectionDescription connection = connections.get(name);
+            while (connection == null) {
+                synchronized (connections) {
+                    connections.wait();
                 }
-                description = services.get(name);
+                connection = connections.get(name);
             }
-            return description;
+            return connection;
         }
 
         @Override
@@ -145,7 +145,7 @@ public class JmdnsJavaDiscoveryService implements Service {
         public void serviceRemoved(ServiceEvent event) {
             ServiceInfo info = event.getInfo();
             String name = info.getName();
-            services.remove(name);
+            connections.remove(name);
 
             System.out.println("Service removed: " + event.getInfo());
         }
@@ -157,10 +157,10 @@ public class JmdnsJavaDiscoveryService implements Service {
             InetAddress address = info.getInetAddresses()[0];
             int port = info.getPort();
 
-            ConnectionDescription description = new ConnectionDescription(address, port);
-            services.put(info.getName(), description);
-            synchronized (services) {
-                services.notifyAll();
+            ConnectionDescription connection = new ConnectionDescription(address, port);
+            connections.put(info.getName(), connection);
+            synchronized (connections) {
+                connections.notifyAll();
             }
         }
     }

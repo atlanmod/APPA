@@ -36,11 +36,11 @@ public class MdnsjavaDiscoveryService {
      */
     private final static long SERVICE_TTL = MulticastDNSService.DEFAULT_SRV_TTL;
 
-    private InetAddress host;
+    private InetAddress ip;
 
     public MdnsjavaDiscoveryService() {
         try {
-            host = InetAddress.getLocalHost();
+            ip = InetAddress.getLocalHost();
         }
         catch (UnknownHostException e) {
             e.printStackTrace();
@@ -101,7 +101,7 @@ public class MdnsjavaDiscoveryService {
 
             ServiceName serviceName = new ServiceName(s.type() + ".local.");
             Name hostname = new Name("testhost.local.");
-            InetAddress[] addresses = {host};
+            InetAddress[] addresses = {ip};
             String[] txtValues = new String[]{""};
 
             MulticastDNSService mDNSService = new MulticastDNSService();

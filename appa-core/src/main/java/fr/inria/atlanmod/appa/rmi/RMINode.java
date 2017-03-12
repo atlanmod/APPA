@@ -18,6 +18,8 @@ import fr.inria.atlanmod.appa.service.DHTService;
 import fr.inria.atlanmod.appa.service.NamingService;
 import fr.inria.atlanmod.appa.service.registry.JmdnsJavaDiscoveryService;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.concurrent.ExecutionException;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -34,12 +36,12 @@ public class RMINode extends Node {
         super();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnknownHostException {
         RMINode node = new RMINode();
         node.start();
         node.dht.put("Hello", "Man");
 
-        Id id = node.naming.register(new ConnectionDescription(250));
+        Id id = node.naming.register(new ConnectionDescription(InetAddress.getLocalHost(), 250));
         System.out.printf("Received id: " + id);
 
         ConnectionDescription cd = node.naming.lookup(id);
@@ -55,10 +57,10 @@ public class RMINode extends Node {
 
     @Override
     protected void startBroker() {
-        ConnectionDescription description;
+        ConnectionDescription connection;
         try {
-            description = discovery.locate(RMIRegistryService.NAME).get();
-            registry = new RMIRegistryClient(description);
+            connection = discovery.locate(RMIRegistryService.NAME).get();
+            registry = new RMIRegistryClient(connection);
         }
         catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();

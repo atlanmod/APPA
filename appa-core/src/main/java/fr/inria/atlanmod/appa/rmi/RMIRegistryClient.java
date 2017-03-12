@@ -22,12 +22,12 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class RMIRegistryClient extends RMIRegistry {
 
-    public RMIRegistryClient(ConnectionDescription description) {
-        InetSocketAddress socketAddress = description.getHost();
+    public RMIRegistryClient(ConnectionDescription connection) {
+        InetSocketAddress socketAddress = connection.getIp();
         try {
             registry = LocateRegistry.getRegistry(socketAddress.getHostName(),
                     socketAddress.getPort());
-            System.out.printf("rmi registry found: " + description);
+            System.out.printf("rmi registry found: " + connection);
         }
         catch (RemoteException e) {
             e.printStackTrace();

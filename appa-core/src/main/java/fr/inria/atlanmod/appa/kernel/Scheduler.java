@@ -9,19 +9,9 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.service;
+package fr.inria.atlanmod.appa.kernel;
 
-import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.datatypes.Id;
+public interface Scheduler extends Runnable {
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
-public interface NamingService {
-
-    String NAME = "NamingService";
-
-    Id register(ConnectionDescription connection);
-
-    ConnectionDescription lookup(Id id);
+    void schedule(Runnable runnable);
 }

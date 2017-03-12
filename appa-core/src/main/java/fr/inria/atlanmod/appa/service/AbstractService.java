@@ -26,11 +26,11 @@ public abstract class AbstractService implements Service {
 
     private final RamdomId id;
 
-    private final ConnectionDescription description;
+    private final ConnectionDescription connection;
 
-    public AbstractService(RamdomId id, ConnectionDescription description) {
+    public AbstractService(RamdomId id, ConnectionDescription connection) {
         this.id = id;
-        this.description = description;
+        this.connection = connection;
     }
 
     @Nonnull
@@ -39,7 +39,7 @@ public abstract class AbstractService implements Service {
         return id;
     }
 
-    public ConnectionDescription getConnectionDescription() {
-        return description;
+    public ConnectionDescription getConnection() {
+        return connection;
     }
 }
