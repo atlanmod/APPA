@@ -75,11 +75,14 @@
         <javax-annotations.version>3.0.1</javax-annotations.version>
         <junit.version>4.12</junit.version>
         <tomp2p.version>5.0-Beta8</tomp2p.version>
+        <artemis.version>2.0.0</artemis.version>
+
     </properties>
 
     <modules>
         <module>appa-core</module>
         <module>appa-stub</module>
+        <module>appa-tester</module>
     </modules>
     <developers>
         <developer>
@@ -101,12 +104,14 @@
             <version>${junit.version}</version>
         </dependency>
 
-		
+
+        <!--
         <dependency>
             <groupId>net.tomp2p</groupId>
             <artifactId>tomp2p-all</artifactId>
             <version>${tomp2p.version}</version>
         </dependency>
+        -->
 
 
         <dependency>
@@ -131,6 +136,7 @@
         </dependency>
         -->
 
+
         <dependency>
             <groupId>net.posick</groupId>
             <artifactId>mdnsjava</artifactId>
@@ -143,7 +149,25 @@
             <artifactId>jmdns</artifactId>
             <version>3.5.2-SNAPSHOT</version>
         </dependency>
-		
+
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-jms-server</artifactId>
+            <version>${artemis.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-jms-client</artifactId>
+            <version>${artemis.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-commons</artifactId>
+            <version>${artemis.version}</version>
+        </dependency>
+
         <!-- Test -->
 
         <dependency>
