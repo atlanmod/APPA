@@ -9,19 +9,23 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.service;
+package fr.inria.atlanmod.appa.core;
 
-import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.datatypes.Id;
+import java.io.Serializable;
+import java.util.concurrent.Future;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public interface NamingService {
+public interface DHT<K, V extends Serializable> {
 
-    String NAME = "NamingService";
+    /**
+     * Stores an object in this {@code DHT}.
+     */
+    void put(K key, V value);
 
-    Id register(ConnectionDescription connection);
-
-    ConnectionDescription lookup(Id id);
+    /**
+     * Retrieves an object from this {@code DHT}.
+     */
+    Future<V> get(K key);
 }

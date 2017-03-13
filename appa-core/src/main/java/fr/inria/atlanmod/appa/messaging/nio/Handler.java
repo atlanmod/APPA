@@ -1,39 +1,23 @@
 /*
- * Created on 2 ao�t 07
+ * Copyright (c) 2016-2017 Atlanmod INRIA LINA Mines Nantes.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
+ * Contributors:
+ *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
+
 package fr.inria.atlanmod.appa.messaging.nio;
 
 import java.io.IOException;
 import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
 
-/**
- * @author sunye
- *
- *  * Sender <-> Reader
- *
- * Receiver <-> Answerer
- *
- */
-public abstract class Handler  {
+import javax.annotation.ParametersAreNonnullByDefault;
 
-    protected final MessagingServer messaging;
+@ParametersAreNonnullByDefault
+public interface Handler {
 
-    public Handler(MessagingServer ms) {
-        assert ms != null;
-
-        messaging = ms;
-    }
-
-    public abstract void run(SelectionKey key) throws IOException;
-
-    protected Selector getSelector() {
-        Selector s = messaging.getSelector();
-        return s;
-    }
-
-    protected void schedule(Runnable r) {
-        messaging.schedule(r);
-    }
+    void handle(SelectionKey key) throws IOException;
 }

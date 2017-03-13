@@ -1,71 +1,76 @@
 /*
- * Created on 26 juil. 07
+ * Copyright (c) 2016-2017 Atlanmod INRIA LINA Mines Nantes.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
+ * Contributors:
+ *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
+
 package fr.inria.atlanmod.appa.service.registry;
 
-import java.util.logging.Logger;
-
-import fr.inria.atlanmod.appa.base.DHT;
-import fr.inria.atlanmod.appa.base.Registry;
-import fr.inria.atlanmod.appa.base.Service;
+import fr.inria.atlanmod.appa.core.DHT;
+import fr.inria.atlanmod.appa.core.Registry;
+import fr.inria.atlanmod.appa.core.Service;
 import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
 import fr.inria.atlanmod.appa.datatypes.RamdomId;
-import fr.inria.atlanmod.appa.exception.ObjectNotFoundException;
-import fr.inria.atlanmod.appa.exception.OperationFailedException;
 import fr.inria.atlanmod.appa.service.AbstractService;
 
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Logger;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class DHTRegistry extends AbstractService implements Registry {
 
-    private Logger logger = Logger.global;
+    @SuppressWarnings("JavaDoc")
+    private static final Logger logger = Logger.getGlobal();
 
-    DHT dht;
+    private final DHT<String, ConnectionDescription> dht;
 
-    public DHTRegistry(RamdomId id, ConnectionDescription cd, DHT service) {
+    public DHTRegistry(RamdomId id, ConnectionDescription cd, DHT<String, ConnectionDescription> dht) {
         super(id, cd);
-        assert service != null;
-        dht = service;
+
+        this.dht = dht;
     }
 
     @Override
     public void run() {
-
     }
 
-    public ConnectionDescription locate(RamdomId id) throws OperationFailedException, ObjectNotFoundException {
-        ConnectionDescription cd = (ConnectionDescription) dht.get(id.toString());
-        return cd;
-
+    public ConnectionDescription locate(RamdomId id) throws ExecutionException, InterruptedException {
+        return dht.get(id.toString()).get();
     }
 
-    public void publish(Service s) throws OperationFailedException {
+    @Override
+    public void publish(Service service) {
         logger.info("publishing");
-        //dht.put(s.id().toString(), s.getConnectionDescription());
-   }
-
-    public void unpublish(Service s) {
-        // TODO Auto-generated method stub
-
+        //dht.put(s.id().toString(), s.getConnection());
     }
 
+    @Override
+    public void unpublish(Service service) {
+    }
+
+    @Override
     public void start() {
-        // TODO Auto-generated method stub
-
     }
 
+    @Override
     public void stop() {
-        // TODO Auto-generated method stub
-
     }
 
+    @Nonnegative
     @Override
     public int port() {
         return 0;
     }
 
-    public ConnectionDescription getConnexionDescription() {
-        // TODO Auto-generated method stub
+    public ConnectionDescription getConnexion() {
         return null;
     }
-
 }

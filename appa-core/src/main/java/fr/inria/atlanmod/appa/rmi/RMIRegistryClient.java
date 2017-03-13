@@ -1,43 +1,48 @@
+/*
+ * Copyright (c) 2016-2017 Atlanmod INRIA LINA Mines Nantes.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
+ */
+
 package fr.inria.atlanmod.appa.rmi;
 
 import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.service.DHTService;
 
 import java.net.InetSocketAddress;
-import java.rmi.AccessException;
-import java.rmi.NotBoundException;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 
-/**
- * Created by sunye on 08/03/2017.
- */
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class RMIRegistryClient extends RMIRegistry {
-    public RMIRegistryClient(ConnectionDescription description) {
-        InetSocketAddress socketAddress = description.getSocketAddress();
+
+    public RMIRegistryClient(ConnectionDescription connection) {
+        InetSocketAddress socketAddress = connection.getIp();
         try {
             registry = LocateRegistry.getRegistry(socketAddress.getHostName(),
                     socketAddress.getPort());
-            System.out.printf("rmi registry found: "+description);
-        } catch (RemoteException e) {
+            System.out.printf("rmi registry found: " + connection);
+        }
+        catch (RemoteException e) {
             e.printStackTrace();
         }
     }
 
-
     @Override
     public void start() {
-
     }
 
     @Override
     public void stop() {
-
     }
 
     @Override
     public void run() {
-
     }
 }

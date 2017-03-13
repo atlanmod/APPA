@@ -1,45 +1,56 @@
+/*
+ * Copyright (c) 2016-2017 Atlanmod INRIA LINA Mines Nantes.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
+ */
+
 package fr.inria.atlanmod.appa.remote;
+
+import fr.inria.atlanmod.appa.core.Peer;
+import fr.inria.atlanmod.appa.datatypes.RamdomId;
 
 import java.net.InetAddress;
 
-import fr.inria.atlanmod.appa.datatypes.RamdomId;
-import fr.inria.atlanmod.appa.base.Peer;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public class RemotePeer implements Peer {
 
-	private RamdomId id;
-	private InetAddress addr;
-	private long port;
-	
+    private RamdomId id;
 
-	public RemotePeer(InetAddress addr, long port) {
+    private InetAddress ip;
 
-		this.addr=addr;
-		this.port=port;
+    private long port;
 
+    public RemotePeer(InetAddress ip, long port) {
+        this.ip = ip;
+        this.port = port;
+    }
 
+    public RemotePeer(RamdomId id) {
+        this.id = id;
+    }
 
-	}
+    @Nonnull
+    @Override
+    public RamdomId getId() {
+        return id;
+    }
 
-	public RemotePeer(RamdomId id) {
+    @Override
+    public long getBasePort() {
+        return port;
+    }
 
-		this.id=id;
-
-	}
-
-	public long getBasePort() {
-		// TODO Auto-generated method stub
-		return port;
-	}
-
-	public InetAddress getIP() {
-		// TODO Auto-generated method stub
-		return addr;
-	}
-
-	public RamdomId getId() {
-		// TODO Auto-generated method stub
-		return id;
-	}
-
+    @Nonnull
+    @Override
+    public InetAddress getIp() {
+        return ip;
+    }
 }

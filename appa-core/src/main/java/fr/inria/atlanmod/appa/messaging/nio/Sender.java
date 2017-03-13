@@ -1,8 +1,17 @@
 /*
- * Created on 1 ao�t 07
+ * Copyright (c) 2016-2017 Atlanmod INRIA LINA Mines Nantes.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
+ * Contributors:
+ *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
+
 package fr.inria.atlanmod.appa.messaging.nio;
+
+import fr.inria.atlanmod.appa.messaging.ResponseHandler;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -10,39 +19,38 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import java.util.logging.Logger;
 
-import fr.inria.atlanmod.appa.messaging.ResponseHandler;
+import javax.annotation.ParametersAreNonnullByDefault;
 
-class Sender extends Handler {
+@ParametersAreNonnullByDefault
+class Sender extends AbstractHandler {
 
-    private final SelectionKey sk;
-    private ByteBuffer output;
-    private static final Logger logger = Logger.global;
-    private ResponseHandler handler;
+    @SuppressWarnings("JavaDoc")
+    private static final Logger logger = Logger.getLogger("appa.messaging");
 
-    public Sender(MessagingServer ms, SelectionKey key,
-            ByteBuffer bb, ResponseHandler rh) throws IOException {
-        super(ms);
-        assert key != null;
-        assert bb != null;
+    private final SelectionKey key;
 
-        output = bb;
-        sk = key;
-        handler = rh;
-        sk.interestOps(SelectionKey.OP_WRITE);
-        sk.attach(this);
+    private ByteBuffer byteBuffer;
+
+    private ResponseHandler responseHandler;
+
+    public Sender(MessagingServer messagingServer, SelectionKey key, ByteBuffer byteBuffer, ResponseHandler responseHandler) throws IOException {
+        super(messagingServer);
+        this.byteBuffer = byteBuffer;
+        this.key = key;
+        this.responseHandler = responseHandler;
+        this.key.interestOps(SelectionKey.OP_WRITE);
+        this.key.attach(this);
+
         getSelector().wakeup();
     }
 
     @Override
-    public void run(SelectionKey key) throws IOException {
-
-        Integer size = output.array().length;
+    public void handle(SelectionKey key) throws IOException {
+        Integer size = byteBuffer.array().length;
         logger.info("Sending " + size + " bytes");
 
         SocketChannel socket = (SocketChannel) key.channel();
-        socket.write(output);
-        new Reader(messaging, sk, handler);
-
+        socket.write(byteBuffer);
+        new Reader(messagingServer, this.key, responseHandler);
     }
-
 }

@@ -9,19 +9,17 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.service;
+package fr.inria.atlanmod.appa.core;
 
 import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.datatypes.Id;
+import fr.inria.atlanmod.appa.messaging.ResponseHandler;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public interface NamingService {
+public interface MessagingService extends Service {
 
-    String NAME = "NamingService";
-
-    Id register(ConnectionDescription connection);
-
-    ConnectionDescription lookup(Id id);
+    @Nonnull
+    ResponseHandler send(Message message, ConnectionDescription connection);
 }

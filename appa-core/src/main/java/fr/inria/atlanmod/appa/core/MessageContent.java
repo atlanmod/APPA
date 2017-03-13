@@ -9,19 +9,32 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.service;
+package fr.inria.atlanmod.appa.core;
 
-import fr.inria.atlanmod.appa.core.Service;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Key-based timestamping service.
+ * Represents the content of a {@link Message}.
+ * <p>
+ * The goal of this class is to represent the query part of a ResolverQuery.
  */
 @ParametersAreNonnullByDefault
-public interface KTService extends Service {
+public interface MessageContent {
 
-    long generateTimestamp();
+    String TYPE_TAG = "type";
 
-    long lastTimestamp();
+    String KEY_TAG = "key";
+
+    String CLASSNAME_TAG = "className";
+
+    String MANAGER_PEER_ID_TAG = "managerPeerID";
+
+    String ATTRIBUTE_TAG = "attribute";
+
+    String ATTRIBUTE_NAME_TAG = "name";
+
+    String ATTRIBUTE_SET_TAG = "attributeSet";
+
+    String getType();
 }

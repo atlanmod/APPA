@@ -9,19 +9,30 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.service;
+package fr.inria.atlanmod.appa.core;
 
-import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.datatypes.Id;
-
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public interface NamingService {
+public interface ZeroconfService {
 
-    String NAME = "NamingService";
+    /**
+     * The name of the service.
+     */
+    @Nonnull
+    String name();
 
-    Id register(ConnectionDescription connection);
+    /**
+     * Type service type, used as a DNS-SD entry.
+     */
+    @Nonnull
+    String type();
 
-    ConnectionDescription lookup(Id id);
+    /**
+     * The service port.
+     */
+    @Nonnegative
+    int port();
 }

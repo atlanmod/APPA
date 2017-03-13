@@ -9,19 +9,21 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.service;
+package fr.inria.atlanmod.appa.core;
 
-import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.datatypes.Id;
+import fr.inria.atlanmod.appa.datatypes.RamdomId;
 
+import java.io.Serializable;
+
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public interface NamingService {
+public interface Message extends Serializable {
 
-    String NAME = "NamingService";
+    @Nonnull
+    RamdomId getId();
 
-    Id register(ConnectionDescription connection);
-
-    ConnectionDescription lookup(Id id);
+    @Nonnull
+    byte[] toByteArray();
 }

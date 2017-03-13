@@ -1,7 +1,14 @@
 /*
- * Created on 1 ao�t 07
+ * Copyright (c) 2016-2017 Atlanmod INRIA LINA Mines Nantes.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
+ * Contributors:
+ *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
+
 package fr.inria.atlanmod.appa.messaging.nio;
 
 import java.io.IOException;
@@ -10,18 +17,23 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import java.util.logging.Logger;
 
-class Answerer extends Handler {
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+class Answerer extends AbstractHandler {
+
+    @SuppressWarnings("JavaDoc")
     private static final Logger logger = Logger.getLogger("appa.messaging");
-    private ByteBuffer output;
-    private Object receiver;
 
-    public Answerer(MessagingServer ms, SocketChannel sc, ByteBuffer bb)
-            throws IOException {
-        super(ms);
-        assert bb != null;
+    private final ByteBuffer output;
 
-        SelectionKey sk = sc.keyFor(getSelector());
-        output = bb;
+    private final Object receiver;
+
+    public Answerer(MessagingServer messagingServer, SocketChannel socketChannel, ByteBuffer byteBuffer) throws IOException {
+        super(messagingServer);
+
+        SelectionKey sk = socketChannel.keyFor(getSelector());
+        output = byteBuffer;
 
         receiver = sk.attachment();
         sk.interestOps(SelectionKey.OP_WRITE);
@@ -30,7 +42,7 @@ class Answerer extends Handler {
     }
 
     @Override
-    public void run(SelectionKey key) throws IOException {
+    public void handle(SelectionKey key) throws IOException {
         assert receiver != null : "Receiver should not be null";
 
         Integer size = output.array().length;
@@ -43,5 +55,4 @@ class Answerer extends Handler {
         //key.attach(receiver);
         socket.close();
     }
-
 }

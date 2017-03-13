@@ -9,16 +9,36 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.service;
+package fr.inria.atlanmod.appa.core;
 
-import java.io.Serializable;
+import fr.inria.atlanmod.appa.datatypes.RamdomId;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public interface DHTFactory {
+public interface Service extends Runnable {
 
+    /**
+     * Returns the unique identification of this {@code Service}.
+     */
     @Nonnull
-    <K, V extends Serializable> DHTService<K, V> createDHTService();
+    RamdomId id();
+
+    /**
+     * Starts this {@code Service}.
+     */
+    void start();
+
+    /**
+     * Stops this {@code Service}.
+     */
+    void stop();
+
+    /**
+     * Returns the port that this {@code Service} is listening to.
+     */
+    @Nonnegative
+    int port();
 }
