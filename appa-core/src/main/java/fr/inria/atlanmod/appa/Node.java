@@ -23,7 +23,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class Node {
 
-    private List<Service> services = new ArrayList<>();
+    private List<Service> services = new ArrayList<Service>();
     private ExecutorService executor = Executors.newFixedThreadPool(10);
 
     public final void start() {

@@ -21,7 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import fr.inria.peerunit.util.HTree;
+import fr.inria.atlanmod.appa.tester.util.HTree;
 
 /**
  *

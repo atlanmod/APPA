@@ -19,6 +19,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 
 import javax.annotation.Nonnegative;
 
@@ -54,6 +55,18 @@ public final class ConnectionDescription implements Serializable {
         this(new InetSocketAddress(ipAddress, port));
     }
 
+
+    public ConnectionDescription(@Nonnegative int port) {
+        assert port >= 0 && port <= 65536 : "Invalid port value";
+        InetAddress localhost;
+        try {
+            localhost = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            localhost = InetAddress.getLoopbackAddress();
+        }
+        this.ip = new InetSocketAddress(localhost, port);
+    }
+
     public static void main(String[] argv) {
         try {
             InetSocketAddress ip = new InetSocketAddress(InetAddress.getLocalHost(), 22);
@@ -70,7 +83,7 @@ public final class ConnectionDescription implements Serializable {
                 }
             }
 
-            System.out.println(xcd.getIp());
+            System.out.println(xcd.ip());
         }
         catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -82,8 +95,18 @@ public final class ConnectionDescription implements Serializable {
      *
      * @return the IP address
      */
-    public InetSocketAddress getIp() {
+    public InetSocketAddress ip() {
         return ip;
+    }
+
+
+    /**
+     * Returns the port used for this service.
+     *
+     * @return an int, the port number.
+     */
+    public int port() {
+        return ip.getPort();
     }
 
     @Override

@@ -11,18 +11,17 @@
 
 package fr.inria.atlanmod.appa.core;
 
-import fr.inria.atlanmod.appa.datatypes.RamdomId;
-
-import java.net.InetAddress;
+import fr.inria.atlanmod.appa.datatypes.Id;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.net.InetAddress;
 
 @ParametersAreNonnullByDefault
 public interface Peer {
 
     @Nonnull
-    RamdomId getId();
+    Id id();
 
     long getBasePort();
 

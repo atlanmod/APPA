@@ -11,7 +11,7 @@
 
 package fr.inria.atlanmod.appa.rmi;
 
-import fr.inria.atlanmod.appa.datatypes.RamdomId;
+import fr.inria.atlanmod.appa.datatypes.Id;
 import fr.inria.atlanmod.appa.service.DHTService;
 
 import java.rmi.RemoteException;
@@ -56,7 +56,7 @@ public class DHTServiceFake implements DHTService<String, String> {
 
     @Nonnull
     @Override
-    public RamdomId id() {
+    public Id id() {
         return null;
     }
 

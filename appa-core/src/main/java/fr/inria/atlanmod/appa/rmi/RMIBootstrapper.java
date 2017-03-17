@@ -12,6 +12,9 @@
 package fr.inria.atlanmod.appa.rmi;
 
 import fr.inria.atlanmod.appa.Node;
+import fr.inria.atlanmod.appa.activemq.ArtemisBroker;
+import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
+import fr.inria.atlanmod.appa.pubsub.PubSub;
 import fr.inria.atlanmod.appa.service.DHTService;
 import fr.inria.atlanmod.appa.service.NamingService;
 import fr.inria.atlanmod.appa.service.registry.JmdnsJavaDiscoveryService;
@@ -72,4 +75,13 @@ public class RMIBootstrapper extends Node {
         }
     }
 
+    protected void afterStarting() {
+        this.startJMSServer();
+    }
+
+    private void startJMSServer() {
+        ConnectionDescription cd = new ConnectionDescription(PubSub.PORT);
+        ArtemisBroker server = new ArtemisBroker(cd);
+        this.execute(server);
+    }
 }

@@ -14,7 +14,7 @@ package fr.inria.atlanmod.appa.service.registry;
 import fr.inria.atlanmod.appa.core.Service;
 import fr.inria.atlanmod.appa.core.ZeroconfService;
 import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.datatypes.RamdomId;
+import fr.inria.atlanmod.appa.datatypes.Id;
 import fr.inria.atlanmod.appa.rmi.RMIRegistryService;
 
 import java.io.IOException;
@@ -48,7 +48,7 @@ public class JmdnsJavaDiscoveryService implements Service {
 
     @Nonnull
     @Override
-    public RamdomId id() {
+    public Id id() {
         return null;
     }
 

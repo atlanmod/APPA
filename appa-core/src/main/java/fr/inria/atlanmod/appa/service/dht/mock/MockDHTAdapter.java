@@ -13,7 +13,7 @@ package fr.inria.atlanmod.appa.service.dht.mock;
 
 import fr.inria.atlanmod.appa.core.Peer;
 import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.datatypes.RamdomId;
+import fr.inria.atlanmod.appa.datatypes.Id;
 import fr.inria.atlanmod.appa.service.DHTService;
 
 import java.io.Serializable;
@@ -97,7 +97,7 @@ public class MockDHTAdapter<K, V extends Serializable> implements DHTService<K, 
     }
 
     @Nonnull
-    public RamdomId id() {
+    public Id id() {
         return null;
     }
 

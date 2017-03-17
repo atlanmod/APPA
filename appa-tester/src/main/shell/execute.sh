@@ -55,7 +55,7 @@ echo "Server: $SERVER  peers: $PEERS nodes: " $(( $PEERS/$NTESTERS ))
 echo "Classpath: ${CLASSPATH}"
 
 # Execute the Coordinator on the first node
-java -classpath ${CLASSPATH} -ea fr.inria.peerunit.CoordinatorRunner peerunit.properties &
+java -classpath ${CLASSPATH} -ea CoordinatorRunner peerunit.properties &
 
 
 # for each node dismissing the first

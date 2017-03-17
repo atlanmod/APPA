@@ -19,4 +19,6 @@ public interface Registry extends Service {
     void publish(Service service);
 
     void unpublish(Service service);
+
+    Service lookup(String name);
 }

@@ -13,7 +13,7 @@ package fr.inria.atlanmod.appa.service;
 
 import fr.inria.atlanmod.appa.core.Service;
 import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.datatypes.RamdomId;
+import fr.inria.atlanmod.appa.datatypes.Id;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -24,18 +24,18 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public abstract class AbstractService implements Service {
 
-    private final RamdomId id;
+    private final Id id;
 
     private final ConnectionDescription connection;
 
-    public AbstractService(RamdomId id, ConnectionDescription connection) {
+    public AbstractService(Id id, ConnectionDescription connection) {
         this.id = id;
         this.connection = connection;
     }
 
     @Nonnull
     @Override
-    public RamdomId id() {
+    public Id id() {
         return id;
     }
 

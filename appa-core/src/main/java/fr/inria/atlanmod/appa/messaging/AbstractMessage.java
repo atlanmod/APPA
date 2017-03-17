@@ -12,7 +12,7 @@
 package fr.inria.atlanmod.appa.messaging;
 
 import fr.inria.atlanmod.appa.core.Message;
-import fr.inria.atlanmod.appa.datatypes.RamdomId;
+import fr.inria.atlanmod.appa.datatypes.Id;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -27,14 +27,14 @@ public abstract class AbstractMessage implements Message {
     @SuppressWarnings("JavaDoc")
     private static final long serialVersionUID = 3129434818460833862L;
 
-    private final RamdomId id;
+    private final Id id;
 
-    public AbstractMessage(RamdomId id) {
+    public AbstractMessage(Id id) {
         this.id = id;
     }
 
     @Nonnull
-    public RamdomId getId() {
+    public Id id() {
         return id;
     }
 

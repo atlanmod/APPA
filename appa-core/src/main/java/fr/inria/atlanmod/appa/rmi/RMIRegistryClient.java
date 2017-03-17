@@ -23,7 +23,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class RMIRegistryClient extends RMIRegistry {
 
     public RMIRegistryClient(ConnectionDescription connection) {
-        InetSocketAddress socketAddress = connection.getIp();
+        InetSocketAddress socketAddress = connection.ip();
         try {
             registry = LocateRegistry.getRegistry(socketAddress.getHostName(),
                     socketAddress.getPort());

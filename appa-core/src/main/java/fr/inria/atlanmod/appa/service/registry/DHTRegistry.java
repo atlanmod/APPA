@@ -15,7 +15,7 @@ import fr.inria.atlanmod.appa.core.DHT;
 import fr.inria.atlanmod.appa.core.Registry;
 import fr.inria.atlanmod.appa.core.Service;
 import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.datatypes.RamdomId;
+import fr.inria.atlanmod.appa.datatypes.Id;
 import fr.inria.atlanmod.appa.service.AbstractService;
 
 import java.util.concurrent.ExecutionException;
@@ -32,7 +32,7 @@ public class DHTRegistry extends AbstractService implements Registry {
 
     private final DHT<String, ConnectionDescription> dht;
 
-    public DHTRegistry(RamdomId id, ConnectionDescription cd, DHT<String, ConnectionDescription> dht) {
+    public DHTRegistry(Id id, ConnectionDescription cd, DHT<String, ConnectionDescription> dht) {
         super(id, cd);
 
         this.dht = dht;
@@ -42,7 +42,7 @@ public class DHTRegistry extends AbstractService implements Registry {
     public void run() {
     }
 
-    public ConnectionDescription locate(RamdomId id) throws ExecutionException, InterruptedException {
+    public ConnectionDescription locate(Id id) throws ExecutionException, InterruptedException {
         return dht.get(id.toString()).get();
     }
 

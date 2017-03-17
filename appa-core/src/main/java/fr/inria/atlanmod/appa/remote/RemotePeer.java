@@ -12,17 +12,16 @@
 package fr.inria.atlanmod.appa.remote;
 
 import fr.inria.atlanmod.appa.core.Peer;
-import fr.inria.atlanmod.appa.datatypes.RamdomId;
-
-import java.net.InetAddress;
+import fr.inria.atlanmod.appa.datatypes.Id;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.net.InetAddress;
 
 @ParametersAreNonnullByDefault
 public class RemotePeer implements Peer {
 
-    private RamdomId id;
+    private Id id;
 
     private InetAddress ip;
 
@@ -33,13 +32,13 @@ public class RemotePeer implements Peer {
         this.port = port;
     }
 
-    public RemotePeer(RamdomId id) {
+    public RemotePeer(Id id) {
         this.id = id;
     }
 
     @Nonnull
     @Override
-    public RamdomId getId() {
+    public Id id() {
         return id;
     }
 

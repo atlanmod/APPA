@@ -13,17 +13,16 @@ package fr.inria.atlanmod.appa.rmi;
 
 import fr.inria.atlanmod.appa.core.Service;
 import fr.inria.atlanmod.appa.core.ZeroconfService;
-import fr.inria.atlanmod.appa.datatypes.RamdomId;
+import fr.inria.atlanmod.appa.datatypes.Id;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
 import java.util.Objects;
-
-import javax.annotation.Nonnegative;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public abstract class RMIRegistry implements Service, ZeroconfService {
@@ -38,7 +37,7 @@ public abstract class RMIRegistry implements Service, ZeroconfService {
 
     @Nonnull
     @Override
-    public RamdomId id() {
+    public Id id() {
         return null;
     }
 

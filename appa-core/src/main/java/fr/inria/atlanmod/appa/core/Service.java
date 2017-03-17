@@ -11,7 +11,7 @@
 
 package fr.inria.atlanmod.appa.core;
 
-import fr.inria.atlanmod.appa.datatypes.RamdomId;
+import fr.inria.atlanmod.appa.datatypes.Id;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -24,7 +24,7 @@ public interface Service extends Runnable {
      * Returns the unique identification of this {@code Service}.
      */
     @Nonnull
-    RamdomId id();
+    Id id();
 
     /**
      * Starts this {@code Service}.

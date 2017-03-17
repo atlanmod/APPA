@@ -28,21 +28,29 @@
             <artifactId>jmdns</artifactId>
         </dependency>
 
+        <!--
         <dependency>
             <groupId>net.posick</groupId>
             <artifactId>mdnsjava</artifactId>
         </dependency>
 
+
         <dependency>
             <groupId>net.posick</groupId>
             <artifactId>mdnsjava-spi</artifactId>
         </dependency>
-
+-->
         <!-- Common -->
 
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.21</version>
         </dependency>
 
     </dependencies>
@@ -57,24 +65,31 @@
                 <artifactId>jmdns</artifactId>
                 <version>${jmdns.version}</version>
                 <exclusions>
+                    <!--
                     <exclusion>
                         <groupId>org.slf4j</groupId>
                         <artifactId>slf4j-api</artifactId>
                     </exclusion>
+                    -->
                 </exclusions>
             </dependency>
 
+            <!--
             <dependency>
                 <groupId>net.posick</groupId>
                 <artifactId>mdnsjava</artifactId>
                 <version>${mdnsjava.version}</version>
             </dependency>
 
+
             <dependency>
                 <groupId>net.posick</groupId>
                 <artifactId>mdnsjava-spi</artifactId>
                 <version>${mdnsjava.version}</version>
             </dependency>
+-->
+
+
         </dependencies>
     </dependencyManagement>
 

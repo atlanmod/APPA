@@ -34,12 +34,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.InOrder;
 
-import fr.inria.peerunit.base.SingleResult;
-import fr.inria.peerunit.common.MethodDescription;
-import fr.inria.peerunit.coordinator.CoordinatorImpl;
-import fr.inria.peerunit.coordinator.TesterRegistration;
-import fr.inria.peerunit.remote.Tester;
-import fr.inria.peerunit.util.TesterUtil;
+import fr.inria.atlanmod.appa.tester.base.SingleResult;
+import fr.inria.atlanmod.appa.tester.common.MethodDescription;
+import fr.inria.atlanmod.appa.tester.coordinator.CoordinatorImpl;
+import fr.inria.atlanmod.appa.tester.coordinator.TesterRegistration;
+import fr.inria.atlanmod.appa.tester.remote.Tester;
+import fr.inria.atlanmod.appa.tester.util.TesterUtil;
 
 /**
  * @author sunye
@@ -71,7 +71,7 @@ public class CoordinatorImplTest {
     }
 
     /**
-     * Test method for {@link fr.inria.peerunit.coordinator.CoordinatorImpl#CoordinatorImpl(int)}.
+     * Test method for {@link CoordinatorImpl#CoordinatorImpl(int)}.
      */
     @Test
     public void testCoordinatorImplInt() {

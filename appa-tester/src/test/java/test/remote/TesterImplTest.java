@@ -32,17 +32,17 @@ import java.util.Set;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import fr.inria.peerunit.GlobalVariablesImpl;
-import fr.inria.peerunit.base.Sample;
-import fr.inria.peerunit.common.MethodDescription;
-import fr.inria.peerunit.coordinator.CoordinatorImpl;
-import fr.inria.peerunit.remote.Bootstrapper;
-import fr.inria.peerunit.remote.Coordinator;
-import fr.inria.peerunit.remote.GlobalVariables;
-import fr.inria.peerunit.tester.TestCaseWrapper;
-import fr.inria.peerunit.tester.TesterImpl;
-import fr.inria.peerunit.util.LogFormat;
-import fr.inria.peerunit.util.TesterUtil;
+import fr.inria.atlanmod.appa.tester.GlobalVariablesImpl;
+import fr.inria.atlanmod.appa.tester.base.Sample;
+import fr.inria.atlanmod.appa.tester.common.MethodDescription;
+import fr.inria.atlanmod.appa.tester.coordinator.CoordinatorImpl;
+import fr.inria.atlanmod.appa.tester.remote.Bootstrapper;
+import fr.inria.atlanmod.appa.tester.remote.Coordinator;
+import fr.inria.atlanmod.appa.tester.remote.GlobalVariables;
+import fr.inria.atlanmod.appa.tester.tester.TestCaseWrapper;
+import fr.inria.atlanmod.appa.tester.tester.TesterImpl;
+import fr.inria.atlanmod.appa.tester.util.LogFormat;
+import fr.inria.atlanmod.appa.tester.util.TesterUtil;
 import java.util.logging.FileHandler;
 
 public class TesterImplTest {

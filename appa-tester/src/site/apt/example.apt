@@ -55,7 +55,7 @@ $ java freepastry.Bootstrap &
 
    [[6]] Run the test(each peer will run in a single JVM):
 
-      $ java fr.inria.peerunit.TestRunner freepastry.test.SimpleTest &
+      $ java TestRunner freepastry.test.SimpleTest &
 
       For instance, if you want to execute with 4 peers (set in tester.peers property), you can use this simple script:
 

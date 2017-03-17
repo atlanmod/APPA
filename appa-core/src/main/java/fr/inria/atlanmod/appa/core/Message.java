@@ -11,18 +11,17 @@
 
 package fr.inria.atlanmod.appa.core;
 
-import fr.inria.atlanmod.appa.datatypes.RamdomId;
-
-import java.io.Serializable;
+import fr.inria.atlanmod.appa.datatypes.Id;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.Serializable;
 
 @ParametersAreNonnullByDefault
 public interface Message extends Serializable {
 
     @Nonnull
-    RamdomId getId();
+    Id id();
 
     @Nonnull
     byte[] toByteArray();

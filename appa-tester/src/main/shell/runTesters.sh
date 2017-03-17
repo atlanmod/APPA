@@ -23,6 +23,6 @@ then
 else
 	for (( i=1; i<= $2; i++));
 	do
-		java -classpath $3 -ea  fr.inria.peerunit.TestRunner $1 &
+		java -classpath $3 -ea  TestRunner $1 &
 	done
 fi
