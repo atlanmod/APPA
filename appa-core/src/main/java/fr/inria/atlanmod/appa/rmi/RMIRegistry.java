@@ -12,52 +12,47 @@
 package fr.inria.atlanmod.appa.rmi;
 
 import fr.inria.atlanmod.appa.core.Service;
-import fr.inria.atlanmod.appa.core.ZeroconfService;
+import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
+import fr.inria.atlanmod.appa.datatypes.ServiceDescription;
+import fr.inria.atlanmod.appa.service.zeroconf.ZeroconfService;
 import fr.inria.atlanmod.appa.datatypes.Id;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.net.InetSocketAddress;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Objects;
 
 @ParametersAreNonnullByDefault
-public abstract class RMIRegistry implements Service, ZeroconfService {
+public class RMIRegistry {
 
     public static final String NAME = "rmiregistry";
-
-    public static final String TYPE = "_jrmp._tcp.local.";
-
+    public static final String PROTOCOL = "jrmp";
     public static final int PORT = Registry.REGISTRY_PORT;
+    public static final int TIMES = 5;
 
-    protected Registry registry;
+    /**
+     * RMI registry (broker)
+     */
+    private Registry registry;
 
-    @Nonnull
-    @Override
-    public Id id() {
-        return null;
+    private ServiceDescription description;
+
+    private Logger logger = LoggerFactory.getLogger(RMIRegistry.class);
+
+    public RMIRegistry(ServiceDescription connection) throws RemoteException {
+        InetSocketAddress socketAddress = connection.ip();
+        registry = LocateRegistry.getRegistry(socketAddress.getHostName(), socketAddress.getPort());
+        logger.info("rmi registry found: " + connection);
     }
 
-    @Nonnegative
-    @Override
-    public int port() {
-        return PORT;
-    }
-
-    @Nonnull
-    @Override
-    public String name() {
-        return NAME;
-    }
-
-    @Nonnull
-    @Override
-    public String type() {
-        return TYPE;
-    }
 
     public void rebind(String name, Remote object) {
         assert Objects.nonNull(registry);
@@ -75,13 +70,13 @@ public abstract class RMIRegistry implements Service, ZeroconfService {
         Remote result = null;
         int times = 0;
 
-        while (times < 5 && result == null) {
+        while (times < TIMES && result == null) {
             try {
                 result = registry.lookup(name);
             }
-            catch (NotBoundException | RemoteException ignored) {
+            catch (NotBoundException | RemoteException e) {
+                logger.warn("RMI could not bind object", e);
             }
-
             times++;
 
             if (result == null) {

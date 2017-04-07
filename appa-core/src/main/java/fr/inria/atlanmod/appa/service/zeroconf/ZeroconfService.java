@@ -9,18 +9,30 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.service;
+package fr.inria.atlanmod.appa.service.zeroconf;
 
-import fr.inria.atlanmod.appa.service.dht.DHTService;
-
-import java.io.Serializable;
-
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public interface DHTFactory {
+public interface ZeroconfService {
 
+    /**
+     * The name of the service.
+     */
     @Nonnull
-    <K extends Serializable, V extends Serializable> DHTService<K, V> createDHTService();
+    String name();
+
+    /**
+     * Type service type, used as a DNS-SD entry.
+     */
+    @Nonnull
+    String type();
+
+    /**
+     * The service port.
+     */
+    @Nonnegative
+    int port();
 }

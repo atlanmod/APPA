@@ -3,6 +3,7 @@ package fr.inria.atlanmod.appa.activemq;
 import fr.inria.atlanmod.appa.core.Service;
 import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
 import fr.inria.atlanmod.appa.datatypes.Id;
+import fr.inria.atlanmod.appa.datatypes.ServiceDescription;
 import org.apache.activemq.artemis.api.core.TransportConfiguration;
 import org.apache.activemq.artemis.core.config.Configuration;
 import org.apache.activemq.artemis.core.config.impl.ConfigurationImpl;
@@ -28,9 +29,10 @@ public class ArtemisBroker implements Service  {
         this.description = description;
     }
 
+
     @Nonnull
     @Override
-    public Id id() {
+    public ServiceDescription description() {
         return null;
     }
 
@@ -47,7 +49,6 @@ public class ArtemisBroker implements Service  {
         }
     }
 
-    @Override
     public int port() {
         return description.port();
     }

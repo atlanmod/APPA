@@ -80,8 +80,9 @@
 
     <modules>
         <module>appa-core</module>
-        <module>appa-stub</module>
         <module>appa-tester</module>
+        <module>appa-bootstrapper</module>
+        <module>appa-node</module>
     </modules>
 
     <developers>

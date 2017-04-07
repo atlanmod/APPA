@@ -14,27 +14,37 @@ package fr.inria.atlanmod.appa.core;
 import fr.inria.atlanmod.appa.datatypes.Id;
 import fr.inria.atlanmod.appa.datatypes.ServiceDescription;
 
-import javax.annotation.Nonnegative;
-import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.concurrent.Future;
 
 @ParametersAreNonnullByDefault
-public interface Service extends Runnable {
+public interface RegistryService extends Service{
 
     /**
-     * Returns the unique identification of this {@code Service}.
+     * Name used to locate this service.
      */
-    @Nonnull
-    ServiceDescription description();
+    String NAME = "RegistryService";
 
     /**
-     * Starts this {@code Service}.
+     * Publishes an available service.
+     *
+     * @param service
      */
-    void start();
+    void publish(ServiceDescription service);
 
     /**
-     * Stops this {@code Service}.
+     *
+     * Unpublishes a service
+     *
+     * @param service
      */
-    void stop();
+    void unpublish(ServiceDescription service);
 
+    /**
+     * Locates an available service
+     *
+     * @param id
+     * @return
+     */
+    Future<ServiceDescription> locate(Id id);
 }

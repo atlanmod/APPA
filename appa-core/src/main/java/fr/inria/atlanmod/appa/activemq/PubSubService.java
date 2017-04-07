@@ -4,6 +4,7 @@ package fr.inria.atlanmod.appa.activemq;
 import fr.inria.atlanmod.appa.core.*;
 import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
 import fr.inria.atlanmod.appa.datatypes.Id;
+import fr.inria.atlanmod.appa.datatypes.ServiceDescription;
 import fr.inria.atlanmod.appa.pubsub.Consumer;
 import fr.inria.atlanmod.appa.pubsub.Producer;
 import fr.inria.atlanmod.appa.pubsub.PubSub;
@@ -32,11 +33,6 @@ public class PubSubService implements PubSub, Service {
     }
 
 
-    @Nonnull
-    @Override
-    public Id id() {
-        return null;
-    }
 
     public Producer createTopic(String string) {
         MessageProducer producer = null;
@@ -62,6 +58,12 @@ public class PubSubService implements PubSub, Service {
         }
 
         return nonNull(consumer) ? new ActiveMQConsumer(consumer) : null ;
+    }
+
+    @Nonnull
+    @Override
+    public ServiceDescription description() {
+        return null;
     }
 
     @Override
@@ -91,7 +93,7 @@ public class PubSubService implements PubSub, Service {
         }
     }
 
-    @Override
+
     public int port() {
         return description.port();
     }

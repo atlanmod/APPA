@@ -9,18 +9,19 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.service;
+package fr.inria.atlanmod.appa.core;
 
-import fr.inria.atlanmod.appa.service.dht.DHTService;
+import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
+import fr.inria.atlanmod.appa.datatypes.Id;
 
-import java.io.Serializable;
-
-import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public interface DHTFactory {
+public interface NamingService {
 
-    @Nonnull
-    <K extends Serializable, V extends Serializable> DHTService<K, V> createDHTService();
+    String NAME = "NamingService";
+
+    Id register(ConnectionDescription connection);
+
+    ConnectionDescription lookup(Id id);
 }

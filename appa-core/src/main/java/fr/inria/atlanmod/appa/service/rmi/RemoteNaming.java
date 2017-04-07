@@ -9,18 +9,21 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.service;
+package fr.inria.atlanmod.appa.service.rmi;
 
-import fr.inria.atlanmod.appa.service.dht.DHTService;
+import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
+import fr.inria.atlanmod.appa.datatypes.Id;
 
-import java.io.Serializable;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 
-import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public interface DHTFactory {
+public interface RemoteNaming extends Remote {
 
-    @Nonnull
-    <K extends Serializable, V extends Serializable> DHTService<K, V> createDHTService();
+    Id register(ConnectionDescription connection) throws RemoteException;
+
+    ConnectionDescription lookup(Id id) throws RemoteException;
 }
+

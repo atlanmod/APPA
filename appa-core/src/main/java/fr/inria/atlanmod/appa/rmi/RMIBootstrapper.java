@@ -15,9 +15,10 @@ import fr.inria.atlanmod.appa.Node;
 import fr.inria.atlanmod.appa.activemq.ArtemisBroker;
 import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
 import fr.inria.atlanmod.appa.pubsub.PubSub;
-import fr.inria.atlanmod.appa.service.DHTService;
-import fr.inria.atlanmod.appa.service.NamingService;
-import fr.inria.atlanmod.appa.service.registry.JmdnsJavaDiscoveryService;
+import fr.inria.atlanmod.appa.service.dht.DHTService;
+import fr.inria.atlanmod.appa.core.NamingService;
+import fr.inria.atlanmod.appa.service.rmi.*;
+import fr.inria.atlanmod.appa.service.zeroconf.ZeroconfRegistry;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -27,8 +28,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class RMIBootstrapper extends Node {
 
-    private RMIRegistryService rmiService;
-    private JmdnsJavaDiscoveryService discovery;
+    private RMIRegistry rmiService;
+    private ZeroconfRegistry discovery;
 
     public static void main(String[] args) {
         RMIBootstrapper instance = new RMIBootstrapper();
@@ -37,26 +38,27 @@ public class RMIBootstrapper extends Node {
 
     @Override
     protected void startDiscovery() {
-        discovery = new JmdnsJavaDiscoveryService();
+        discovery = new ZeroconfRegistry();
         this.execute(discovery);
     }
 
     @Override
     protected void startBroker() {
-        rmiService = new RMIRegistryService();
+        /*
+        rmiService = new RMIRegistry();
         this.execute(rmiService);
         try {
             discovery.publish(rmiService);
         }
         catch (RuntimeException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     @Override
     protected void startDHT() {
         try {
-            RemoteMap<?, ?> map = (RemoteMap<?, ?>) UnicastRemoteObject.exportObject(new RemoteMapServer<String, String>(), 0);
+            RemoteDHT<?, ?> map = (RemoteDHT<?, ?>) UnicastRemoteObject.exportObject(new RemoteDHTService<String, String>(), 0);
             rmiService.rebind(DHTService.NAME, map);
         }
         catch (RemoteException e) {
@@ -67,7 +69,7 @@ public class RMIBootstrapper extends Node {
     @Override
     protected void startNaming() {
         try {
-            RemoteNaming naming = (RemoteNaming) UnicastRemoteObject.exportObject(new RemoteNamingServer(), 0);
+            RemoteNaming naming = (RemoteNaming) UnicastRemoteObject.exportObject(new RemoteNamingService(), 0);
             rmiService.rebind(NamingService.NAME, naming);
         }
         catch (RemoteException e) {

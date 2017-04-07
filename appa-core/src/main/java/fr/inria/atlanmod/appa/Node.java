@@ -11,6 +11,7 @@
 
 package fr.inria.atlanmod.appa;
 
+import fr.inria.atlanmod.appa.core.Factory;
 import fr.inria.atlanmod.appa.core.Service;
 
 import java.util.ArrayList;
@@ -23,8 +24,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class Node {
 
-    private List<Service> services = new ArrayList<Service>();
+    private List<Service> services = new ArrayList<>();
     private ExecutorService executor = Executors.newFixedThreadPool(10);
+
 
     public final void start() {
         this.beforeStarting();

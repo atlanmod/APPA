@@ -11,8 +11,9 @@
 
 package fr.inria.atlanmod.appa.rmi;
 
-import fr.inria.atlanmod.appa.datatypes.Id;
-import fr.inria.atlanmod.appa.service.DHTService;
+import fr.inria.atlanmod.appa.datatypes.ServiceDescription;
+import fr.inria.atlanmod.appa.service.dht.DHTService;
+import fr.inria.atlanmod.appa.service.rmi.RemoteDHT;
 
 import java.rmi.RemoteException;
 import java.util.concurrent.ExecutionException;
@@ -20,18 +21,17 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public class DHTServiceFake implements DHTService<String, String> {
 
-    private final RemoteMap<String, String> map;
+    private final RemoteDHT<String, String> map;
 
     @SuppressWarnings("unchecked")
     public DHTServiceFake(RMIRegistry registry) {
-        map = (RemoteMap<String, String>) registry.lookup(DHTService.NAME);
+        map = (RemoteDHT<String, String>) registry.lookup(DHTService.NAME);
     }
 
     @Override
@@ -45,38 +45,20 @@ public class DHTServiceFake implements DHTService<String, String> {
     }
 
     @Override
-    public Future<String> get(String key) {
+    public String get(String key) {
         try {
-            return new GetValue(map.get(key));
+            return map.get(key);
         }
         catch (RemoteException e) {
             throw new RuntimeException(e);
         }
     }
 
-    @Nonnull
     @Override
-    public Id id() {
-        return null;
+    public void remove(String key) {
+
     }
 
-    @Override
-    public void start() {
-    }
-
-    @Override
-    public void stop() {
-    }
-
-    @Nonnegative
-    @Override
-    public int port() {
-        return 0;
-    }
-
-    @Override
-    public void run() {
-    }
 
     @ParametersAreNonnullByDefault
     private static class GetValue implements Future<String> {

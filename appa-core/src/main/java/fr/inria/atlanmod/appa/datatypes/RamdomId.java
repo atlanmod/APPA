@@ -37,4 +37,17 @@ public final class RamdomId implements Id {
     public String toString() {
         return id.toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RamdomId ramdomId = (RamdomId) o;
+        return Objects.equals(id, ramdomId.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

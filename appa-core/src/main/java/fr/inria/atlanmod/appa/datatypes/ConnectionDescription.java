@@ -20,10 +20,11 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
+import java.util.Objects;
 
 import javax.annotation.Nonnegative;
 
-public final class ConnectionDescription implements Serializable {
+public class ConnectionDescription implements Serializable {
 
     @SuppressWarnings("JavaDoc")
     private static final long serialVersionUID = -5648760003002377742L;
@@ -67,6 +68,45 @@ public final class ConnectionDescription implements Serializable {
         this.ip = new InetSocketAddress(localhost, port);
     }
 
+
+
+    /**
+     * Returns the IP address used for this connection.
+     *
+     * @return the IP address
+     */
+    public InetSocketAddress ip() {
+        return ip;
+    }
+
+    /**
+     * Returns the port used for this service.
+     *
+     * @return an int, the port number.
+     */
+    public int port() {
+        return ip.getPort();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s:%d", ip.getHostName(), ip.getPort());
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ConnectionDescription that = (ConnectionDescription) o;
+        return Objects.equals(ip, that.ip);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(ip);
+    }
+
     public static void main(String[] argv) {
         try {
             InetSocketAddress ip = new InetSocketAddress(InetAddress.getLocalHost(), 22);
@@ -88,29 +128,5 @@ public final class ConnectionDescription implements Serializable {
         catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Returns the IP address used for this connection.
-     *
-     * @return the IP address
-     */
-    public InetSocketAddress ip() {
-        return ip;
-    }
-
-
-    /**
-     * Returns the port used for this service.
-     *
-     * @return an int, the port number.
-     */
-    public int port() {
-        return ip.getPort();
-    }
-
-    @Override
-    public String toString() {
-        return String.format("%s:%d", ip.getHostName(), ip.getPort());
     }
 }

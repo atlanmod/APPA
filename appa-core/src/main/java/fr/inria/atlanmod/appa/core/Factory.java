@@ -18,8 +18,13 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public interface Factory {
 
     @Nonnull
-    Registry createRegistry();
+    RegistryService createRegistry();
 
+    /*
     @Nonnull
     MessagingService createMessaging();
+    */
+
+    @Nonnull
+    NamingService createNaming();
 }

@@ -15,6 +15,7 @@ import fr.inria.atlanmod.appa.core.Message;
 import fr.inria.atlanmod.appa.core.MessagingService;
 import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
 import fr.inria.atlanmod.appa.datatypes.Id;
+import fr.inria.atlanmod.appa.datatypes.ServiceDescription;
 import fr.inria.atlanmod.appa.service.AbstractService;
 
 import javax.annotation.Nonnegative;
@@ -33,6 +34,12 @@ public class DefaultMessagingService extends AbstractService implements Messagin
         this.server = server;
     }
 
+    @Nonnull
+    @Override
+    public ServiceDescription description() {
+        return null;
+    }
+
     @Override
     public void start() {
         thread = new Thread(server);
@@ -44,7 +51,6 @@ public class DefaultMessagingService extends AbstractService implements Messagin
     }
 
     @Nonnegative
-    @Override
     public int port() {
         return 0;
     }

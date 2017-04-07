@@ -6,4 +6,8 @@
 **/.idea
 **/*.iws
 **/*.iml
-appa-node/dependency-reduced-pom.xml
+
+### Others
+**/dependency-reduced-pom.xml
+**/logs
+*.log

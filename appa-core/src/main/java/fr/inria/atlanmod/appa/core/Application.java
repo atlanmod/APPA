@@ -24,40 +24,44 @@ public abstract class Application {
     @SuppressWarnings("JavaDoc")
     private static final Logger logger = Logger.getGlobal();
 
-    private final Registry registry;
+    private final RegistryService registry;
 
-    private final MessagingService messaging;
+    private  MessagingService messaging;
+    private NamingService naming;
 
     private final List<Service> services = new ArrayList<>();
 
     public Application(Factory factory) {
         registry = factory.createRegistry();
-        messaging = factory.createMessaging();
+        naming = factory.createNaming();
+        //messaging = factory.createMessaging();
 
-        addService(registry);
-        addService(messaging);
+        //addService(registry);
+        //addService(messaging);
     }
 
     public MessagingService getMessagingService() {
         return messaging;
     }
 
-    public Registry getRegistry() {
+    public RegistryService getRegistry() {
         return registry;
     }
+
+    public NamingService getNaming () {return naming;}
 
     protected void addService(Service service) {
         services.add(service);
     }
 
     public void start() {
-        logger.info(String.format("starting with %d services", services.size()));
+        logger.info(String.format("Appa starting with %d services", services.size()));
         assert registry != null;
 
         for (Service each : services) {
             each.start();
             try {
-                registry.publish(each);
+                //registry.publish(each);
             }
             catch (RuntimeException e) {
                 e.printStackTrace();
@@ -73,7 +77,7 @@ public abstract class Application {
             each = it.previous();
             each.stop();
             try {
-                registry.unpublish(each);
+                //registry.unpublish(each);
             }
             catch (RuntimeException e) {
                 e.printStackTrace();

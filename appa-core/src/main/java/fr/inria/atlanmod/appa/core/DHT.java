@@ -17,7 +17,7 @@ import java.util.concurrent.Future;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public interface DHT<K, V extends Serializable> {
+public interface DHT<K extends Serializable, V extends Serializable> {
 
     /**
      * Stores an object in this {@code DHT}.
@@ -27,5 +27,10 @@ public interface DHT<K, V extends Serializable> {
     /**
      * Retrieves an object from this {@code DHT}.
      */
-    Future<V> get(K key);
+    V get(K key);
+
+    /**
+     * Removes the value store at this key and the key itself from the DHT.
+     */
+    void remove(K key);
 }

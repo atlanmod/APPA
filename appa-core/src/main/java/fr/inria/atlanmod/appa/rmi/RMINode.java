@@ -14,12 +14,16 @@ package fr.inria.atlanmod.appa.rmi;
 import fr.inria.atlanmod.appa.Node;
 import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
 import fr.inria.atlanmod.appa.datatypes.Id;
-import fr.inria.atlanmod.appa.service.DHTService;
-import fr.inria.atlanmod.appa.service.NamingService;
-import fr.inria.atlanmod.appa.service.registry.JmdnsJavaDiscoveryService;
+import fr.inria.atlanmod.appa.datatypes.ServiceDescription;
+import fr.inria.atlanmod.appa.datatypes.StringId;
+import fr.inria.atlanmod.appa.service.dht.DHTService;
+import fr.inria.atlanmod.appa.core.NamingService;
+import fr.inria.atlanmod.appa.service.rmi.RemoteNamingServiceAdapter;
+import fr.inria.atlanmod.appa.service.zeroconf.ZeroconfRegistry;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.rmi.RemoteException;
 import java.util.concurrent.ExecutionException;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -27,13 +31,46 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class RMINode extends Node {
 
-    private JmdnsJavaDiscoveryService discovery;
-    private RMIRegistryClient registry;
+    private ZeroconfRegistry discovery;
+    private RMIRegistry registry;
     private DHTService<String, String> dht;
     private NamingService naming;
 
     public RMINode() {
         super();
+    }
+
+
+
+    @Override
+    protected void startDiscovery() {
+        discovery = new ZeroconfRegistry();
+        this.execute(discovery);
+    }
+
+    @Override
+    protected void startBroker() {
+        Id id = new StringId(RMIRegistry.NAME);
+        ServiceDescription connection;
+        try {
+            connection = discovery.locate(id).get();
+            registry = new RMIRegistry(connection);
+        }
+        catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void startDHT() {
+        dht = new DHTServiceFake(registry);
+    }
+
+    @Override
+    protected void startNaming() {
+        naming = new RemoteNamingServiceAdapter(registry);
     }
 
     public static void main(String[] args) throws UnknownHostException {
@@ -46,34 +83,5 @@ public class RMINode extends Node {
 
         ConnectionDescription cd = node.naming.lookup(id);
         System.out.printf("Received CD for id: " + cd);
-
-    }
-
-    @Override
-    protected void startDiscovery() {
-        discovery = new JmdnsJavaDiscoveryService();
-        this.execute(discovery);
-    }
-
-    @Override
-    protected void startBroker() {
-        ConnectionDescription connection;
-        try {
-            connection = discovery.locate(RMIRegistryService.NAME).get();
-            registry = new RMIRegistryClient(connection);
-        }
-        catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected void startDHT() {
-        dht = new DHTServiceFake(registry);
-    }
-
-    @Override
-    protected void startNaming() {
-        naming = new NamingServiceFake(registry);
     }
 }

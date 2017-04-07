@@ -9,32 +9,29 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.service;
+package fr.inria.atlanmod.appa.service.rmi;
 
-import fr.inria.atlanmod.appa.core.Service;
 import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
 import fr.inria.atlanmod.appa.datatypes.Id;
+import fr.inria.atlanmod.appa.core.NamingService;
+import fr.inria.atlanmod.appa.service.naming.SimpleNamingService;
 
-import javax.annotation.Nonnull;
+import java.rmi.RemoteException;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 
-/**
- * The abstract implementation of a {@link Service}.
- */
 @ParametersAreNonnullByDefault
-public abstract class AbstractService implements Service {
+public class RemoteNamingService implements RemoteNaming {
 
-    private final Id id;
+    private final NamingService service = new SimpleNamingService();
 
-    private final ConnectionDescription connection;
-
-    public AbstractService(Id id, ConnectionDescription connection) {
-        this.id = id;
-        this.connection = connection;
+    @Override
+    public Id register(ConnectionDescription connection) throws RemoteException {
+        return service.register(connection);
     }
 
-
-    public ConnectionDescription getConnection() {
-        return connection;
+    @Override
+    public ConnectionDescription lookup(Id id) throws RemoteException {
+        return service.lookup(id);
     }
 }
