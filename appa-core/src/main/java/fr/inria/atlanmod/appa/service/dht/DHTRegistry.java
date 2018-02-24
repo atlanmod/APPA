@@ -74,10 +74,6 @@ public class DHTRegistry  implements RegistryService {
 
     }
 
-    @Override
-    public void run() {
-
-    }
 
     @ParametersAreNonnullByDefault
     class ReturnValue<V1> implements Future<V1> {

@@ -8,8 +8,6 @@ import fr.inria.atlanmod.appa.messaging.DefaultMessagingService;
 import fr.inria.atlanmod.appa.messaging.Server;
 import fr.inria.atlanmod.appa.messaging.nio.MessagingServer;
 
-import javax.annotation.Nonnull;
-
 public class VanillaFactory implements Factory {
 
     private int port;
@@ -26,7 +24,7 @@ public class VanillaFactory implements Factory {
     public MessagingService createMessaging() {
 
         ConnectionDescription cd = new ConnectionDescription(port + 58);
-        Server s = new MessagingServer(cd.ip(), scheduler);
+        Server s = new MessagingServer(cd.socket(), scheduler);
         Id id = new StringId("Messaging");
         MessagingService ms = new DefaultMessagingService(id, cd, s);
         scheduler.schedule(s);

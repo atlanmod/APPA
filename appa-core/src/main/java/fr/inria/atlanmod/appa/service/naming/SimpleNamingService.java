@@ -40,7 +40,7 @@ public class SimpleNamingService implements NamingService {
     }
 
     /**
-     * Returns a connection description for a given node identifier.
+     * Returns a connection connection for a given node identifier.
      * @param id
      * @return
      */

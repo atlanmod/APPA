@@ -11,18 +11,19 @@
 
 package fr.inria.atlanmod.appa.core;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.logging.Logger;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public abstract class Application {
 
-    @SuppressWarnings("JavaDoc")
-    private static final Logger logger = Logger.getGlobal();
+    private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
     private final RegistryService registry;
 
@@ -55,18 +56,15 @@ public abstract class Application {
     }
 
     public void start() {
-        logger.info(String.format("Appa starting with %d services", services.size()));
         assert registry != null;
+        this.beforeStart();
 
+        logger.info(String.format("Appa starting with %d services", services.size()));
         for (Service each : services) {
             each.start();
-            try {
-                //registry.publish(each);
-            }
-            catch (RuntimeException e) {
-                e.printStackTrace();
-            }
+            this.getRegistry().publish(each.description());
         }
+        this.afterStart();
     }
 
     public void stop() {
@@ -84,4 +82,7 @@ public abstract class Application {
             }
         }
     }
+
+    protected void beforeStart() {};
+    protected void afterStart() {};
 }

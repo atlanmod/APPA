@@ -4,6 +4,7 @@ import fr.inria.atlanmod.appa.core.DHT;
 import fr.inria.atlanmod.appa.core.Factory;
 import fr.inria.atlanmod.appa.core.NamingService;
 import fr.inria.atlanmod.appa.core.RegistryService;
+import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
 import fr.inria.atlanmod.appa.datatypes.Id;
 import fr.inria.atlanmod.appa.datatypes.ServiceDescription;
 import fr.inria.atlanmod.appa.datatypes.StringId;
@@ -35,7 +36,10 @@ public class RMIBootstrapperFactory implements Factory {
     public RMIBootstrapperFactory() throws RemoteException {
         registry = LocateRegistry.createRegistry(RMIRegistry.PORT);
         Id id = new StringId(RMIRegistry.NAME);
-        ServiceDescription sd = new ServiceDescription(RMIRegistry.PORT, id, RMIRegistry.PROTOCOL);
+        ConnectionDescription cd = new ConnectionDescription(RMIRegistry.PORT);
+        ServiceDescription sd = new ServiceDescription(cd, id);
+
+        sd.protocol(RMIRegistry.PROTOCOL);
         zeroconf.start();
         zeroconf.publish(sd);
     }

@@ -1,6 +1,6 @@
 package fr.inria.atlanmod.appa.datatypes;
 
-import java.net.InetSocketAddress;
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -8,7 +8,7 @@ import java.util.Objects;
  *
  * @author AtlanMod team.
  */
-public class ServiceDescription extends ConnectionDescription {
+public class ServiceDescription implements Serializable {
 
     /**
      * This service's identifier.
@@ -16,22 +16,21 @@ public class ServiceDescription extends ConnectionDescription {
     private final Id id;
 
     /**
-     * This service protocol
+     * This service connection connection
      */
-    private final String protocol;
+    private final ConnectionDescription connection;
 
 
-    public ServiceDescription(InetSocketAddress ip, Id id, String protocol) {
-        super(ip);
+    /**
+     * Creates a Service Descriptiuon from a Connection Description and an Id.
+     * @param cd The ConnectionDescription allowing clients to connect to the service
+     * @param id The service identification.
+     */
+    public ServiceDescription(ConnectionDescription cd, Id id) {
         this.id = id;
-        this.protocol = protocol;
+        this.connection =cd;
     }
 
-    public ServiceDescription(int port, Id id, String protocol){
-        super(port);
-        this.id = id;
-        this.protocol = protocol;
-    }
 
 
     /**
@@ -41,8 +40,9 @@ public class ServiceDescription extends ConnectionDescription {
         return id;
     }
 
-    public String protocol() {
-        return protocol;
+
+    public ConnectionDescription connection() {
+        return connection;
     }
 
     @Override
@@ -51,12 +51,20 @@ public class ServiceDescription extends ConnectionDescription {
         if (o == null || getClass() != o.getClass()) return false;
         ServiceDescription that = (ServiceDescription) o;
         return Objects.equals(id, that.id) &&
-                Objects.equals(protocol, that.protocol) &&
-                Objects.equals(ip(), that.ip());
+                Objects.equals(connection, that.connection);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, protocol);
+        return Objects.hash(id, connection);
     }
+
+    private String protocol;
+    public void protocol(String str) {
+        protocol = str;
+    }
+    public String protocol() {
+        return protocol;
+    }
+
 }

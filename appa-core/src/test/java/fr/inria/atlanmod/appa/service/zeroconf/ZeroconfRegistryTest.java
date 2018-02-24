@@ -1,9 +1,6 @@
 package fr.inria.atlanmod.appa.service.zeroconf;
 
-import fr.inria.atlanmod.appa.datatypes.Id;
-import fr.inria.atlanmod.appa.datatypes.RamdomId;
-import fr.inria.atlanmod.appa.datatypes.ServiceDescription;
-import fr.inria.atlanmod.appa.datatypes.StringId;
+import fr.inria.atlanmod.appa.datatypes.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +34,9 @@ public class ZeroconfRegistryTest {
     public void publish() throws Exception {
         Id id = new StringId("id1");
         InetSocketAddress socketAddress = new InetSocketAddress(InetAddress.getLocalHost(), 9090);
-        ServiceDescription sd1 = new ServiceDescription(socketAddress, id, "daap");
+        ServiceDescription sd1 = new ServiceDescription(new ConnectionDescription(socketAddress), id);
+        sd1.protocol("daap");
+
         System.out.println("will publish service");
         registry.publish(sd1);
         System.out.println("will locate service");

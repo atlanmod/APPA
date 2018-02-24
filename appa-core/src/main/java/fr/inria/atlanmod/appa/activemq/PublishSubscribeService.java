@@ -3,16 +3,20 @@ package fr.inria.atlanmod.appa.activemq;
 
 import fr.inria.atlanmod.appa.core.*;
 import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.datatypes.Id;
 import fr.inria.atlanmod.appa.datatypes.ServiceDescription;
+import fr.inria.atlanmod.appa.datatypes.StringId;
 import fr.inria.atlanmod.appa.pubsub.Consumer;
 import fr.inria.atlanmod.appa.pubsub.Producer;
-import fr.inria.atlanmod.appa.pubsub.PubSub;
+import fr.inria.atlanmod.appa.pubsub.PublishSubscribe;
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import javax.jms.*;
 import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import static java.util.Objects.nonNull;
 
@@ -22,13 +26,16 @@ import static java.util.Objects.nonNull;
  *
  * @author AtlanMod team.
  */
-public class PubSubService implements PubSub, Service {
+public class PublishSubscribeService implements PublishSubscribe, Service {
     private final ConnectionDescription description;
     private Topic topic;
     private Connection connection;
     private Session session;
 
-    public PubSubService(ConnectionDescription description) {
+    private static Logger logger = LoggerFactory.getLogger(PublishSubscribeService.class);
+
+
+    public PublishSubscribeService(ConnectionDescription description) {
         this.description = description;
     }
 
@@ -42,7 +49,7 @@ public class PubSubService implements PubSub, Service {
             producer.setDeliveryMode(DeliveryMode.PERSISTENT);
             producer.setTimeToLive(10000);
         } catch (JMSException e) {
-            e.printStackTrace();
+            logger.error("JMS error when creating topic producer", e);
         }
 
         return nonNull(producer) ? new ActiveMQProducer(producer) : null;
@@ -54,7 +61,7 @@ public class PubSubService implements PubSub, Service {
             topic = session.createTopic(string);
             consumer = session.createDurableConsumer(topic, "str");
         } catch (JMSException e) {
-            e.printStackTrace();
+            logger.error("JMS error when creating topic consumer", e);
         }
 
         return nonNull(consumer) ? new ActiveMQConsumer(consumer) : null ;
@@ -70,6 +77,10 @@ public class PubSubService implements PubSub, Service {
     public void start() {
         // Create a ConnectionFactory
         String url = "tcp://" + description.toString();
+        //String url = "tcp://127.0.0.1:6446";
+
+        System.out.println("url: "+url);
+
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(url);
 
         try {
@@ -91,16 +102,6 @@ public class PubSubService implements PubSub, Service {
         } catch (JMSException e) {
             e.printStackTrace();
         }
-    }
-
-
-    public int port() {
-        return description.port();
-    }
-
-    @Override
-    public void run() {
-
     }
 
 
@@ -144,10 +145,14 @@ public class PubSubService implements PubSub, Service {
         }
     }
 
-    public static void main(String[] args) throws JMSException {
-        ConnectionDescription description = new ConnectionDescription(PubSub.PORT);
-        PubSubService service = new PubSubService(description);
+    public static void main(String[] args) throws JMSException, UnknownHostException {
+
+
+        ConnectionDescription description = new ConnectionDescription(InetAddress.getByName("127.0.0.1"),PublishSubscribe.PORT);
+        PublishSubscribeService service = new PublishSubscribeService(description);
         service.start();
+
+
         Producer producer = service.createTopic("neoemf");
         Consumer consumer = service.consumeTopic("neoemf");
 
@@ -156,6 +161,5 @@ public class PubSubService implements PubSub, Service {
         ConnectionDescription retour = (ConnectionDescription) consumer.receive(1000);
         System.out.println("Received: "+retour);
         service.stop();
-        service.run();
     }
 }

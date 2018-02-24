@@ -12,16 +12,11 @@
 package fr.inria.atlanmod.appa.rmi;
 
 import fr.inria.atlanmod.appa.Node;
-import fr.inria.atlanmod.appa.activemq.ArtemisBroker;
 import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.pubsub.PubSub;
-import fr.inria.atlanmod.appa.service.dht.DHTService;
-import fr.inria.atlanmod.appa.core.NamingService;
-import fr.inria.atlanmod.appa.service.rmi.*;
+import fr.inria.atlanmod.appa.pubsub.PublishSubscribe;
 import fr.inria.atlanmod.appa.service.zeroconf.ZeroconfRegistry;
 
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -42,19 +37,21 @@ public class RMIBootstrapper extends Node {
         this.execute(discovery);
     }
 
+
     @Override
     protected void startBroker() {
-        /*
-        rmiService = new RMIRegistry();
-        this.execute(rmiService);
+
         try {
-            discovery.publish(rmiService);
+            rmiService = new RMIRegistry();
+            //this.execute(rmiService);
+            //discovery.publish(rmiService);
         }
-        catch (RuntimeException e) {
+        catch (RuntimeException | RemoteException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
+/*
     @Override
     protected void startDHT() {
         try {
@@ -75,15 +72,15 @@ public class RMIBootstrapper extends Node {
         catch (RemoteException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     protected void afterStarting() {
         this.startJMSServer();
     }
 
     private void startJMSServer() {
-        ConnectionDescription cd = new ConnectionDescription(PubSub.PORT);
-        ArtemisBroker server = new ArtemisBroker(cd);
-        this.execute(server);
+        ConnectionDescription cd = new ConnectionDescription(PublishSubscribe.PORT);
+        //ArtemisBroker server = new ArtemisBroker(cd);
+        //this.execute(server);
     }
 }

@@ -55,13 +55,10 @@ public class DefaultMessagingService extends AbstractService implements Messagin
         return 0;
     }
 
-    @Override
-    public void run() {
-    }
 
     @Nonnull
     @Override
     public ResponseHandler send(Message message, ConnectionDescription connection) {
-        return server.send(message.toByteArray(), connection.ip());
+        return server.send(message.toByteArray(), connection.socket());
     }
 }

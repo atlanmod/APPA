@@ -11,16 +11,10 @@
 
 package fr.inria.atlanmod.appa.rmi;
 
-import fr.inria.atlanmod.appa.core.Service;
-import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
 import fr.inria.atlanmod.appa.datatypes.ServiceDescription;
-import fr.inria.atlanmod.appa.service.zeroconf.ZeroconfService;
-import fr.inria.atlanmod.appa.datatypes.Id;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnegative;
-import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.net.InetSocketAddress;
 import java.rmi.NotBoundException;
@@ -48,11 +42,14 @@ public class RMIRegistry {
     private Logger logger = LoggerFactory.getLogger(RMIRegistry.class);
 
     public RMIRegistry(ServiceDescription connection) throws RemoteException {
-        InetSocketAddress socketAddress = connection.ip();
+        InetSocketAddress socketAddress = connection.connection().socket();
         registry = LocateRegistry.getRegistry(socketAddress.getHostName(), socketAddress.getPort());
         logger.info("rmi registry found: " + connection);
     }
 
+    public RMIRegistry() throws RemoteException {
+        registry = LocateRegistry.createRegistry(RMIRegistry.PORT);
+    }
 
     public void rebind(String name, Remote object) {
         assert Objects.nonNull(registry);

@@ -28,10 +28,13 @@ public class AppaNode extends Application {
 
         Id id = new RamdomId();
 
-        registry.publish(new ServiceDescription(250, id , "http"));
+        ServiceDescription sd = new ServiceDescription(new ConnectionDescription(50), id);
+        sd.protocol("http");
 
-        ServiceDescription sd = registry.locate(id).get();
-        System.out.printf("Received SD for id: " + sd);
+        registry.publish(sd);
+
+        ServiceDescription retrieved  = registry.locate(id).get();
+        System.out.printf("Received SD for id: " + retrieved);
 
         Id nodeId = node.getNaming().register(new ConnectionDescription(80));
         System.out.println("Got a new identifier: "+nodeId);

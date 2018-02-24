@@ -2,6 +2,7 @@ package fr.inria.atlanmod.appa.service.zeroconf;
 
 import com.google.common.collect.ImmutableMap;
 import fr.inria.atlanmod.appa.core.RegistryService;
+import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
 import fr.inria.atlanmod.appa.datatypes.Id;
 import fr.inria.atlanmod.appa.datatypes.ServiceDescription;
 import fr.inria.atlanmod.appa.datatypes.StringId;
@@ -45,13 +46,13 @@ public class ZeroconfRegistry implements RegistryService {
 
         Map<String,String> properties = ImmutableMap.of("protocol",service.protocol());
 
-        ServiceInfo serviceInfo = ServiceInfo.create(nameMap, service.port(), 0, 0, false, properties);
+        ServiceInfo serviceInfo = ServiceInfo.create(nameMap, service.connection().port(), 0, 0, false, properties);
 
         try {
             zeroconf.registerService(serviceInfo);
         }
         catch (IOException e) {
-            e.printStackTrace();
+            logger.warn("IO error when registering a service", e);
         }
     }
 
@@ -73,24 +74,21 @@ public class ZeroconfRegistry implements RegistryService {
 
     @Override
     public void start() {
+        logger.info("Starting Zeroconf registry");
         try {
-            zeroconf = JmDNS.create(InetAddress.getLocalHost());
+            //zeroconf = JmDNS.create(InetAddress.getLocalHost());
+            zeroconf = JmDNS.create();
             String type = String.format("_%s._%s.%s.",APPLICATION,PROTOCOL,DOMAIN);
             zeroconf.addServiceListener(type, new SampleListener());
         }
         catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Could not start Zeroconf registry",e);
         }
     }
 
     @Override
     public void stop() {
         zeroconf.unregisterAllServices();
-    }
-
-    @Override
-    public void run() {
-
     }
 
     @ParametersAreNonnullByDefault
@@ -163,7 +161,10 @@ public class ZeroconfRegistry implements RegistryService {
 
             InetSocketAddress socketAddress = new InetSocketAddress(address, info.getPort());
 
-            ServiceDescription description = new ServiceDescription(socketAddress, id, protocol);
+            ConnectionDescription cd = new ConnectionDescription(socketAddress);
+            ServiceDescription description = new ServiceDescription(cd, id);
+            description.protocol(protocol);
+
             descriptions.put(info.getName(), description);
             synchronized (descriptions) {
                 descriptions.notifyAll();

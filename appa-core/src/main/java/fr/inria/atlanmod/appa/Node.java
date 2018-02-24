@@ -40,7 +40,6 @@ public class Node {
     protected void execute(Service s) {
         s.start();
         services.add(s);
-        executor.execute(s);
     }
 
     protected void beforeStarting() {}

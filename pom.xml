@@ -83,6 +83,9 @@
         <module>appa-tester</module>
         <module>appa-bootstrapper</module>
         <module>appa-node</module>
+        <!--
+        <module>appa-tests</module>
+        -->
     </modules>
 
     <developers>
@@ -90,6 +93,16 @@
             <name>Yoann Vernageau</name>
             <id>yoann.vernageau</id>
             <email>yoann.vernageau@inria.fr</email>
+            <roles>
+                <role>admin</role>
+                <role>developer</role>
+            </roles>
+            <timezone>+2</timezone>
+        </developer>
+        <developer>
+            <name>Gerson Sunyé</name>
+            <id>sunye</id>
+            <email>gerson.sunye@gmail.com</email>
             <roles>
                 <role>admin</role>
                 <role>developer</role>

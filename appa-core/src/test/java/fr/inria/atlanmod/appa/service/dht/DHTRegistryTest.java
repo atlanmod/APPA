@@ -1,6 +1,7 @@
 package fr.inria.atlanmod.appa.service.dht;
 
 import fr.inria.atlanmod.appa.core.RegistryService;
+import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
 import fr.inria.atlanmod.appa.datatypes.Id;
 import fr.inria.atlanmod.appa.datatypes.RamdomId;
 import fr.inria.atlanmod.appa.datatypes.ServiceDescription;
@@ -25,7 +26,8 @@ public class DHTRegistryTest {
     ServiceDescription sd1;
     public DHTRegistryTest() throws URISyntaxException, UnknownHostException {
         InetSocketAddress socketAddress = new InetSocketAddress(InetAddress.getLocalHost(), 8080);
-        sd1 = new ServiceDescription(socketAddress, new RamdomId(), "rmi");
+        sd1 = new ServiceDescription(new ConnectionDescription(socketAddress), new RamdomId());
+        sd1.protocol("rmi");
     }
 
 

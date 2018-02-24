@@ -11,11 +11,6 @@
 
 package fr.inria.atlanmod.appa.datatypes;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -32,15 +27,15 @@ public class ConnectionDescription implements Serializable {
     /**
      * The IP address used for this connection.
      */
-    private final InetSocketAddress ip;
+    private final InetSocketAddress socket;
 
     /**
-     * Constructs a new {@code ConnectionDescription} with the given {@code ip}.
+     * Constructs a new {@code ConnectionDescription} with the given {@code socket}.
      *
-     * @param ip the described IP address
+     * @param socket the described IP address
      */
-    public ConnectionDescription(InetSocketAddress ip) {
-        this.ip = ip;
+    public ConnectionDescription(InetSocketAddress socket) {
+        this.socket = socket;
     }
 
     /**
@@ -65,18 +60,26 @@ public class ConnectionDescription implements Serializable {
         } catch (UnknownHostException e) {
             localhost = InetAddress.getLoopbackAddress();
         }
-        this.ip = new InetSocketAddress(localhost, port);
+        this.socket = new InetSocketAddress(localhost, port);
     }
 
 
+    /**
+     * Returns the IP socket address used for this connection.
+     *
+     * @return the IP socket address
+     */
+    public InetSocketAddress socket() {
+        return socket;
+    }
 
     /**
      * Returns the IP address used for this connection.
      *
      * @return the IP address
      */
-    public InetSocketAddress ip() {
-        return ip;
+    public InetAddress address() {
+        return socket.getAddress();
     }
 
     /**
@@ -85,12 +88,12 @@ public class ConnectionDescription implements Serializable {
      * @return an int, the port number.
      */
     public int port() {
-        return ip.getPort();
+        return socket.getPort();
     }
 
     @Override
     public String toString() {
-        return String.format("%s:%d", ip.getHostName(), ip.getPort());
+        return String.format("%s:%d", socket.getHostName(), socket.getPort());
     }
 
 
@@ -99,34 +102,12 @@ public class ConnectionDescription implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ConnectionDescription that = (ConnectionDescription) o;
-        return Objects.equals(ip, that.ip);
+        return Objects.equals(socket, that.socket);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(ip);
+        return Objects.hash(socket);
     }
 
-    public static void main(String[] argv) {
-        try {
-            InetSocketAddress ip = new InetSocketAddress(InetAddress.getLocalHost(), 22);
-            ConnectionDescription cd = new ConnectionDescription(ip);
-            ConnectionDescription xcd;
-
-            try (ByteArrayOutputStream oStream = new ByteArrayOutputStream()) {
-                try (ObjectOutputStream oos = new ObjectOutputStream(oStream)) {
-                    oos.writeObject(cd);
-                }
-
-                try (ByteArrayInputStream iStream = new ByteArrayInputStream(oStream.toByteArray()); ObjectInputStream ois = new ObjectInputStream(iStream)) {
-                    xcd = (ConnectionDescription) ois.readObject();
-                }
-            }
-
-            System.out.println(xcd.ip());
-        }
-        catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
 }

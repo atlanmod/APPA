@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public interface Service extends Runnable {
+public interface Service  {
 
     /**
      * Returns the unique identification of this {@code Service}.

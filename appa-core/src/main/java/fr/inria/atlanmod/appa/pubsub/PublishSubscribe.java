@@ -6,8 +6,9 @@ package fr.inria.atlanmod.appa.pubsub;
  *
  * @author AtlanMod team.
  */
-public interface PubSub  {
+public interface PublishSubscribe {
     int PORT = 6446;
+    String NAME = "PublishSubscribe";
 
     Producer createTopic(String string);
 
