@@ -18,7 +18,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
  * The interface defining the Distributed Hash Table (DHT) service.
  */
 @ParametersAreNonnullByDefault
-public interface DHTService<K extends Serializable, V extends Serializable> extends DHT<K, V> {
+public interface DHTService<K extends Serializable, V extends Serializable> {
 
     /**
      * Service name
