@@ -9,10 +9,6 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.service.dht;
-
-import fr.inria.atlanmod.appa.core.DHT;
-import fr.inria.atlanmod.appa.core.Service;
 
 import java.io.Serializable;
 
