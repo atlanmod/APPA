@@ -1,34 +1,96 @@
 
 # EMF Binary Format
 
+```txt
+0  1  2  3  4  5  6  7
++--+--+--+--+--+--+--+
+/                    /
+|       Header       | From 9 to 13 bytes
+/                    /
++--+--+--+--+--+--+--+
+/                    /
+|      EObjects      | 
+/                    /
++--+--+--+--+--+--+--+
+```
+
 
 ## Header
     
     - Signature (8 bytes)
     - Version (1 byte)
     - Style (Optional)
-    
-    
-### Signature
 
-    - 8 bytes : chars {'\211','e','m','f','\n','\r','\032','\n'};
-    
-### Version
+```txt
+0  1  2  3  4  5  6  7
++--+--+--+--+--+--+--+
+/                    /
+|     Signature      | 8 bytes
+/                    /
++--+--+--+--+--+--+--+
+|      Version       | 1 byte
++--+--+--+--+--+--+--+
+/                    /
+|       Style        | 8 bytes
+/                    /
++--+--+--+--+--+--+--+
+```
 
-- Version is an enumeration ( `enum BinaryIO.Version`), with two possible literals (VERSION_1_0 and VERSION_1_1). 
+## Signature
+
+- 8 bytes : chars {'\211','e','m','f','\n','\r','\032','\n'};
+
+```txt
+0  1  2  3  4  5  6  7
++--+--+--+--+--+--+--+
+|       '\211'       |
++--+--+--+--+--+--+--+
+|         'e'        | 
++--+--+--+--+--+--+--+
+|         'm'        | 
++--+--+--+--+--+--+--+
+|         'f'        | 
++--+--+--+--+--+--+--+
+|        '\n'        | 
++--+--+--+--+--+--+--+
+|         'r'        | 
++--+--+--+--+--+--+--+
+|       '\032'       | 
++--+--+--+--+--+--+--+
+|        '\n'        | 
++--+--+--+--+--+--+--+
+```
+
+
+## Version
+
+Version is an enumeration ( `enum BinaryIO.Version`), with two possible literals (`VERSION_1_0` and `VERSION_1_1`). 
 
 - 1 byte: the version ordinal (0 or 1). 
-    
-### Style
+
+```txt
+0  1  2  3  4  5  6  7
++--+--+--+--+--+--+--+
+|                    | 1Byte
++--+--+--+--+--+--+--+
+```
+
+
+## Style
 
 - Optional, only if version > 1.0 (ordinal > 0)
 - 4 bytes 
-```
-                                    1  1  1  1  1  1  1  1  1  1  2  2  2  2  2  2  2  2  2  2  3  3
-      0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5  6  7  8  9  0  1 
-    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-    |      Unused                                                                    | a| b| c| d| e|
-    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+```txt
+0  1  2  3  4  5  6  7
++--+--+--+--+--+--+--+
+|       Unused       |
++--+--+--+--+--+--+--+
+|       Unused       | 
++--+--+--+--+--+--+--+
+|       Unused       | 
++--+--+--+--+--+--+--+
+|     | a| b| c| d| e| 
++--+--+--+--+--+--+--+
 ```
 
 a : STYLE_DATA_CONVERTER        (bit 27) // Uses segmented String
@@ -142,6 +204,102 @@ e : BINARY_FLOATING_POINT         (bit 31)
 ```
 
 - Entries: call `writeEStructuralFeature()`
+
+#### Feature Map entry Value
+
+		Object value = entry.getValue();
+		switch (eStructuralFeatureData.kind) {
+		case EOBJECT:
+		case EOBJECT_LIST:
+		case EOBJECT_CONTAINMENT:
+		case EOBJECT_CONTAINMENT_LIST: {
+			saveEObject((InternalEObject) value, Check.NOTHING);
+			break;
+		}
+		case EOBJECT_CONTAINMENT_PROXY_RESOLVING:
+		case EOBJECT_CONTAINMENT_LIST_PROXY_RESOLVING: {
+			saveEObject((InternalEObject) value, Check.DIRECT_RESOURCE);
+			break;
+		}
+		case EOBJECT_PROXY_RESOLVING:
+		case EOBJECT_LIST_PROXY_RESOLVING: {
+			saveEObject((InternalEObject) value, Check.RESOURCE);
+			break;
+		}
+		case BOOLEAN: {
+			writeBoolean((Boolean) value);
+			break;
+		}
+		case BYTE: {
+			writeByte((Byte) value);
+			break;
+		}
+		case CHAR: {
+			writeChar((Character) value);
+			break;
+		}
+		case DOUBLE: {
+			writeDouble((Double) value);
+			break;
+		}
+		case FLOAT: {
+			writeFloat((Float) value);
+			break;
+		}
+		case INT: {
+			writeInt((Integer) value);
+			break;
+		}
+		case LONG: {
+			writeLong((Long) value);
+			break;
+		}
+		case SHORT: {
+			writeShort((Short) value);
+			break;
+		}
+		case STRING: {
+			writeSegmentedString((String) value);
+			break;
+		}
+		case DATE: {
+			if (eStructuralFeatureData.dataConverter != null) {
+				eStructuralFeatureData.dataConverter.write(this, value);
+			} else if ((style & STYLE_BINARY_DATE) != 0) {
+				writeDate((Date) value);
+			} else {
+				writeSegmentedString(
+						eStructuralFeatureData.eFactory.convertToString(eStructuralFeatureData.eDataType, value));
+			}
+			break;
+		}
+		case ENUMERATOR: {
+			if (eStructuralFeatureData.dataConverter != null) {
+				eStructuralFeatureData.dataConverter.write(this, value);
+			} else if ((style & STYLE_BINARY_ENUMERATOR) != 0) {
+				writeInt(((Enumerator) value).getValue());
+			} else {
+				writeString(eStructuralFeatureData.eFactory.convertToString(eStructuralFeatureData.eDataType, value));
+			}
+			break;
+		}
+		case DATA:
+		case DATA_LIST: {
+			if (eStructuralFeatureData.dataConverter != null) {
+				eStructuralFeatureData.dataConverter.write(this, value);
+			} else {
+				String literal = eStructuralFeatureData.eFactory.convertToString(eStructuralFeatureData.eDataType,
+						value);
+				writeSegmentedString(literal);
+			}
+			break;
+		}
+		default: {
+			throw new IOException("Unhandled case " + eStructuralFeatureData.kind);
+		}
+		}
+
+
 
 #### Date
 
