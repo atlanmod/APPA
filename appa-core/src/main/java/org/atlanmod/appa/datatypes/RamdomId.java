@@ -9,7 +9,7 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.datatypes;
+package org.atlanmod.appa.datatypes;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
@@ -35,6 +35,12 @@ public final class RamdomId implements Id {
     @Override
     public String toString() {
         return id.toString();
+    }
+
+    @Override
+    public byte[] toBytes() {
+        // TODO: Implement this method
+        return new byte[0];
     }
 
     @Override

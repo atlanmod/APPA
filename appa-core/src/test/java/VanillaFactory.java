@@ -1,12 +1,12 @@
-import fr.inria.atlanmod.appa.core.*;
-import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.datatypes.Id;
-import fr.inria.atlanmod.appa.datatypes.StringId;
-import fr.inria.atlanmod.appa.kernel.AsyncScheduler;
-import fr.inria.atlanmod.appa.kernel.Scheduler;
-import fr.inria.atlanmod.appa.messaging.DefaultMessagingService;
-import fr.inria.atlanmod.appa.messaging.Server;
-import fr.inria.atlanmod.appa.messaging.nio.MessagingServer;
+import org.atlanmod.appa.core.*;
+import org.atlanmod.appa.datatypes.ConnectionDescription;
+import org.atlanmod.appa.datatypes.Id;
+import org.atlanmod.appa.datatypes.StringId;
+import org.atlanmod.appa.kernel.AsyncScheduler;
+import org.atlanmod.appa.kernel.Scheduler;
+import org.atlanmod.appa.messaging.DefaultMessagingService;
+import org.atlanmod.appa.messaging.Server;
+import org.atlanmod.appa.messaging.nio.MessagingServer;
 
 public class VanillaFactory implements Factory {
 

@@ -9,9 +9,9 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.rmi;
+package org.atlanmod.appa.rmi;
 
-import fr.inria.atlanmod.appa.datatypes.ServiceDescription;
+import org.atlanmod.appa.datatypes.ServiceDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

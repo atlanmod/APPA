@@ -9,10 +9,10 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.core;
+package org.atlanmod.appa.core;
 
-import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.datatypes.Id;
+import org.atlanmod.appa.datatypes.ConnectionDescription;
+import org.atlanmod.appa.datatypes.Id;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 

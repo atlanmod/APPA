@@ -1,4 +1,4 @@
-package fr.inria.atlanmod.appa.service.dht;
+package org.atlanmod.appa.service.dht;
 
 /**
  * Created on 04/04/2017.

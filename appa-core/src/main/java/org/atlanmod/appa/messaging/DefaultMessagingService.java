@@ -9,14 +9,14 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.messaging;
+package org.atlanmod.appa.messaging;
 
-import fr.inria.atlanmod.appa.core.Message;
-import fr.inria.atlanmod.appa.core.MessagingService;
-import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.datatypes.Id;
-import fr.inria.atlanmod.appa.datatypes.ServiceDescription;
-import fr.inria.atlanmod.appa.service.AbstractService;
+import org.atlanmod.appa.core.Message;
+import org.atlanmod.appa.core.MessagingService;
+import org.atlanmod.appa.datatypes.ConnectionDescription;
+import org.atlanmod.appa.datatypes.Id;
+import org.atlanmod.appa.datatypes.ServiceDescription;
+import org.atlanmod.appa.service.AbstractService;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;

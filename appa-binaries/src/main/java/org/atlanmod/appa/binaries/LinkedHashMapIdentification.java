@@ -1,6 +1,5 @@
 package org.atlanmod.appa.binaries;
 
-import org.atlanmod.appa.datatypes.Id;
 import org.eclipse.emf.ecore.EObject;
 
 import java.util.LinkedHashMap;
@@ -8,16 +7,16 @@ import java.util.Map;
 import java.util.Set;
 
 public class LinkedHashMapIdentification implements Identifier {
-    private Map<EObject, Id> idMap = new LinkedHashMap<>();
+    private Map<EObject, WritableId> idMap = new LinkedHashMap<>();
 
     @Override
-    public Id idFor(EObject eObject) {
+    public WritableId idFor(EObject eObject) {
         return idMap.get(eObject);
     }
 
     @Override
     public void identify(EObject eObject) {
-        Id id = new IntegerId(idMap.size());
+        WritableId id = new IntegerId(idMap.size());
         idMap.put(eObject, id);
     }
 
@@ -32,7 +31,7 @@ public class LinkedHashMapIdentification implements Identifier {
     }
 
     @Override
-    public Set<Map.Entry<EObject, Id>> entrySet() {
+    public Set<Map.Entry<EObject, WritableId>> entrySet() {
         return idMap.entrySet();
     }
 }

@@ -1,6 +1,9 @@
 package org.atlanmod.appa.binaries;
 
 import org.atlanmod.appa.datatypes.Id;
+import org.atlanmod.appa.io.CompressedInts;
+import org.atlanmod.appa.io.UnsignedShort;
+import org.atlanmod.appa.io.UnsignedShorts;
 import org.atlanmod.commons.Preconditions;
 import org.atlanmod.commons.annotation.Static;
 import org.atlanmod.commons.collect.MoreArrays;
@@ -13,9 +16,7 @@ import org.eclipse.emf.ecore.EcorePackage;
 import javax.annotation.Nonnull;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 public class ECoreConverters {
@@ -65,7 +66,8 @@ public class ECoreConverters {
     public static byte[] intToBytes(Object object) {
         Preconditions.checkArgument(Integer.class.isInstance(object));
 
-        return Ints.toBytes((int) object);
+        //return Ints.toBytes((int) object);
+        return CompressedInts.toBytes((int) object);
     }
 
     public static byte[] longToBytes(Object object) {
@@ -90,8 +92,9 @@ public class ECoreConverters {
         Preconditions.checkInstanceOf(object, String.class);
 
         byte[] bytes = Strings.toBytes((String) object);
+        UnsignedShort length = UnsignedShort.fromInt(bytes.length);
 
-        return MoreArrays.addAll(Ints.toBytes(bytes.length), bytes);
+        return MoreArrays.addAll(UnsignedShorts.toBytes(length), bytes);
     }
 
     public static byte[] dateToBytes(Object object) {
@@ -120,14 +123,14 @@ public class ECoreConverters {
         Preconditions.checkInstanceOf(object, byte[].class);
 
         byte[] value = (byte[]) object;
-        return MoreArrays.addAll(Ints.toBytes(value.length), bigIntegerToBytes(value));
+        return MoreArrays.addAll(CompressedInts.toBytes(value.length), bigIntegerToBytes(value));
     }
 
     public static byte[] enumLiteralToByes(Object object) {
         Preconditions.checkInstanceOf(object, Enumerator.class);
 
         Enumerator literal = (Enumerator) object;
-        return Ints.toBytes(literal.getValue());
+        return CompressedInts.toBytes(literal.getValue());
     }
 
     private void initialize() {
@@ -139,7 +142,8 @@ public class ECoreConverters {
         singleObjectConverters.put(EcorePackage.ELONG, ECoreConverters::longToBytes);
         singleObjectConverters.put(EcorePackage.EFLOAT, ECoreConverters::floatToBytes);
         singleObjectConverters.put(EcorePackage.EDOUBLE, ECoreConverters::doubleToBytes);
-        singleObjectConverters.put(EcorePackage.ESTRING, ECoreConverters::stringToBytes);
+        //singleObjectConverters.put(EcorePackage.ESTRING, ECoreConverters::stringToBytes);
+        singleObjectConverters.put(EcorePackage.ESTRING, new StringSerializer());
         singleObjectConverters.put(EcorePackage.EDATE, ECoreConverters::dateToBytes);
         singleObjectConverters.put(EcorePackage.EBIG_INTEGER, ECoreConverters::bigIntegerToBytes);
         singleObjectConverters.put(EcorePackage.EBIG_DECIMAL, ECoreConverters::bigDecimalToBytes);
@@ -170,7 +174,7 @@ public class ECoreConverters {
         return this.singleObjectConverters.get(i);
     }
 
-    public Function<Object, byte[]> getElistConverter(Integer i) {
+    public Function<Object, byte[]> getEListConverter(Integer i) {
         return this.eListConverters.get(i);
     }
 
@@ -199,7 +203,7 @@ public class ECoreConverters {
             Preconditions.checkInstanceOf(o, EList.class);
             EList<Object> elements = (EList<Object>) o;
 
-            byte[] serialized = Ints.toBytes(elements.size());
+            byte[] serialized = CompressedInts.toBytes(elements.size());
             for (Object each : elements) {
                 serialized = MoreArrays.addAll(serialized, converter.apply(each));
             }
@@ -237,7 +241,7 @@ public class ECoreConverters {
 
             Preconditions.checkInstanceOf(o, EList.class);
             EList<EObject> references = (EList) o;
-            byte[] referenceBytes = Ints.toBytes(references.size());
+            byte[] referenceBytes = CompressedInts.toBytes(references.size());
             for (EObject each : references) {
                 Id id = identifier.idFor(each);
                 referenceBytes = MoreArrays.addAll(referenceBytes, id.toBytes());

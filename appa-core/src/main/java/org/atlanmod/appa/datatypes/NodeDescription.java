@@ -1,4 +1,4 @@
-package fr.inria.atlanmod.appa.datatypes;
+package org.atlanmod.appa.datatypes;
 
 /**
  * Created on 15/03/2017.

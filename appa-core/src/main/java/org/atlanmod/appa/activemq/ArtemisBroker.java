@@ -1,10 +1,10 @@
-package fr.inria.atlanmod.appa.activemq;
+package org.atlanmod.appa.activemq;
 
-import fr.inria.atlanmod.appa.core.Service;
-import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.datatypes.ServiceDescription;
-import fr.inria.atlanmod.appa.datatypes.StringId;
-import fr.inria.atlanmod.appa.pubsub.PublishSubscribe;
+import org.atlanmod.appa.core.Service;
+import org.atlanmod.appa.datatypes.ConnectionDescription;
+import org.atlanmod.appa.datatypes.ServiceDescription;
+import org.atlanmod.appa.datatypes.StringId;
+import org.atlanmod.appa.pubsub.PublishSubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

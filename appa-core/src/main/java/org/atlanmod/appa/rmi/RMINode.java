@@ -9,16 +9,16 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.rmi;
+package org.atlanmod.appa.rmi;
 
-import fr.inria.atlanmod.appa.Node;
-import fr.inria.atlanmod.appa.core.NamingService;
-import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.datatypes.Id;
-import fr.inria.atlanmod.appa.datatypes.ServiceDescription;
-import fr.inria.atlanmod.appa.datatypes.StringId;
-import fr.inria.atlanmod.appa.service.rmi.RemoteNamingServiceAdapter;
-import fr.inria.atlanmod.appa.service.zeroconf.ZeroconfRegistry;
+import org.atlanmod.appa.Node;
+import org.atlanmod.appa.core.NamingService;
+import org.atlanmod.appa.datatypes.ConnectionDescription;
+import org.atlanmod.appa.datatypes.Id;
+import org.atlanmod.appa.datatypes.ServiceDescription;
+import org.atlanmod.appa.datatypes.StringId;
+import org.atlanmod.appa.service.rmi.RemoteNamingServiceAdapter;
+import org.atlanmod.appa.service.zeroconf.ZeroconfRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.net.InetAddress;

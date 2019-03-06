@@ -24,7 +24,7 @@ class EAttributeMetadata extends EFeatureMetadata {
         if (type instanceof EEnum) {
             converter = converters.getEnumConverter();
         } else {
-            converter = attribute.isMany() ? converters.getElistConverter(id)
+            converter = attribute.isMany() ? converters.getEListConverter(id)
                     : converters.getPrimitiveTypeConverter(id);
         }
 

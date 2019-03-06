@@ -1,17 +1,17 @@
-package fr.inria.atlanmod.appa.bootstrapper;
+package org.atlanmod.appa.bootstrapper;
 
-import fr.inria.atlanmod.appa.core.Factory;
-import fr.inria.atlanmod.appa.core.NamingService;
-import fr.inria.atlanmod.appa.core.RegistryService;
-import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.datatypes.Id;
-import fr.inria.atlanmod.appa.datatypes.ServiceDescription;
-import fr.inria.atlanmod.appa.datatypes.StringId;
-import fr.inria.atlanmod.appa.rmi.RMIRegistry;
-import fr.inria.atlanmod.appa.service.rmi.RemoteNaming;
-import fr.inria.atlanmod.appa.service.rmi.RemoteNamingService;
-import fr.inria.atlanmod.appa.service.rmi.RemoteNamingServiceAdapter;
-import fr.inria.atlanmod.appa.service.zeroconf.ZeroconfRegistry;
+import org.atlanmod.appa.core.Factory;
+import org.atlanmod.appa.core.NamingService;
+import org.atlanmod.appa.core.RegistryService;
+import org.atlanmod.appa.datatypes.ConnectionDescription;
+import org.atlanmod.appa.datatypes.Id;
+import org.atlanmod.appa.datatypes.ServiceDescription;
+import org.atlanmod.appa.datatypes.StringId;
+import org.atlanmod.appa.rmi.RMIRegistry;
+import org.atlanmod.appa.service.rmi.RemoteNaming;
+import org.atlanmod.appa.service.rmi.RemoteNamingService;
+import org.atlanmod.appa.service.rmi.RemoteNamingServiceAdapter;
+import org.atlanmod.appa.service.zeroconf.ZeroconfRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,12 +1,12 @@
-package fr.inria.atlanmod.appa.activemq;
+package org.atlanmod.appa.activemq;
 
 
-import fr.inria.atlanmod.appa.core.Service;
-import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.datatypes.ServiceDescription;
-import fr.inria.atlanmod.appa.pubsub.Consumer;
-import fr.inria.atlanmod.appa.pubsub.Producer;
-import fr.inria.atlanmod.appa.pubsub.PublishSubscribe;
+import org.atlanmod.appa.core.Service;
+import org.atlanmod.appa.datatypes.ConnectionDescription;
+import org.atlanmod.appa.datatypes.ServiceDescription;
+import org.atlanmod.appa.pubsub.Consumer;
+import org.atlanmod.appa.pubsub.Producer;
+import org.atlanmod.appa.pubsub.PublishSubscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
  */
 public class PublishSubscribeService implements PublishSubscribe, Service {
     private static Logger logger = LoggerFactory.getLogger(PublishSubscribeService.class);
-//    private Topic topic;
+    //    private Topic topic;
 //    private Connection connection;
 //    private Session session;
     private final ConnectionDescription description;

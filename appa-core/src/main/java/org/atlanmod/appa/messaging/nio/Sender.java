@@ -9,9 +9,9 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.messaging.nio;
+package org.atlanmod.appa.messaging.nio;
 
-import fr.inria.atlanmod.appa.messaging.ResponseHandler;
+import org.atlanmod.appa.messaging.ResponseHandler;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;

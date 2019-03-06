@@ -1,4 +1,4 @@
-package fr.inria.atlanmod.appa.pubsub;
+package org.atlanmod.appa.pubsub;
 
 
 /**

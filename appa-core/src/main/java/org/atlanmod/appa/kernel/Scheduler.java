@@ -9,7 +9,7 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.kernel;
+package org.atlanmod.appa.kernel;
 
 public interface Scheduler extends Runnable {
 

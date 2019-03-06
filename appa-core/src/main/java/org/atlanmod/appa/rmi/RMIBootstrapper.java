@@ -9,12 +9,12 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.rmi;
+package org.atlanmod.appa.rmi;
 
-import fr.inria.atlanmod.appa.Node;
-import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.pubsub.PublishSubscribe;
-import fr.inria.atlanmod.appa.service.zeroconf.ZeroconfRegistry;
+import org.atlanmod.appa.Node;
+import org.atlanmod.appa.datatypes.ConnectionDescription;
+import org.atlanmod.appa.pubsub.PublishSubscribe;
+import org.atlanmod.appa.service.zeroconf.ZeroconfRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.rmi.RemoteException;

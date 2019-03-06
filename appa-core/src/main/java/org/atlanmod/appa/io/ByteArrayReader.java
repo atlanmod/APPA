@@ -1,15 +1,15 @@
 package org.atlanmod.appa.io;
 
 
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.function.Function;
 
 public class ByteArrayReader {
-    private final List<Byte> bytes;
+    private final ByteBuffer bytes;
     private int position = 0;
 
-    public ByteArrayReader(List<Byte> bytes) {
+    public ByteArrayReader(ByteBuffer bytes) {
         this.bytes = bytes;
     }
 
@@ -43,6 +43,14 @@ public class ByteArrayReader {
 
     public UnsignedByte readUnsignedByte() {
         return UnsignedByte.fromByte(get());
+    }
+
+    public UnsignedInt readUnsignedInt() {
+        return UnsignedInt.fromInt(this.readInteger());
+    }
+
+    public UnsignedShort readUnsignedShort() {
+        return UnsignedShort.fromShort(this.readShort());
     }
 
     /**
@@ -90,7 +98,7 @@ public class ByteArrayReader {
 
 
     private byte get() {
-        assert position < bytes.size();
+        assert position < bytes.limit();
 
         return bytes.get(position++);
     }

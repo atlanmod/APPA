@@ -1,7 +1,7 @@
-import fr.inria.atlanmod.appa.core.Application;
-import fr.inria.atlanmod.appa.core.DHT;
-import fr.inria.atlanmod.appa.messaging.ResponseHandler;
-import fr.inria.atlanmod.appa.test.doubles.FakeDHT;
+import org.atlanmod.appa.core.Application;
+import org.atlanmod.appa.core.DHT;
+import org.atlanmod.appa.messaging.ResponseHandler;
+import org.atlanmod.appa.test.doubles.FakeDHT;
 
 public class VanillaRun {
 

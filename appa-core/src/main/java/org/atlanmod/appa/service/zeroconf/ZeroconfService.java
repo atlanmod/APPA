@@ -9,7 +9,7 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.service.zeroconf;
+package org.atlanmod.appa.service.zeroconf;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;

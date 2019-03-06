@@ -1,5 +1,5 @@
-import fr.inria.atlanmod.appa.core.Application;
-import fr.inria.atlanmod.appa.core.Factory;
+import org.atlanmod.appa.core.Application;
+import org.atlanmod.appa.core.Factory;
 
 public class VanillaApplication extends Application {
 

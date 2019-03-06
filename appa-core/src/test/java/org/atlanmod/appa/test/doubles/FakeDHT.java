@@ -9,9 +9,9 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.test.doubles;
+package org.atlanmod.appa.test.doubles;
 
-import fr.inria.atlanmod.appa.core.DHT;
+import org.atlanmod.appa.core.DHT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

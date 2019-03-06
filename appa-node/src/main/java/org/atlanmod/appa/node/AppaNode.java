@@ -1,13 +1,13 @@
-package fr.inria.atlanmod.appa.node;
+package org.atlanmod.appa.node;
 
-import fr.inria.atlanmod.appa.core.Application;
-import fr.inria.atlanmod.appa.core.Factory;
-import fr.inria.atlanmod.appa.core.RegistryService;
-import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.datatypes.Id;
-import fr.inria.atlanmod.appa.datatypes.RamdomId;
-import fr.inria.atlanmod.appa.datatypes.ServiceDescription;
-import fr.inria.atlanmod.appa.rmi.RMIFactory;
+import org.atlanmod.appa.core.Application;
+import org.atlanmod.appa.core.Factory;
+import org.atlanmod.appa.core.RegistryService;
+import org.atlanmod.appa.datatypes.ConnectionDescription;
+import org.atlanmod.appa.datatypes.Id;
+import org.atlanmod.appa.datatypes.RamdomId;
+import org.atlanmod.appa.datatypes.ServiceDescription;
+import org.atlanmod.appa.rmi.RMIFactory;
 
 /**
  * Created on 06/04/2017.

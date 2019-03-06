@@ -5,6 +5,8 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl;
+import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.gmt.modisco.java.emf.meta.JavaPackage;
@@ -25,6 +27,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class BinaryWriterTest {
 
     private static String RESOURCE_FILE = "./src/main/resources/org.eclipse.jdt.source.all.xmi";
+    //private static String RESOURCE_FILE = "./src/main/resources/org.eclipse.jdt.source.all.bin";
+
+
+
+
     private Resource resource;
 
     @BeforeEach
@@ -36,6 +43,12 @@ class BinaryWriterTest {
         Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
         Map<String, Object> m = reg.getExtensionToFactoryMap();
         m.put("xmi", new XMIResourceFactoryImpl());
+        m.put("bin", new ResourceFactoryImpl() {
+            @Override
+            public Resource createResource(URI uri) {
+                return new BinaryResourceImpl(uri);
+            }
+        });
 
         // Obtain a new resource set
         ResourceSet resSet = new ResourceSetImpl();

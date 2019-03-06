@@ -1,6 +1,5 @@
 package org.atlanmod.appa.binaries;
 
-import org.atlanmod.appa.datatypes.Id;
 import org.eclipse.emf.ecore.EObject;
 
 import java.util.Map;
@@ -8,7 +7,7 @@ import java.util.Set;
 
 public interface Identifier {
 
-    Id idFor(EObject eObject);
+    WritableId idFor(EObject eObject);
 
     void identify(EObject eObject);
 
@@ -16,5 +15,5 @@ public interface Identifier {
 
     Set<EObject> eObjects();
 
-    Set<Map.Entry<EObject, Id>> entrySet();
+    Set<Map.Entry<EObject, WritableId>> entrySet();
 }

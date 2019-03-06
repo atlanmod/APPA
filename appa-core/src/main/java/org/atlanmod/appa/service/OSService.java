@@ -9,9 +9,9 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.service;
+package org.atlanmod.appa.service;
 
-import fr.inria.atlanmod.appa.core.Service;
+import org.atlanmod.appa.core.Service;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;

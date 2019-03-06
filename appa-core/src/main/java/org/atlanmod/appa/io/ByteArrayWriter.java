@@ -16,6 +16,10 @@ public class ByteArrayWriter {
         return this;
     }
 
+    public ByteArrayWriter write(WritableOnByteBuffer writable) {
+        writable.writeOn(buffer);
+        return this;
+    }
 
     public ByteArrayWriter writeUnsignedShort(UnsignedShort value) {
         return this.writeShort(value.shortValue());

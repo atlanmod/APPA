@@ -1,4 +1,4 @@
-package fr.inria.atlanmod.appa.service.zeroconf;
+package org.atlanmod.appa.service.zeroconf;
 
 /**
  * Created on 05/04/2017.

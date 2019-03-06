@@ -2,6 +2,7 @@ package org.atlanmod.appa.io;
 
 import org.atlanmod.commons.Preconditions;
 
+import java.nio.ByteBuffer;
 import java.util.Objects;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Objects;
  * It wraps a value of the primitive getType `long` in an object.
  * An object of getType `UnsignedInt` contains a single field whose getType is `long`.
  */
-public class UnsignedInt extends Number implements Comparable<UnsignedInt> {
+public class UnsignedInt extends Number implements Comparable<UnsignedInt>, WritableOnByteBuffer {
     public final static long MIN_VALUE = 0;
     public final static long MAX_VALUE = 0xffffffffL;
     private final static long UNSIGNED_INT_MASK = 0xFFFFFFFFL;
@@ -92,5 +93,12 @@ public class UnsignedInt extends Number implements Comparable<UnsignedInt> {
     @Override
     public int compareTo(UnsignedInt other) {
         return (this.value < other.value ? -1 : (this.value == other.value ? 0 : 1));
+    }
+
+    @Override
+    public void writeOn(ByteBuffer buffer) {
+        for (int i = (Integer.BYTES - 1); i >= 0; i--) {
+            buffer.put((byte) (value >>> i * Byte.SIZE));
+        }
     }
 }

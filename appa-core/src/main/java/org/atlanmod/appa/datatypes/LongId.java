@@ -9,7 +9,9 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.datatypes;
+package org.atlanmod.appa.datatypes;
+
+import org.atlanmod.commons.primitive.Longs;
 
 import javax.annotation.Nonnull;
 
@@ -51,5 +53,10 @@ public final class LongId implements Id {
     @Override
     public String toString() {
         return Long.toString(id);
+    }
+
+    @Override
+    public byte[] toBytes() {
+        return Longs.toBytes(id);
     }
 }

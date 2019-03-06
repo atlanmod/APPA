@@ -1,4 +1,4 @@
-package fr.inria.atlanmod.appa.datatypes;
+package org.atlanmod.appa.datatypes;
 
 import java.util.Objects;
 
@@ -36,5 +36,10 @@ public class StringId implements Id {
     @Override
     public String toString() {
         return id;
+    }
+
+    @Override
+    public byte[] toBytes() {
+        return new byte[0];
     }
 }

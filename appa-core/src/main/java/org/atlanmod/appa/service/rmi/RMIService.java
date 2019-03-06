@@ -9,7 +9,7 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.service.rmi;
+package org.atlanmod.appa.service.rmi;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.rmi.RemoteException;

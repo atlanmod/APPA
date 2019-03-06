@@ -8,10 +8,10 @@ import java.util.Map;
 import java.util.Set;
 
 public class HashMapIdentifier implements Identifier {
-    private Map<EObject, Id> idMap = new HashMap<>();
+    private Map<EObject, WritableId> idMap = new HashMap<>();
 
     @Override
-    public Id idFor(EObject eObject) {
+    public WritableId idFor(EObject eObject) {
         return idMap.get(eObject);
     }
 
@@ -32,7 +32,7 @@ public class HashMapIdentifier implements Identifier {
     }
 
     @Override
-    public Set<Map.Entry<EObject, Id>> entrySet() {
+    public Set<Map.Entry<EObject, WritableId>> entrySet() {
         return idMap.entrySet();
     }
 }

@@ -1,9 +1,9 @@
-package fr.inria.atlanmod.appa.test.doubles;
+package org.atlanmod.appa.test.doubles;
 
-import fr.inria.atlanmod.appa.core.NamingService;
-import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.datatypes.Id;
-import fr.inria.atlanmod.appa.datatypes.RamdomId;
+import org.atlanmod.appa.core.NamingService;
+import org.atlanmod.appa.datatypes.ConnectionDescription;
+import org.atlanmod.appa.datatypes.Id;
+import org.atlanmod.appa.datatypes.RamdomId;
 
 import java.util.HashMap;
 import java.util.Map;

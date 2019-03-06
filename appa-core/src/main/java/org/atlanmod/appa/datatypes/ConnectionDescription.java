@@ -9,7 +9,7 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.datatypes;
+package org.atlanmod.appa.datatypes;
 
 import javax.annotation.Nonnegative;
 import java.io.Serializable;

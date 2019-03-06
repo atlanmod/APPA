@@ -2,6 +2,7 @@ package org.atlanmod.appa.binaries;
 
 import org.atlanmod.appa.datatypes.Id;
 import org.atlanmod.appa.io.ByteArrayWriter;
+import org.atlanmod.appa.io.CompressedInts;
 import org.atlanmod.appa.io.UnsignedShort;
 import org.atlanmod.appa.io.UnsignedShorts;
 import org.atlanmod.commons.collect.MoreArrays;
@@ -60,21 +61,11 @@ public class Metadata {
         ePackageDataMap.put(ePackage, metadata);
     }
 
-    public byte[] headerToBytes() {
-        return new byte[0];
-    }
 
     public void writeHeader() {
 
     }
 
-    public byte[] ePackagesToBytes() {
-        byte[] bytes = Ints.toBytes(ePackageDataMap.size());
-        for (EPackageMetadata each : ePackageDataMap.values()) {
-            bytes = MoreArrays.addAll(bytes, each.toBytes());
-        }
-        return bytes;
-    }
 
     public void writeEPackages() {
         writer.writeInteger(ePackageDataMap.size());
@@ -83,45 +74,21 @@ public class Metadata {
         }
     }
 
-    public byte[] eObjectsToBytes() {
-        byte[] eObjectsBytes = Ints.toBytes(this.identifier.eObjects().size());
-
-        for (Map.Entry<EObject, Id> each : this.identifier.entrySet()) {
-            byte[] objectId = each.getValue().toBytes();
-            UnsignedShort id = UnsignedShort.fromInt(each.getKey().eClass().getClassifierID());
-            byte[] classId = UnsignedShorts.toBytes(id);
-            eObjectsBytes = merge(eObjectsBytes, objectId, classId);
-        }
-
-        return eObjectsBytes;
-    }
-
     public void writeEObjects() {
         writer.writeInteger(this.identifier.eObjects().size());
-        for (Map.Entry<EObject, Id> each : this.identifier.entrySet()) {
-            UnsignedShort id = UnsignedShort.fromInt(each.getKey().eClass().getClassifierID());
-            writer.put(each.getValue().toBytes())
-                    .writeUnsignedShort(id);
+        for (Map.Entry<EObject, WritableId> each : this.identifier.entrySet()) {
+
+            writer.put(CompressedInts.toBytes(each.getKey().eClass().getClassifierID()));
+            writer.write(each.getValue());
         }
-    }
-
-
-
-
-    public byte[] featuresToBytes(EObject eObject) {
-        Id id = identifier.idFor(eObject);
-        EClassMetadata classMetadata = this.eClassDataMap.get(eObject.eClass());
-        byte[] eObjectFeatureValues = classMetadata.featuresToBytes(eObject);
-
-        return MoreArrays.addAll(id.toBytes(), eObjectFeatureValues);
     }
 
     public void writeEFeatures(EObject eObject) {
-        Id id = identifier.idFor(eObject);
+        WritableId id = identifier.idFor(eObject);
         EClassMetadata classMetadata = this.eClassDataMap.get(eObject.eClass());
         byte[] eObjectFeatureValues = classMetadata.featuresToBytes(eObject);
 
-        writer.put(id.toBytes())
+        writer.write(id)
                 .put(eObjectFeatureValues);
     }
 

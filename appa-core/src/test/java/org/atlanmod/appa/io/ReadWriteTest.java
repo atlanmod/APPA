@@ -12,14 +12,15 @@ import java.nio.ByteBuffer;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ReadWriteTest {
-    /*
+
     private ByteArrayWriter writer;
     private ByteArrayReader reader;
 
     @BeforeEach
     void setUp() {
-        writer = new ByteArrayWriter(ByteBuffer.allocate(1000));
-        reader = new ByteArrayReader(writer.);
+        ByteBuffer buffer = ByteBuffer.allocate(1000);
+        writer = new ByteArrayWriter(buffer);
+        reader = new ByteArrayReader(buffer);
     }
 
     @ValueSource(shorts = {0, 133, Short.MIN_VALUE, Short.MAX_VALUE})
@@ -111,5 +112,32 @@ class ReadWriteTest {
 
         assertEquals(expected, actual);
     }
-    */
+
+    @Test
+    void readWriteUnsignedByte() {
+        UnsignedByte expected = UnsignedByte.fromInt(133);
+        writer.write(expected);
+        UnsignedByte actual = reader.readUnsignedByte();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void readWriteUnsignedInt() {
+        UnsignedInt expected = UnsignedInt.fromInt(133);
+        writer.write(expected);
+        UnsignedInt actual = reader.readUnsignedInt();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void readWriteUnsignedShort() {
+        UnsignedShort expected = UnsignedShort.fromInt(133);
+        writer.write(expected);
+        UnsignedShort actual = reader.readUnsignedShort();
+
+        assertEquals(expected, actual);
+    }
+
 }

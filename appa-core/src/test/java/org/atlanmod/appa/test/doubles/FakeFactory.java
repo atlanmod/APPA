@@ -1,11 +1,11 @@
-package fr.inria.atlanmod.appa.test.doubles;
+package org.atlanmod.appa.test.doubles;
 
-import fr.inria.atlanmod.appa.core.DHT;
-import fr.inria.atlanmod.appa.core.Factory;
-import fr.inria.atlanmod.appa.core.NamingService;
-import fr.inria.atlanmod.appa.core.RegistryService;
-import fr.inria.atlanmod.appa.datatypes.Id;
-import fr.inria.atlanmod.appa.datatypes.ServiceDescription;
+import org.atlanmod.appa.core.DHT;
+import org.atlanmod.appa.core.Factory;
+import org.atlanmod.appa.core.NamingService;
+import org.atlanmod.appa.core.RegistryService;
+import org.atlanmod.appa.datatypes.Id;
+import org.atlanmod.appa.datatypes.ServiceDescription;
 
 import javax.annotation.Nonnull;
 

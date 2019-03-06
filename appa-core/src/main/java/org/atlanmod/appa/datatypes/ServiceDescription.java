@@ -1,4 +1,4 @@
-package fr.inria.atlanmod.appa.datatypes;
+package org.atlanmod.appa.datatypes;
 
 import java.io.Serializable;
 import java.util.Objects;

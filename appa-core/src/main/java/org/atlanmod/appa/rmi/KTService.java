@@ -9,9 +9,9 @@
  *     Atlanmod INRIA LINA Mines Nantes - initial API and implementation
  */
 
-package fr.inria.atlanmod.appa.rmi;
+package org.atlanmod.appa.rmi;
 
-import fr.inria.atlanmod.appa.service.TimestampServer;
+import org.atlanmod.appa.service.TimestampServer;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.net.InetAddress;

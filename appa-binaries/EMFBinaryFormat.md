@@ -5,7 +5,7 @@
 0  1  2  3  4  5  6  7
 +--+--+--+--+--+--+--+
 /                    /
-|       Header       | From 9 to 13 bytes
+|       Header       | From 9 to 13 buffer
 /                    /
 +--+--+--+--+--+--+--+
 /                    /
@@ -17,7 +17,7 @@
 
 ## Header
     
-    - Signature (8 bytes)
+    - Signature (8 buffer)
     - Version (1 byte)
     - Style (Optional)
 
@@ -25,20 +25,20 @@
 0  1  2  3  4  5  6  7
 +--+--+--+--+--+--+--+
 /                    /
-|     Signature      | 8 bytes
+|     Signature      | 8 buffer
 /                    /
 +--+--+--+--+--+--+--+
 |      Version       | 1 byte
 +--+--+--+--+--+--+--+
 /                    /
-|       Style        | 8 bytes
+|       Style        | 8 buffer
 /                    /
 +--+--+--+--+--+--+--+
 ```
 
 ## Signature
 
-- 8 bytes : chars {'\211','e','m','f','\n','\r','\032','\n'};
+- 8 buffer : chars {'\211','e','m','f','\n','\r','\032','\n'};
 
 ```txt
 0  1  2  3  4  5  6  7
@@ -79,7 +79,7 @@ Version is an enumeration ( `enum BinaryIO.Version`), with two possible literals
 ## Style
 
 - Optional, only if version > 1.0 (ordinal > 0)
-- 4 bytes 
+- 4 buffer 
 ```txt
 0  1  2  3  4  5  6  7
 +--+--+--+--+--+--+--+
@@ -99,9 +99,43 @@ c : STYLE_PROXY_ATTRIBUTES      (bit 29)
 d : BINARY_DATE                               (bit 30)
 e : BINARY_FLOATING_POINT         (bit 31)
 
+
+## EPackage
+
+```txt
+0  1  2  3  4  5  6  7
++--+--+--+--+--+--+--+
+|     EPackage ID    | Compressed Int
++--+--+--+--+--+--+--+
+|                    |
+/       NsURI        / String (Only the 1st time)
+|                    |
++--+--+--+--+--+--+--+
+|                    |
+/        URI         / URI (Only the 1st time)
+|                    |
++--+--+--+--+--+--+--+
+```
+
+- Package ID id Compressed Int
+- NSURI : Segmented String
+- URI : URI
+
+## EClass
+
+```txt
+0  1  2  3  4  5  6  7
++--+--+--+--+--+--+--+
+|      EClass ID     | Compressed Int
++--+--+--+--+--+--+--+
+|                    |
+/     EClass Name    / String (Only the 1st time)
+|                    |
++--+--+--+--+--+--+--+
+```
 ## EObjects 
 
-- Size : Compressed Int (1, 2, 3 or 4 bytes)
+- Size : Compressed Int (1, 2, 3 or 4 buffer)
 - Contents (in the first level, all resource's root elements {Check.CONTAINER})
   - EObject ID : Compressed Int
   - EClass ID: 
@@ -109,36 +143,38 @@ e : BINARY_FLOATING_POINT         (bit 31)
     - EClass ID : Compressed Int
   - Structural Feature DATA
  
- 
-    0  1  2  3  4  5  6  7
-    +--+--+--+--+--+--+--+
-    |      EObject ID    | Compressed Int
-    +--+--+--+--+--+--+--+
-    |      EClass ID     | Compressed Int
-    +--+--+--+--+--+--+--+
-    |      EPackage ID   | Compressed Int
-    +--+--+--+--+--+--+--+
-    |                    |
-    /                    /
-    / Structural Feature /
-    |        DATA        |
-    +--+--+--+--+--+--+--+
-    |          0         | Compressed Int
-    +--+--+--+--+--+--+--+        
-
+ ```txt
+0  1  2  3  4  5  6  7
++--+--+--+--+--+--+--+
+|      EObject ID    | Compressed Int
++--+--+--+--+--+--+--+
+|       EClass       | 
++--+--+--+--+--+--+--+
+|      EPackage      | 
++--+--+--+--+--+--+--+
+|                    |
+/                    /
+/ Structural Feature /
+|        DATA        |
++--+--+--+--+--+--+--+
+|          1         | Compressed Int
++--+--+--+--+--+--+--+        
+```
 
 ## Structural Features
 
-    0  1  2  3  4  5  6  7
-    +--+--+--+--+--+--+--+
-    /  Feature ID + 1    / Compressed Int
-    +--+--+--+--+--+--+--+
-    /    Feature NAME    / String (Only for the 1st time the feature is written)
-    +--+--+--+--+--+--+--+
-    |   Data Converter   | Boolean (Only for the 1st time the feature is written)
-    +--+--+--+--+--+--+--+
-    /   Feature Value    /
-    +--+--+--+--+--+--+--+
+```txt
+0  1  2  3  4  5  6  7
++--+--+--+--+--+--+--+
+/  Feature ID + 1    / Compressed Int
++--+--+--+--+--+--+--+
+/    Feature NAME    / String (Only for the 1st time the feature is written)
++--+--+--+--+--+--+--+
+|   Data Converter   | Boolean (Only for the 1st time the feature is written)
++--+--+--+--+--+--+--+
+/   Feature Value    /
++--+--+--+--+--+--+--+
+```
 
 ## Feature Value
 
@@ -147,35 +183,39 @@ e : BINARY_FLOATING_POINT         (bit 31)
 - Boolean : 1 byte
 - Byte       : 1 byte
 - Char      : 1 byte
-- Double  : 8 bytes
-- Float      : 4 bytes
-- Int          : 4 bytes
-- Short     : 2 bytes
-- Long      : 8 bytes
+- Double  : 8 buffer
+- Float      : 4 buffer
+- Int          : 4 buffer
+- Short     : 2 buffer
+- Long      : 8 buffer
 
 #### String
 
-    0  1  2  3  4  5  6  7
-    +--+--+--+--+--+--+--+
-    /    String Size     / Compressed Int
-    +--+--+--+--+--+--+--+
-    |                    |
-    /       Chars        /
-    /                    /
-    |                    |
-    +--+--+--+--+--+--+--+
+```txt
+0  1  2  3  4  5  6  7
++--+--+--+--+--+--+--+
+/    String Size     / Compressed Int
++--+--+--+--+--+--+--+
+|                    |
+/       Chars        /
+/                    /
+|                    |
++--+--+--+--+--+--+--+
+```
 
 ####  FEATURE_MAP;
 
-    0  1  2  3  4  5  6  7
-    +--+--+--+--+--+--+--+
-    /   FeatureMap Size  / Compressed Int
-    +--+--+--+--+--+--+--+
-    |                    |
-    /      Entries       /
-    /                    /
-    |                    |
-    +--+--+--+--+--+--+--+
+```txt
+0  1  2  3  4  5  6  7
++--+--+--+--+--+--+--+
+/   FeatureMap Size  / Compressed Int
++--+--+--+--+--+--+--+
+|                    |
+/      Entries       /
+/                    /
+|                    |
++--+--+--+--+--+--+--+
+```
 
 ##### Feature Map Entry
 
@@ -207,98 +247,6 @@ e : BINARY_FLOATING_POINT         (bit 31)
 
 #### Feature Map entry Value
 
-		Object value = entry.getValue();
-		switch (eStructuralFeatureData.kind) {
-		case EOBJECT:
-		case EOBJECT_LIST:
-		case EOBJECT_CONTAINMENT:
-		case EOBJECT_CONTAINMENT_LIST: {
-			saveEObject((InternalEObject) value, Check.NOTHING);
-			break;
-		}
-		case EOBJECT_CONTAINMENT_PROXY_RESOLVING:
-		case EOBJECT_CONTAINMENT_LIST_PROXY_RESOLVING: {
-			saveEObject((InternalEObject) value, Check.DIRECT_RESOURCE);
-			break;
-		}
-		case EOBJECT_PROXY_RESOLVING:
-		case EOBJECT_LIST_PROXY_RESOLVING: {
-			saveEObject((InternalEObject) value, Check.RESOURCE);
-			break;
-		}
-		case BOOLEAN: {
-			writeBoolean((Boolean) value);
-			break;
-		}
-		case BYTE: {
-			writeByte((Byte) value);
-			break;
-		}
-		case CHAR: {
-			writeChar((Character) value);
-			break;
-		}
-		case DOUBLE: {
-			writeDouble((Double) value);
-			break;
-		}
-		case FLOAT: {
-			writeFloat((Float) value);
-			break;
-		}
-		case INT: {
-			writeInt((Integer) value);
-			break;
-		}
-		case LONG: {
-			writeLong((Long) value);
-			break;
-		}
-		case SHORT: {
-			writeShort((Short) value);
-			break;
-		}
-		case STRING: {
-			writeSegmentedString((String) value);
-			break;
-		}
-		case DATE: {
-			if (eStructuralFeatureData.dataConverter != null) {
-				eStructuralFeatureData.dataConverter.write(this, value);
-			} else if ((style & STYLE_BINARY_DATE) != 0) {
-				writeDate((Date) value);
-			} else {
-				writeSegmentedString(
-						eStructuralFeatureData.eFactory.convertToString(eStructuralFeatureData.eDataType, value));
-			}
-			break;
-		}
-		case ENUMERATOR: {
-			if (eStructuralFeatureData.dataConverter != null) {
-				eStructuralFeatureData.dataConverter.write(this, value);
-			} else if ((style & STYLE_BINARY_ENUMERATOR) != 0) {
-				writeInt(((Enumerator) value).getValue());
-			} else {
-				writeString(eStructuralFeatureData.eFactory.convertToString(eStructuralFeatureData.eDataType, value));
-			}
-			break;
-		}
-		case DATA:
-		case DATA_LIST: {
-			if (eStructuralFeatureData.dataConverter != null) {
-				eStructuralFeatureData.dataConverter.write(this, value);
-			} else {
-				String literal = eStructuralFeatureData.eFactory.convertToString(eStructuralFeatureData.eDataType,
-						value);
-				writeSegmentedString(literal);
-			}
-			break;
-		}
-		default: {
-			throw new IOException("Unhandled case " + eStructuralFeatureData.kind);
-		}
-		}
-
 
 
 #### Date
@@ -311,15 +259,17 @@ e : BINARY_FLOATING_POINT         (bit 31)
 
 Attributes with a true `isMany()`
 
-    0  1  2  3  4  5  6  7
-    +--+--+--+--+--+--+--+
-    /     List Size      / Compressed Int
-    +--+--+--+--+--+--+--+
-    |                    |
-    /     Strings        / Values as strings (if no data converter)
-    /        or          / OR
-    |     Objects        | Values as objects (if data converter)
-    +--+--+--+--+--+--+--+
+```txt
+0  1  2  3  4  5  6  7
++--+--+--+--+--+--+--+
+/     List Size      / Compressed Int
++--+--+--+--+--+--+--+
+|                    |
+/     Strings        / Values as strings (if no data converter)
+/        or          / OR
+|     Objects        | Values as objects (if data converter)
++--+--+--+--+--+--+--+
+```
 
 Note: data converter seems to be null for primitive types
 
@@ -327,64 +277,176 @@ Note: data converter seems to be null for primitive types
 
 - Three Different serialization possibilities:
   1. With a Data Converter
-  2. If flag `STYLE_BINARY_ENUMERATOR` is set, uses an Integer (4 bytes)
+  2. If flag `STYLE_BINARY_ENUMERATOR` is set, uses an Integer (4 buffer)
   3. Otherwise: Use `EFactory::convertToString()` for DataType
 
 
 #### DATA
 
-    +--+--+--+--+--+--+--+
-    |                    |
-    /     Strings        / Values as strings (if no data converter)
-    /        or          / OR
-    |     Objects        | Values as objects (if data converter)
-    +--+--+--+--+--+--+--+
+```txt
++--+--+--+--+--+--+--+
+|                    |
+/     Strings        / Values as strings (if no data converter)
+/        or          / OR
+|     Objects        | Values as objects (if data converter)
++--+--+--+--+--+--+--+
+```
 
 ### EReferences
 
 ####  isContainment() AND isResolveProxies() AND  isMany()
 
-EOBJECT_CONTAINMENT_LIST_PROXY_RESOLVING;
+- EOBJECT_CONTAINMENT_LIST_PROXY_RESOLVING;
 
-#### isContainment() AND isResolveProxies() AND NOT  isMany()
-
-EOBJECT_CONTAINMENT_PROXY_RESOLVING;
-
-#### isContainment() AND NOT  isResolveProxies() AND  isMany()
-
-EOBJECT_CONTAINMENT_LIST;
-
-#### NOT isContainment() AND isContainer() AND  isResolveProxies() 
-
-EOBJECT_CONTAINER_PROXY_RESOLVING;
-
-#### NOT isContainment() AND isContainer() AND NOT isResolveProxies()
-
-EOBJECT_CONTAINER
+```java
+InternalEList<? extends InternalEObject> internalEList = (InternalEList<? extends InternalEObject>) value;
+			saveEObjects(internalEList, Check.DIRECT_RESOURCE);
+```
 
 #### NOT isContainment()  AND NOT isContainer() AND isResolveProxies()
 
 EOBJECT_LIST_PROXY_RESOLVING;
 
-#### NOT isContainment()  AND NOT isContainer() AND NOT isResolveProxies() AND isMany()
-
-EOBJECT_LIST;
-
-#### NOT isContainment()  AND NOT isContainer() AND NOT isResolveProxies() AND isMany()
-
-EOBJECT
+```java
+InternalEList<? extends InternalEObject> internalEList = (InternalEList<? extends InternalEObject>) value;
+			saveEObjects(internalEList, Check.RESOURCE);
+```
 
 
+#### isContainment() AND isResolveProxies() AND NOT  isMany()
+
+- EOBJECT_CONTAINMENT_PROXY_RESOLVING;
+
+- `saveEObject((InternalEObject) value, Check.DIRECT_RESOURCE);`
+
+
+#### NOT isContainment() AND isContainer() AND  isResolveProxies() 
+
+- EOBJECT_CONTAINER_PROXY_RESOLVING;
+- EOBJECT_PROXY_RESOLVING:
+- `saveEObject((InternalEObject) value, Check.RESOURCE);`
+
+ ```txt
+0  1  2  3  4  5  6  7
++--+--+--+--+--+--+--+
+|      EObject ID    | Compressed Int
++--+--+--+--+--+--+--+
+|       EClass       | 
++--+--+--+--+--+--+--+
+|      EPackage      | 
++--+--+--+--+--+--+--+
+|        0           |
++--+--+--+--+--+--+--+
+|                    |
+/        URI         /
+|                    |
++--+--+--+--+--+--+--+
+```
+
+#### 
+
+
+
+
+## Multivalued Reference (Simple or Containment)
+
+- NOT isContainment()  AND NOT isContainer() AND NOT isResolveProxies() AND isMany()
+- isContainment() AND NOT  isResolveProxies() AND  isMany()
+- EOBJECT_CONTAINMENT_LIST or EOBJECT_LIST;
+- `saveEObjects(internalEList, Check.NOTHING)`
+
+ ```txt
+0  1  2  3  4  5  6  7
++--+--+--+--+--+--+--+
+|        size        | Compressed Int
++--+--+--+--+--+--+--+
+|   EObjects         |
+(...)
+```
+
+## Single Reference (Simple or Containment)
+
+- NOT isContainment()  AND NOT isContainer() AND NOT isResolveProxies() AND isMany()
+- EOBJECT or EOBJECT_CONTAINMENT
+- `saveEObject((InternalEObject) value, Check.NOTHING)`;
+
+ ```txt
+0  1  2  3  4  5  6  7
++--+--+--+--+--+--+--+
+|      EObject ID    | Compressed Int
++--+--+--+--+--+--+--+
+|       EClass       | 
++--+--+--+--+--+--+--+
+|      EPackage      | 
++--+--+--+--+--+--+--+
+|                    |
+/                    /
+/ Structural Feature /
+|        DATA        |
++--+--+--+--+--+--+--+
+|          1         | Compressed Int
++--+--+--+--+--+--+--+
+```
 
 ## Conventions
 
 ### Compressed Int:
   
-  - Integer with 1, 2, 3 or 4 bytes
+Compressed Ints use the first two bits of a byte to specify the size (in buffer) of the written Integer.
+
+
+- 1 Byte Integer:
+
+```txt
+0  1  2  3  4  5  6  7
++--+--+--+--+--+--+--+
+| 0| 0|   Value      | Compressed Int
++--+--+--+--+--+--+--+
+```
+
+- 2 Bytes Integer
+
+```txt
+0  1  2  3  4  5  6  7
++--+--+--+--+--+--+--+
+| 0| 1|   Value      | Compressed Int
++--+--+--+--+--+--+--+
+|        Value       |
++--+--+--+--+--+--+--+
+```
+
++ 3 Bytes Integer
+
+```txt
+0  1  2  3  4  5  6  7
++--+--+--+--+--+--+--+
+| 1| 0|   Value      | Compressed Int
++--+--+--+--+--+--+--+
+|        Value       |
++--+--+--+--+--+--+--+
+|        Value       |
++--+--+--+--+--+--+--+
+```
+
+- 4 Bytes Integer
+
+```txt
+0  1  2  3  4  5  6  7
++--+--+--+--+--+--+--+
+| 1| 1|   Value      | Compressed Int
++--+--+--+--+--+--+--+
+|        Value       |
++--+--+--+--+--+--+--+
+|        Value       |
++--+--+--+--+--+--+--+
+|        Value       |
++--+--+--+--+--+--+--+
+```
   
-  ### Null values
+  - Integer with 1, 2, 3 or 4 buffer
   
-  - Null values are represented by the compressed Int "-1"
+- All integers are incremented (+1) before written. 
+- Null values are represented by the compressed Int "-1"
 
 ### Data converters 
 

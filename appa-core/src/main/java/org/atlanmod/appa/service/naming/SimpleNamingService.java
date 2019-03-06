@@ -1,9 +1,9 @@
-package fr.inria.atlanmod.appa.service.naming;
+package org.atlanmod.appa.service.naming;
 
-import fr.inria.atlanmod.appa.core.NamingService;
-import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.datatypes.Id;
-import fr.inria.atlanmod.appa.datatypes.LongId;
+import org.atlanmod.appa.core.NamingService;
+import org.atlanmod.appa.datatypes.ConnectionDescription;
+import org.atlanmod.appa.datatypes.Id;
+import org.atlanmod.appa.datatypes.LongId;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

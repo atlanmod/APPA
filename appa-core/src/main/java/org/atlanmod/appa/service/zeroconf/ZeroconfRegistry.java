@@ -1,10 +1,10 @@
-package fr.inria.atlanmod.appa.service.zeroconf;
+package org.atlanmod.appa.service.zeroconf;
 
-import fr.inria.atlanmod.appa.core.RegistryService;
-import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.datatypes.Id;
-import fr.inria.atlanmod.appa.datatypes.ServiceDescription;
-import fr.inria.atlanmod.appa.datatypes.StringId;
+import org.atlanmod.appa.core.RegistryService;
+import org.atlanmod.appa.datatypes.ConnectionDescription;
+import org.atlanmod.appa.datatypes.Id;
+import org.atlanmod.appa.datatypes.ServiceDescription;
+import org.atlanmod.appa.datatypes.StringId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

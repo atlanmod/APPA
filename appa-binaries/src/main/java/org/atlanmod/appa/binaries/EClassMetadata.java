@@ -26,9 +26,10 @@ class EClassMetadata {
 
     private void registerFeatures() {
         for (int i = 0; i < eClass.getFeatureCount(); i++) {
-            EStructuralFeature feature = eClass.getEStructuralFeature(i);
+            EStructuralFeature.Internal feature = (EStructuralFeature.Internal) eClass.getEStructuralFeature(i);
             boolean shouldBePersisted = !(feature.isTransient() |
-                    feature.isDerived() | feature.isVolatile());
+                    feature.isDerived() | feature.isVolatile() |
+                    feature.isContainer());
 
             if (shouldBePersisted) {
                 this.registerFeature(feature);

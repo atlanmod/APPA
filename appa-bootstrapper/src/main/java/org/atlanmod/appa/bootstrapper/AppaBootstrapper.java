@@ -1,12 +1,12 @@
-package fr.inria.atlanmod.appa.bootstrapper;
+package org.atlanmod.appa.bootstrapper;
 
-import fr.inria.atlanmod.appa.activemq.ArtemisBroker;
-import fr.inria.atlanmod.appa.core.Application;
-import fr.inria.atlanmod.appa.core.Factory;
-import fr.inria.atlanmod.appa.datatypes.ConnectionDescription;
-import fr.inria.atlanmod.appa.datatypes.ServiceDescription;
-import fr.inria.atlanmod.appa.datatypes.StringId;
-import fr.inria.atlanmod.appa.pubsub.PublishSubscribe;
+import org.atlanmod.appa.activemq.ArtemisBroker;
+import org.atlanmod.appa.core.Application;
+import org.atlanmod.appa.core.Factory;
+import org.atlanmod.appa.datatypes.ConnectionDescription;
+import org.atlanmod.appa.datatypes.ServiceDescription;
+import org.atlanmod.appa.datatypes.StringId;
+import org.atlanmod.appa.pubsub.PublishSubscribe;
 
 import java.rmi.RemoteException;
 

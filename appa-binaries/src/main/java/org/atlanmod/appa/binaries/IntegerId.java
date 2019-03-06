@@ -1,11 +1,11 @@
 package org.atlanmod.appa.binaries;
 
-import org.atlanmod.appa.datatypes.Id;
-import org.atlanmod.commons.primitive.Ints;
+import org.atlanmod.appa.io.CompressedInts;
 
+import java.nio.ByteBuffer;
 import java.util.Objects;
 
-public class IntegerId implements Id {
+public class IntegerId implements WritableId {
 
     private final int id;
 
@@ -33,6 +33,11 @@ public class IntegerId implements Id {
 
     @Override
     public byte[] toBytes() {
-        return Ints.toBytes(id);
+        return CompressedInts.toBytes(id);
+    }
+
+    @Override
+    public void writeOn(ByteBuffer buffer) {
+        buffer.put(this.toBytes());
     }
 }
