@@ -11,15 +11,14 @@ import java.util.function.Function;
 
 class EAttributeMetadata extends EFeatureMetadata {
 
-    private EAttributeMetadata(EStructuralFeature feature, Function<Object, byte[]> converter) {
+    private EAttributeMetadata(Converter converter, EStructuralFeature feature) {
         super(converter, feature);
     }
 
-    public static EAttributeMetadata create(EAttribute attribute) {
+    public static EAttributeMetadata create(EAttribute attribute, Converters converters) {
         EDataType type = attribute.getEAttributeType();
         int id = type.getClassifierID();
-        Function<Object, byte[]> converter;
-        ECoreConverters converters = ECoreConverters.getInstance();
+        Converter converter;
 
         if (type instanceof EEnum) {
             converter = converters.getEnumConverter();
@@ -35,6 +34,6 @@ class EAttributeMetadata extends EFeatureMetadata {
             Log.error("EDataType: Instance Class Name: " + type.getInstanceClassName());
         }
 
-        return new EAttributeMetadata(attribute, converter);
+        return new EAttributeMetadata(converter, attribute);
     }
 }

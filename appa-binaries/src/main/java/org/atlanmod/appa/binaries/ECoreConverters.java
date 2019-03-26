@@ -1,9 +1,7 @@
 package org.atlanmod.appa.binaries;
 
 import org.atlanmod.appa.datatypes.Id;
-import org.atlanmod.appa.io.CompressedInts;
-import org.atlanmod.appa.io.UnsignedShort;
-import org.atlanmod.appa.io.UnsignedShorts;
+import org.atlanmod.appa.io.*;
 import org.atlanmod.commons.Preconditions;
 import org.atlanmod.commons.annotation.Static;
 import org.atlanmod.commons.collect.MoreArrays;
@@ -92,9 +90,9 @@ public class ECoreConverters {
         Preconditions.checkInstanceOf(object, String.class);
 
         byte[] bytes = Strings.toBytes((String) object);
-        UnsignedShort length = UnsignedShort.fromInt(bytes.length);
+        UnsignedByte length = UnsignedByte.fromInt(bytes.length);
 
-        return MoreArrays.addAll(UnsignedShorts.toBytes(length), bytes);
+        return MoreArrays.addAll(UnsignedBytes.toBytes(length), bytes);
     }
 
     public static byte[] dateToBytes(Object object) {
@@ -123,7 +121,7 @@ public class ECoreConverters {
         Preconditions.checkInstanceOf(object, byte[].class);
 
         byte[] value = (byte[]) object;
-        return MoreArrays.addAll(CompressedInts.toBytes(value.length), bigIntegerToBytes(value));
+        return MoreArrays.addAll(CompressedInts.toBytes(value.length), value);
     }
 
     public static byte[] enumLiteralToByes(Object object) {
@@ -164,7 +162,7 @@ public class ECoreConverters {
             eListConverters.put(each.getKey(), new EListToBytes(each.getValue()));
         }
 
-        Identifier identifier = IdentifierFactory.getInstance().getDefaultIndentifier();
+        Identifier identifier = IdentifierFactory.getInstance().createNewIdentifier();
         this.singleReferenceConverter = new SingleReferenceToBytes(identifier);
         this.multipleReferenceConverter = new MultipleReferenceToBytes(identifier);
 

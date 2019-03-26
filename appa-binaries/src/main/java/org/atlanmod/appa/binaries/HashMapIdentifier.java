@@ -9,6 +9,7 @@ import java.util.Set;
 
 public class HashMapIdentifier implements Identifier {
     private Map<EObject, WritableId> idMap = new HashMap<>();
+    private Map<WritableId, EObject> eObjectMap = new HashMap<>();
 
     @Override
     public WritableId idFor(EObject eObject) {
@@ -16,9 +17,18 @@ public class HashMapIdentifier implements Identifier {
     }
 
     @Override
+    public EObject eObjectFor(WritableId id) {
+        return eObjectMap.get(id);
+    }
+
+    @Override
     public void identify(EObject eObject) {
         IntegerId id = new IntegerId(idMap.size());
         idMap.put(eObject, id);
+    }
+
+    public void put(WritableId id, EObject eObject) {
+        eObjectMap.put(id, eObject);
     }
 
     @Override

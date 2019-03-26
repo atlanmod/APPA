@@ -464,3 +464,8 @@ Compressed Ints use the first two bits of a byte to specify the size (in buffer)
  */
 public abstract class DataConverter<T> {
 ```
+
+## Segmented String
+
+ID              : Compressed Int
+Segment Count   : Compressed Int

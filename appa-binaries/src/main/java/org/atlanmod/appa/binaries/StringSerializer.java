@@ -1,6 +1,8 @@
 package org.atlanmod.appa.binaries;
 
 import org.atlanmod.appa.io.CompressedInts;
+import org.atlanmod.commons.Preconditions;
+import org.atlanmod.commons.log.Log;
 import org.eclipse.emf.common.util.CommonUtil;
 
 import java.util.ArrayList;
@@ -10,14 +12,13 @@ import java.util.Map;
 import java.util.function.Function;
 
 public class StringSerializer implements Function<Object, byte[]> {
-    private String[] segments;
+    private List<String> segments = new ArrayList<>();
     private Map<String, Integer> segmentedStringToIDMap;
-    protected static final int MAX_DELIMITER = 0xC0;
-    protected static final String[] DELIMITERS = new String[MAX_DELIMITER];
-    protected char[] characters;
+    private static final int MAX_DELIMITER = 0xC0;
+    private static final String[] DELIMITERS = new String[MAX_DELIMITER];
     private Map<String, Integer> segmentToIDMap;
-    protected static final Map<String, Integer> INTRINSIC_STRING_TO_ID_MAP = new HashMap<String, Integer>();
-    static final List<String> INTRINSIC_STRINGS = new ArrayList<String>();
+    private static final Map<String, Integer> INTRINSIC_STRING_TO_ID_MAP = new HashMap<String, Integer>();
+    private static final List<String> INTRINSIC_STRINGS = new ArrayList<String>();
 
     static {
         INTRINSIC_STRING_TO_ID_MAP.put("", 0);
@@ -65,11 +66,10 @@ public class StringSerializer implements Function<Object, byte[]> {
                     if (c < MAX_DELIMITER) {
                         String delimiter = DELIMITERS[c];
                         if (delimiter != null) {
-                            ensureSegmentCapacity(segmentCount + 2);
                             if (start < i) {
-                                segments[segmentCount++] = value.substring(start, i);
+                                segments.add(value.substring(start, i));
                             }
-                            segments[segmentCount++] = delimiter;
+                            segments.add(delimiter);
                             start = i + 1;
                         }
                     }
@@ -79,13 +79,12 @@ public class StringSerializer implements Function<Object, byte[]> {
                     writeString(bytes, value);
                 } else {
                     if (start < end) {
-                        ensureSegmentCapacity(segmentCount + 1);
-                        segments[segmentCount++] = value.substring(start, end);
+                        segments.add(value.substring(start, end));
                     }
 
                     writeCompressedInt(bytes, segmentCount);
-                    for (int i = 0; i < segmentCount; ++i) {
-                        writeString(bytes, segments[i]);
+                    for (String each: segments) {
+                        writeString(bytes, each);
                     }
                 }
             } else {
@@ -94,51 +93,24 @@ public class StringSerializer implements Function<Object, byte[]> {
         }
     }
 
-    private void writeString(List<Byte> bytes, String value) {
-        if (value == null) {
-            writeCompressedInt(bytes,-1);
+    protected void writeString(List<Byte> bytes, String value) {
+        Preconditions.checkNotNull(bytes);
+        Preconditions.checkNotNull(segmentedStringToIDMap);
+        Preconditions.checkNotNull(value);
+
+        Integer id = segmentToIDMap.get(value);
+        if (id != null) {
+            this.writeCompressedInt(bytes, id);
+            return;
         } else {
-            if (segmentToIDMap != null) {
-                Integer id = segmentToIDMap.get(value);
-                if (id != null) {
-                    writeCompressedInt(bytes, id);
-                    return;
-                } else {
-                    int idValue = segmentToIDMap.size();
-                    segmentToIDMap.put(value, idValue);
-                    writeCompressedInt(bytes, idValue);
-                }
-            }
-
-            int length = value.length();
-            writeCompressedInt(bytes, length);
-            if (characters == null || characters.length < length) {
-                characters = new char[length];
-            }
-            value.getChars(0, length, characters, 0);
-            LOOP: for (int i = 0; i < length; ++i) {
-                char character = characters[i];
-                if (character == 0 || character > 0xFF) {
-                    writeByte(bytes, (byte) 0);
-                    writeChar(bytes, character);
-                    while (++i < length) {
-                        writeChar(bytes, characters[i]);
-                    }
-                    break LOOP;
-                } else {
-                    writeByte(bytes, (byte) character);
-                }
-            }
+            int idValue = segmentToIDMap.size();
+            segmentToIDMap.put(value, idValue);
+            writeCompressedInt(bytes, idValue);
         }
-    }
 
-    private void ensureSegmentCapacity(int capacity) {
-        if (segments == null) {
-            segments = new String[Math.max(20, capacity)];
-        } else if (segments.length < capacity) {
-            String[] newSegments = new String[Math.max(2 * segments.length, capacity)];
-            System.arraycopy(segments, 0, newSegments, 0, segments.length);
-            segments = newSegments;
+        byte[] serialized = ECoreConverters.stringToBytes(value);
+        for (byte each: serialized) {
+            bytes.add(each);
         }
     }
 

@@ -1,17 +1,16 @@
 package org.atlanmod.appa.binaries;
 
+import org.atlanmod.appa.io.ByteArrayReader;
 import org.atlanmod.commons.Preconditions;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import java.util.function.Function;
 
 public abstract class EFeatureMetadata {
-    protected static final byte[] EMPTY_ARRAY = new byte[0];
-    protected final Function<Object, byte[]> converter;
+    protected final Converter converter;
     protected final EStructuralFeature feature;
 
-    protected EFeatureMetadata(Function<Object, byte[]> converter, EStructuralFeature feature) {
+    protected EFeatureMetadata(Converter converter, EStructuralFeature feature) {
         Preconditions.checkNotNull(converter);
         Preconditions.checkNotNull(feature);
 
@@ -20,11 +19,14 @@ public abstract class EFeatureMetadata {
     }
 
     public byte[] toBytes(EObject eObject) {
-        if (eObject.eIsSet(feature)) {
-            byte[] bytes = converter.apply(eObject.eGet(feature));
-            return bytes;
-        } else {
-            return EMPTY_ARRAY;
-        }
+        byte[] bytes = converter.toBytes(eObject.eGet(feature));
+        return bytes;
     }
+
+    public Object toValue(ByteArrayReader reader) {
+        Object object = converter.toObject(reader);
+        return object;
+    }
+
+
 }

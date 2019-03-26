@@ -26,8 +26,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BinaryWriterTest {
 
-    private static String RESOURCE_FILE = "./src/main/resources/org.eclipse.jdt.source.all.xmi";
+    //private static String RESOURCE_FILE = "./src/main/resources/org.eclipse.jdt.source.all.xmi";
     //private static String RESOURCE_FILE = "./src/main/resources/org.eclipse.jdt.source.all.bin";
+    private static String RESOURCE_FILE = "./src/main/resources/org.eclipse.jdt.core.xmi";
+    //private static String RESOURCE_FILE = "./src/main/resources/fr.inria.atlanmod.neo4emf.neo4jresolver.bin";
+    //private static String RESOURCE_FILE = "./src/main/resources/org.eclipse.gmt.modisco.java.kyanos.xmi";
 
 
 
@@ -88,7 +91,7 @@ class BinaryWriterTest {
 
         ByteBuffer buffer = ByteBuffer.allocate(1000000000);
         BinaryWriter writer = new BinaryWriter(resource, buffer);
-        writer.run();
+        writer.save();
         buffer.flip();
         channel.write(buffer);
         channel.close();

@@ -15,10 +15,11 @@ class ReadWriteTest {
 
     private ByteArrayWriter writer;
     private ByteArrayReader reader;
+    private ByteBuffer buffer;
 
     @BeforeEach
     void setUp() {
-        ByteBuffer buffer = ByteBuffer.allocate(1000);
+        buffer = ByteBuffer.allocate(1000);
         writer = new ByteArrayWriter(buffer);
         reader = new ByteArrayReader(buffer);
     }
@@ -28,6 +29,8 @@ class ReadWriteTest {
     void readWriteByte() {
         Byte expected = Byte.valueOf((byte) 133);
         writer.writeByte(expected);
+
+        buffer.flip();
         Byte actual = reader.readByte();
 
         assertEquals(expected, actual);
@@ -38,6 +41,7 @@ class ReadWriteTest {
     void readWriteShort(short i) {
         Short expected = Short.valueOf((short) i);
         writer.writeShort(expected);
+        buffer.flip();
         Short actual = reader.readShort();
 
         assertEquals(expected, actual);
@@ -48,6 +52,7 @@ class ReadWriteTest {
     void readWriteInteger(int i) {
         Integer expected = Integer.valueOf(i);
         writer.writeInteger(expected);
+        buffer.flip();
         Integer actual = reader.readInteger();
 
         assertEquals(expected, actual);
@@ -58,6 +63,7 @@ class ReadWriteTest {
     void readWriteLong(long i) {
         Long expected = Long.valueOf(i);
         writer.writeLong(expected);
+        buffer.flip();
         Long actual = reader.readLong();
 
         assertEquals(expected, actual);
@@ -68,6 +74,7 @@ class ReadWriteTest {
     void readWriteString(String value) {
         String expected = value;
         writer.writeString(expected);
+        buffer.flip();
         String actual = reader.readString();
 
         assertEquals(expected, actual);
@@ -79,6 +86,7 @@ class ReadWriteTest {
     void readWriteFloat(float value) {
         Float expected = Float.valueOf(value);
         writer.writeFloat(expected);
+        buffer.flip();
         Float actual = reader.readFload();
 
         assertEquals(expected, actual);
@@ -89,6 +97,7 @@ class ReadWriteTest {
     void readWriteDouble(double value) {
         Double expected = Double.valueOf(value);
         writer.writeDouble(expected);
+        buffer.flip();
         Double actual = reader.readDouble();
 
         assertEquals(expected, actual);
@@ -98,6 +107,7 @@ class ReadWriteTest {
     void readWriteBoolean() {
         writer.writeBoolean(true);
         writer.writeBoolean(false);
+        buffer.flip();
 
         assertTrue(reader.readBoolean());
         assertFalse(reader.readBoolean());
@@ -108,6 +118,7 @@ class ReadWriteTest {
     void readWrite() {
         Long expected = Long.valueOf(Long.MAX_VALUE);
         writer.write(expected, Longs::toBytes);
+        buffer.flip();
         Long actual = reader.read(Bytes::toLong, Long.BYTES);
 
         assertEquals(expected, actual);
@@ -117,6 +128,7 @@ class ReadWriteTest {
     void readWriteUnsignedByte() {
         UnsignedByte expected = UnsignedByte.fromInt(133);
         writer.write(expected);
+        buffer.flip();
         UnsignedByte actual = reader.readUnsignedByte();
 
         assertEquals(expected, actual);
@@ -126,6 +138,7 @@ class ReadWriteTest {
     void readWriteUnsignedInt() {
         UnsignedInt expected = UnsignedInt.fromInt(133);
         writer.write(expected);
+        buffer.flip();
         UnsignedInt actual = reader.readUnsignedInt();
 
         assertEquals(expected, actual);
@@ -135,6 +148,7 @@ class ReadWriteTest {
     void readWriteUnsignedShort() {
         UnsignedShort expected = UnsignedShort.fromInt(133);
         writer.write(expected);
+        buffer.flip();
         UnsignedShort actual = reader.readUnsignedShort();
 
         assertEquals(expected, actual);

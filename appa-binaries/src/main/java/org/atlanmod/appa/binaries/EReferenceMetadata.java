@@ -6,15 +6,13 @@ import java.util.function.Function;
 
 public class EReferenceMetadata extends EFeatureMetadata {
 
-    private EReferenceMetadata(Function<Object, byte[]> converter, EReference reference) {
+    private EReferenceMetadata(Converter converter, EReference reference) {
         super(converter, reference);
     }
 
-    public static EReferenceMetadata create(EReference eReference) {
-        Function<Object, byte[]> converter;
-        ECoreConverters converters = ECoreConverters.getInstance();
+    public static EReferenceMetadata create(EReference eReference, Converters converters) {
 
-        converter = eReference.isMany() ? converters.getMultipleReferenceConverter()
+        Converter converter = eReference.isMany() ? converters.getMultipleReferenceConverter()
                 : converters.getSingleReferenceConverter();
 
         return new EReferenceMetadata(converter, eReference);

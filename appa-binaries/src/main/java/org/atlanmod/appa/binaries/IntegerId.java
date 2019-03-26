@@ -40,4 +40,9 @@ public class IntegerId implements WritableId {
     public void writeOn(ByteBuffer buffer) {
         buffer.put(this.toBytes());
     }
+
+    @Override
+    public String toString() {
+        return "IntegerId{" + id + '}';
+    }
 }

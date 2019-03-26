@@ -9,15 +9,15 @@ import org.eclipse.emf.ecore.resource.Resource;
 import java.nio.ByteBuffer;
 
 public class BinaryWriter {
-    private final Metadata metadata;
+    private final WriterMetadata metadata;
     private Resource resource;
 
     public BinaryWriter(Resource resource, ByteBuffer buffer) {
         this.resource = resource;
-        this.metadata = new Metadata(new ByteArrayWriter(buffer));
+        this.metadata = new WriterMetadata(new ByteArrayWriter(buffer));
     }
 
-    public void run() {
+    public void save() {
 
         this.extractMetadata();
         this.writeHeader();

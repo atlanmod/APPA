@@ -1,31 +1,25 @@
 package org.atlanmod.appa.binaries;
 
-import org.atlanmod.appa.datatypes.Id;
 import org.atlanmod.appa.io.ByteArrayWriter;
 import org.atlanmod.appa.io.CompressedInts;
-import org.atlanmod.appa.io.UnsignedShort;
-import org.atlanmod.appa.io.UnsignedShorts;
-import org.atlanmod.commons.collect.MoreArrays;
-import org.atlanmod.commons.primitive.Ints;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Stream;
 
-public class Metadata {
+public class WriterMetadata {
     private final ByteArrayWriter writer;
-    private Identifier identifier = IdentifierFactory.getInstance().getDefaultIndentifier();
+    private Identifier identifier = IdentifierFactory.getInstance().createNewIdentifier();
+    private Converters converters = new Converters(identifier);
     private Map<EPackage, EPackageMetadata> ePackageDataMap = new HashMap<EPackage, EPackageMetadata>();
     private Map<EClass, EClassMetadata> eClassDataMap = new HashMap<EClass, EClassMetadata>();
     private Map<URI, Integer> uriToIDMap = new HashMap<URI, Integer>();
     private Header header = new Header();
 
-    public Metadata(ByteArrayWriter writer) {
+    public WriterMetadata(ByteArrayWriter writer) {
         this.writer = writer;
     }
 
@@ -44,12 +38,8 @@ public class Metadata {
         }
 
         this.registerEPackage(eClass.getEPackage());
-
-        Integer id = Integer.valueOf(eClassDataMap.size());
-        EClassMetadata eClassMetadata = EClassMetadata.create(id, eClass);
+        EClassMetadata eClassMetadata = EClassMetadata.create(eClass, converters);
         eClassDataMap.put(eClass, eClassMetadata);
-
-
     }
 
     public void registerEPackage(final EPackage ePackage) {
@@ -75,9 +65,8 @@ public class Metadata {
     }
 
     public void writeEObjects() {
-        writer.writeInteger(this.identifier.eObjects().size());
+        writer.put(CompressedInts.toBytes(this.identifier.eObjects().size()));
         for (Map.Entry<EObject, WritableId> each : this.identifier.entrySet()) {
-
             writer.put(CompressedInts.toBytes(each.getKey().eClass().getClassifierID()));
             writer.write(each.getValue());
         }
@@ -86,26 +75,13 @@ public class Metadata {
     public void writeEFeatures(EObject eObject) {
         WritableId id = identifier.idFor(eObject);
         EClassMetadata classMetadata = this.eClassDataMap.get(eObject.eClass());
-        byte[] eObjectFeatureValues = classMetadata.featuresToBytes(eObject);
+        byte[] eObjectFeatureValues = classMetadata.valuesToBytes(eObject);
 
         writer.write(id)
                 .put(eObjectFeatureValues);
     }
 
 
-    public static byte[] merge(byte[] ...arrays) {
-        int length = 0;
-        for (int i = 0; i < arrays.length; i++) {
-            length += arrays[i].length;
-        }
 
-        byte[] concatenation = new byte[length];
-        int position = 0;
-        for (int i = 0; i < arrays.length; i++){
-            System.arraycopy(arrays[i], 0, concatenation, position, arrays[i].length);
-            position = arrays[i].length;
-        }
-        return  concatenation;
-    }
 
 }

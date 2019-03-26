@@ -7,7 +7,6 @@ import java.util.function.Function;
 
 public class ByteArrayReader {
     private final ByteBuffer bytes;
-    private int position = 0;
 
     public ByteArrayReader(ByteBuffer bytes) {
         this.bytes = bytes;
@@ -15,6 +14,11 @@ public class ByteArrayReader {
 
     public Byte readByte() {
         return Byte.valueOf(get());
+    }
+
+    public Character readChar() {
+        char value = (char) ((readByte() << 8) & 0xFF00 | readByte() & 0xFF);
+        return Character.valueOf(value);
     }
 
     public Short readShort() {
@@ -29,6 +33,13 @@ public class ByteArrayReader {
         int value = (get() << 24) | (get() << 16) & 0xFF0000 | (get() << 8) & 0xFF00 | get() & 0xFF;
 
         return Integer.valueOf(value);
+    }
+
+    public int readCompressedInt() {
+        int size = bytes.get(bytes.position()) >> 6 & 0x3;
+        byte[] compressed = new byte[size +1];
+        bytes.get(compressed);
+        return Bytes.toCompressedInt(compressed);
     }
 
     public Long readLong() {
@@ -89,7 +100,7 @@ public class ByteArrayReader {
         return mapper.apply(this.get(destination));
     }
 
-    private byte[] get(byte[] destination) {
+    public byte[] get(byte[] destination) {
         for (int i = 0; i < destination.length; i++) {
             destination[i] = this.get();
         }
@@ -98,9 +109,9 @@ public class ByteArrayReader {
 
 
     private byte get() {
-        assert position < bytes.limit();
+        //assert position < bytes.limit();
 
-        return bytes.get(position++);
+        return bytes.get();
     }
 
 }

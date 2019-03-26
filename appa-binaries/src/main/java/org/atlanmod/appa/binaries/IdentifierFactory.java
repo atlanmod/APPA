@@ -4,8 +4,6 @@ import org.atlanmod.commons.annotation.Static;
 
 public class IdentifierFactory {
 
-    private Identifier identifier = new HashMapIdentifier();
-
     private IdentifierFactory() {
     }
 
@@ -13,8 +11,8 @@ public class IdentifierFactory {
         return IdentifierFactory.Holder.INSTANCE;
     }
 
-    public Identifier getDefaultIndentifier() {
-        return identifier;
+    public Identifier createNewIdentifier() {
+        return new HashMapIdentifier();
     }
 
     /**

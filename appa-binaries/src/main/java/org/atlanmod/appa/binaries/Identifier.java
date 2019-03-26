@@ -9,6 +9,10 @@ public interface Identifier {
 
     WritableId idFor(EObject eObject);
 
+    EObject eObjectFor(WritableId id);
+
+    void put(WritableId id, EObject eObject);
+
     void identify(EObject eObject);
 
     boolean knows(EObject eObject);
