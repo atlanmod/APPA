@@ -1,5 +1,6 @@
 ### Maven template
 **/target
+*.versionsBackup
 
 ### JetBrains template
 # User-specific stuff:

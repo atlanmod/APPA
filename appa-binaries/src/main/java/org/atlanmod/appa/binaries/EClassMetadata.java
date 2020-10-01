@@ -79,7 +79,7 @@ class EClassMetadata {
         byte[] bytes = flags.toByteArray();
         UnsignedByte size = UnsignedByte.fromInt(bytes.length);
         byte[] serializedValues = Converters.merge(UnsignedBytes.toBytes(size), bytes, accumulation);
-        System.out.println("Values: " + Arrays.toString(serializedValues));
+        Log.debug("Values: " + Arrays.toString(serializedValues));
         return serializedValues;
     }
 

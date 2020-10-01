@@ -16,9 +16,9 @@
     <description/>
 
     <properties>
-        <jmdns.version>3.5.1</jmdns.version>
+        <jmdns.version>3.5.5</jmdns.version>
         <mdnsjava.version>2.2.0</mdnsjava.version>
-        <slf4j.version>1.7.25</slf4j.version>
+        <slf4j.version>1.7.30</slf4j.version>
     </properties>
 
     <dependencies>
@@ -49,7 +49,7 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.6.2</version>
+            <version>3.17.2</version>
             <scope>test</scope>
         </dependency>
 
