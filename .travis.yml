@@ -18,6 +18,7 @@ before_install:
 
 script:
   # Build and test with code coverage
+  - unzip appa-binaries/src/main/resources/resources.zip  -d appa-binaries/src/main/resources/
   - mvn -B jacoco:prepare-agent install jacoco:report jacoco:report-aggregate
 
 after_success:
